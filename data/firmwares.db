@@ -1,0 +1,532 @@
+# Aastra 51i 2.4.1
+[aa51i_241]
+brand: Aastra
+model: 51i
+version: 2.4.1
+files: LangPaks_PA-001006-02-REV01_lp_2.4.1_0901.zip 6751i_FC-001126-04-REV01_sr_2.4.1_0901.zip
+
+[6751i_FC-001126-04-REV01_sr_2.4.1_0901.zip]
+url: http://www.aastra.com/cps/rde/xbcr/SID-3D8CCB6A-9B838AC4/04/6751i_FC-001126-04-REV01_sr_2.4.1_0901.zip
+size: 1914014
+md5sum: 2edc7efed26f166af03bac294eae22e8
+sha1sum: c21e93c3da45fdb221975055aff5c1d148d53066
+
+# Aastra 53i 2.4.1
+[aa53i_241]
+brand: Aastra
+model: 53i
+version: 2.4.1
+files: LangPaks_PA-001006-02-REV01_lp_2.4.1_0901.zip 6753i_FC-001086-08-REV01_sr_2.4.1_0901.zip
+
+[6753i_FC-001086-08-REV01_sr_2.4.1_0901.zip]
+url: http://www.aastra.com/cps/rde/xbcr/SID-3D8CCB6A-9B838AC4/04/6753i_FC-001086-08-REV01_sr_2.4.1_0901.zip
+size: 2912845
+md5sum: 46e8ce9adad42e68a8c16c424472b0c6
+sha1sum: b0a100483ae3dc810b1332044002e8478581308d
+
+# Aastra 55i 2.4.1
+[aa55i_241]
+brand: Aastra
+model: 55i
+version: 2.4.1
+files: LangPaks_PA-001006-02-REV01_lp_2.4.1_0901.zip 6755i_FC-001087-06-REV01_sr_2.4.1_0901.zip
+
+[6755i_FC-001087-06-REV01_sr_2.4.1_0901.zip]
+url: http://www.aastra.com/cps/rde/xbcr/SID-3D8CCB6A-9B838AC4/04/6755i_FC-001087-06-REV01_sr_2.4.1_0901.zip
+size: 2943876
+md5sum: 122fbffec1f6720cb705896bdb315623
+sha1sum: 6ea4b04e1d09333ae0d8f2a520703b7556ac3257
+
+# Aastra 57i 2.4.1
+[aa57i_241]
+brand: Aastra
+model: 57i
+version: 2.4.1
+files: LangPaks_PA-001006-02-REV01_lp_2.4.1_0901.zip 6757i_FC-001088-06-REV01_sr_2.4.1_0901.zip
+
+[6757i_FC-001088-06-REV01_sr_2.4.1_0901.zip]
+url: http://www.aastra.com/cps/rde/xbcr/SID-3D8CCB6A-9B838AC4/04/6757i_FC-001088-06-REV01_sr_2.4.1_0901.zip
+size: 2943216
+md5sum: 218b4a39c20204f7442b9df9c00587ab
+sha1sum: bcec75f61c7db5c7b89178dd82f0694e44ff898c
+
+# Common files for Aastra phones
+[LangPaks_PA-001006-02-REV01_lp_2.4.1_0901.zip]
+url: http://www.aastra.com/cps/rde/xbcr/SID-3D8CCB6A-9B838AC4/04/LangPaks_PA-001006-02-REV01_lp_2.4.1_0901.zip
+size: 83562
+md5sum: b58f13bf2b80368060b873223fb2bbd1
+sha1sum: 8aa41c092cd87822b781790ac8d09a84c2d9c721
+
+# Linksys PAP2T 5.1.6
+[lspap2t_516]
+brand: Linksys
+model: PAP2T
+version: 5.1.6
+files: pap2t-5-1-6.zip
+
+[pap2t-5-1-6.zip]
+url: http://www.linksys.com/servlet/Satellite?blobcol=urldata&blobheadername1=Content-Type&blobheadername2=Content-Disposition&blobheadervalue1=application%2Fzip&blobheadervalue2=inline%3B+filename%3DPAP2T_v5.1.6_fw.zip&blobkey=id&blobtable=MungoBlobs&blobwhere=1193765607333&ssbinary=true&lid=6115325776B08
+size: 1504430
+md5sum: c35ffdd7c60372305e59bf376362b022
+sha1sum: c8a2c48e06e3bd89de6f444824a41ebc7e1d57f5
+
+# Linksys SPA901 5.1.5
+[lsspa901_515]
+brand: Linksys
+model: SPA901
+version: 5.1.5
+files: spa901-5-1-5.zip
+
+[spa901-5-1-5.zip]
+url: http://www.linksys.com/servlet/Satellite?blobcol=urldata&blobheadername1=Content-Type&blobheadername2=Content-Disposition&blobheadervalue1=application%2Fzip&blobheadervalue2=inline%3B+filename%3Dspa901-5.1.5.zip&blobkey=id&blobtable=MungoBlobs&blobwhere=1193769501566&ssbinary=true&lid=6160326362B04
+size: 1607399
+md5sum: 598c35cbcf851a17f58da4d0a9c62bbb
+sha1sum: 2cc6bfeb64812ca80a69cbe51296e3db2b68a491
+
+# Linksys SPA941 5.1.8
+[lsspa941_518]
+brand: Linksys
+model: SPA941
+version: 5.1.8
+files: spa941-5-1-8.zip
+
+[spa941-5-1-8.zip]
+url: http://www.linksys.com/servlet/Satellite?blobcol=urldata&blobheadername1=Content-Type&blobheadername2=Content-Disposition&blobheadervalue1=application%2Fzip&blobheadervalue2=inline%3B+filename%3Dspa941-5.1.8.zip&blobkey=id&blobtable=MungoBlobs&blobwhere=1193770292308&ssbinary=true&lid=4571655272B10
+size: 1548720
+md5sum: b6c99b91bbb1625d088b4f3a90794522
+sha1sum: fe3616d709599763fd27fc5afebd1c8f71a95b9c
+
+# Linksys SPA942 6.1.3a
+[lsspa942_613a]
+brand: Linksys
+model: SPA942
+version: 6.1.3a
+files: spa942-6-1-3a.zip
+
+[spa942-6-1-3a.zip]
+url: ftp://ftp.linksys.com/downloads/NA/firmware/spa942-6-1-3a.zip
+size: 3513620
+md5sum: 30e05d16a9b47ab68c5bdda39b1ec2aa
+sha1sum: b260aff0ff8311f328c35d06528f5f865b9a5367
+
+# Linksys SPA962 6.1.3a
+[lsspa962_613a]
+brand: Linksys
+model: SPA962
+version: 6.1.3a
+files: spa962-6-1-3a.zip
+
+[spa962-6-1-3a.zip]
+url: ftp://ftp.linksys.com/downloads/NA/firmware/spa962-6-1-3a.zip
+size: 4000656
+md5sum: e5afb0a72cda89051f46d12dccdc0890
+sha1sum: a16f33a7a20e6424762ec843fa546d603422ded4
+
+# Linksys SPA3102
+[lsspa3102_517]
+brand: Linksys
+model: SPA3102
+version: 5.1.7
+files: spa3102-5-1-7.zip
+
+[spa3102-5-1-7.zip]
+url: http://www.linksys.com/servlet/Satellite?blobcol=urldata&blobheadername1=Content-Type&blobheadername2=Content-Disposition&blobheadervalue1=application%2Fzip&blobheadervalue2=inline%3B+filename%3Dspa3102-5.1.7.zip&blobkey=id&blobtable=MungoBlobs&blobwhere=1193768671799&ssbinary=true&lid=6139069263B06
+size: 2033784
+md5sum: b3d65bc5ab21991c169fb33c054d666a
+sha1sum: af66b4ed914ada3ecdd6b64a3378316be8f34ba3
+
+# Linksys SPA8000 6.1.3
+[lsspa8000_613]
+brand: Linksys
+model: SPA8000
+version: 6.1.3
+files: spa8000-6-1-3.zip
+
+[spa8000-6-1-3.zip]
+url: ftp://ftp.linksys.com/downloads/NA/firmware/SPA8000_v6.1.3_fw.zip
+size: 3783070
+md5sum: bb9512cf8ba07a78b12a94b4f153396d
+sha1sum: 86171bd8d65497e594b79a03188acbe51b4e32e9
+
+# Polycom SoundPoint IP 301 3.1.1
+[pcspip301_311]
+brand: Polycom
+model: SoundPoint IP 301
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 320 3.1.1
+[pcspip320_311]
+brand: Polycom
+model: SoundPoint IP 320
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 330 3.1.1
+[pcspip330_311]
+brand: Polycom
+model: SoundPoint IP 330
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 430 3.1.1
+[pcspip430_311]
+brand: Polycom
+model: SoundPoint IP 430
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 450 3.1.1
+[pcspip450_311]
+brand: Polycom
+model: SoundPoint IP 450
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 500 3.1.1
+[pcspip500_311]
+brand: Polycom
+model: SoundPoint IP 500
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 501 3.1.1
+[pcspip501_311]
+brand: Polycom
+model: SoundPoint IP 501
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 550 3.1.1
+[pcspip550_311]
+brand: Polycom
+model: SoundPoint IP 550
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 560 3.1.1
+[pcspip560_311]
+brand: Polycom
+model: SoundPoint IP 560
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 600 3.1.1
+[pcspip600_311]
+brand: Polycom
+model: SoundPoint IP 600
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 601 3.1.1
+[pcspip601_311]
+brand: Polycom
+model: SoundPoint IP 601
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 650 3.1.1
+[pcspip650_311]
+brand: Polycom
+model: SoundPoint IP 650
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundPoint IP 670 3.1.1
+[pcspip670_311]
+brand: Polycom
+model: SoundPoint IP 670
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundStation IP 4000 SIP
+[pcssip4000sip_311]
+brand: Polycom
+model: SoundStation IP 4000 SIP
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundStation IP 6000 SIP
+[pcssip6000sip_311]
+brand: Polycom
+model: SoundStation IP 6000 SIP
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Polycom SoundStation IP 7000 SIP
+[pcssip7000sip_311]
+brand: Polycom
+model: SoundStation IP 7000 SIP
+version: 3.1.1
+files: spip_ssip_BootROM_4_1_2_release_sig.zip spip_ssip_3_1_1_release_sig.zip
+
+# Common files for Polycom phones
+
+[spip_ssip_BootROM_4_1_2_release_sig.zip]
+url: http://downloads.polycom.com/voice/voip/sp_ss_bootrom/spip_ssip_BootROM_4_1_2_release_sig.zip
+size: 24567235
+md5sum: 430dcfc588a73461341569f8c8fe69ae
+sha1sum: 6d8ed2160a3c8c61b092d8dba9d1fe31f4c33c2e
+
+[spip_ssip_3_1_1_release_sig.zip]
+url: http://downloads.polycom.com/voice/voip/sp_ss_sip/spip_ssip_3_1_1_release_sig.zip
+size: 100247868
+md5sum: 2e22be473a5b33fd4248e550e4ef41d9
+sha1sum: 985efb8aa405f8edc119617dd23caa982e75684b
+
+# Snom 300 7.3.7
+[sn300_737]
+brand: Snom
+model: 300
+version: 7.3.7
+files: snom300-7.3.7-SIP-f.bin
+
+[snom300-7.3.7-SIP-f.bin]
+url: http://provisioning.snom.com/download/fw/snom300-7.3.7-SIP-f.bin
+size: 2915632
+md5sum: d8b106d5b09f8f0b3633cb6ec536126f
+sha1sum: aca233eb226e284557258601a8f085dbc1812bd5
+
+# Snom 320 7.3.7
+[sn320_737]
+brand: Snom
+model: 320
+version: 7.3.7
+files: snom320-7.3.7-SIP-f.bin
+
+[snom320-7.3.7-SIP-f.bin]
+url: http://provisioning.snom.com/download/fw/snom320-7.3.7-SIP-f.bin
+size: 2928428
+md5sum: b16a23408a2b0358e0d8719fd9032723
+sha1sum: 58cf14b679326364417ed253e4702877089ac16b
+
+# Snom 360 7.3.7
+[sn360_737]
+brand: Snom
+model: 360
+version: 7.3.7
+files: snom360-7.3.7-SIP-f.bin
+
+[snom360-7.3.7-SIP-f.bin]
+url: http://provisioning.snom.com/download/fw/snom360-7.3.7-SIP-f.bin
+size: 2971044
+md5sum: 200f1089d2c65044ecd7ab8ce8f4b49c
+sha1sum: 88b78553b31b17f967619d187b42758889a90ba8
+
+# Snom 370 7.3.7
+[sn370_737]
+brand: Snom
+model: 370
+version: 7.3.7
+files: snom370-7.3.7-SIP-f.bin
+
+[snom370-7.3.7-SIP-f.bin]
+url: http://provisioning.snom.com/download/fw/snom370-7.3.7-SIP-f.bin
+size: 3777536
+md5sum: 5eb9854c4ca0489900472ff4b5a01ae9
+sha1sum: f565cc725a28c9b8a1faba45c438c538d7c16dfc
+
+# Snom m3 1.1.6
+[snm3_116]
+brand: Snom
+model: m3
+version: 1.1.6
+files: SnakeGw_fr01_v0116.fwu SnakePp_fr01_v0116.fwu
+
+[SnakeGw_fr01_v0116.fwu]
+url: http://provisioning.snom.com/m3/firmware/Fileformat3/SnakeGw_fr01_v0116.fwu
+size: 983616
+md5sum: 40c65670f13f31edf46d3c65999affd5
+sha1sum: 0c49ea248d503273dbfd8bdc889ea1e112f4b8fa
+
+[SnakePp_fr01_v0116.fwu]
+url: http://provisioning.snom.com/m3/firmware/Fileformat3/SnakePp_fr01_v0116.fwu
+size: 979068
+md5sum: 1a4966ec9c0c48c8bbc7ca440ba4ae7e
+sha1sum: f3bd2fd9872096a07c5ae17eacede68072681e64
+
+# Thomson ST2022 3.65
+[thst2022_365]
+brand: Thomson
+model: ST2022
+version: 3.65
+files: ST2022_SG_v3.65_Release_Package.zip
+
+[ST2022_SG_v3.65_Release_Package.zip]
+url: http://www.thomsonbroadbandpartner.com/getfile.php?id=6457
+size: 7769854
+md5sum: 904e2455606f4424b6decdaae1a14370
+sha1sum: 905a5440b89c39833bd5e5bb04d5618963a60d02
+
+# Thomson ST2030 1.66
+[thst2030_166]
+brand: Thomson
+model: ST2030
+version: 1.66
+files: ST2030_SG_v1.66_Release_package.zip
+
+[ST2030_SG_v1.66_Release_package.zip]
+url: http://www.thomsonbroadbandpartner.com/getfile.php?id=6466
+size: 8248076
+md5sum: b2cba25db65d5c7036e759e4646130a7
+sha1sum: f4b370fd70a8ba4de56d0779909ab103b856efba
+
+###
+### Cards Firmwares starting from here ###
+###
+
+[oct6114-128_10501]
+brand: Digium
+model: VPMOCT128M/VPM450M
+version: 1.05.01
+files: dahdi-fw-oct6114-128-1.05.01.tar.gz
+
+[dahdi-fw-oct6114-128-1.05.01.tar.gz]
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-128-1.05.01.tar.gz
+size: 165849
+md5sum: c1f1a18d3e20d283f42c71e580a64b5a
+sha1sum: bcf07434f4589d07d9b5f67f7b3a8fb115aa9229
+
+[oct6114-064_10501]
+brand: Digium
+model: VPMOCT064M
+version: 1.05.01
+files: dahdi-fw-oct6114-064-1.05.01.tar.gz
+
+[dahdi-fw-oct6114-064-1.05.01.tar.gz]
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-064-1.05.01.tar.gz
+size: 165869
+md5sum: 88db9b7a07d8392736171b1b3e6bcc66
+sha1sum: 2fb8e5f4f7aedb285ffa21632efd45af877eacd4
+
+[tc400m_612]
+brand: Digium
+model: TC400M
+version: 6.12
+files: dahdi-fw-tc400m-MR6.12.tar.gz
+
+[dahdi-fw-tc400m-MR6.12.tar.gz]
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-tc400m-MR6.12.tar.gz
+size: 1750035
+md5sum: 2ea860bb8a9d8ede2858b9557b74ee3c
+sha1sum: 9206abda4c9cf192e8cae7e707f2e4e65beb8f87
+
+[vpmadt032_107]
+brand: Digium
+model: VPMADT032
+version: 1.07
+files: dahdi-fw-vpmadt032-1.07.tar.gz
+
+[dahdi-fw-vpmadt032-1.07.tar.gz]
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-vpmadt032-1.07.tar.gz
+size: 41376
+md5sum: e1c7231d6225ac999cb18f4e858f66b6
+sha1sum: fd470e7aec0db62e3750aa4819ff03b70c6e9977
+
+[aft_a101d]
+brand: Sangoma
+model: AFT A101D
+version: 34
+files: A101dm_0040_V34.BIN
+
+[A101dm_0040_V34.BIN]
+url: ftp://ftp.sangoma.com/firmware/A101dm_0040_V34.BIN
+size: 212392
+md5sum: 4367ff7f110087bfe8f41545d2200fd4
+sha1sum: a80f05da2ba81cf2944ffef682ad0b5d51739f27
+
+[aft_a102d]
+brand: Sangoma
+model: AFT A102D
+version: 33
+files: A102dm_0040_V33.BIN
+
+[A102dm_0040_V33.BIN]
+url: ftp://ftp.sangoma.com/firmware/A102dm_0040_V33.BIN
+size: 212392
+md5sum: 87735cd6dac1b019cbbbdcdaf948531b
+sha1sum: a09d50ef018e526e25154694b1b3255879853ee1
+
+[aft_a104d]
+brand: Sangoma
+model: AFT A104D
+version: 26
+files: A104d_0100_V26.BIN
+
+[A104d_0100_V26.BIN]
+url: ftp://ftp.sangoma.com/firmware/A104d_0100_V26.BIN
+size: 402936
+md5sum: ea86577472f787e56d6be510032f8dd5
+sha1sum: baa79916fa3098f0b03084a7a3bc8909e7e1eaa4
+
+[aft_a108d]
+brand: Sangoma
+model: AFT A108D
+version: 35
+files: A108dm_0100_V35.BIN
+
+[A108dm_0100_V35.BIN]
+url: ftp://ftp.sangoma.com/firmware/A108dm_0100_V35.BIN
+size: 402936
+md5sum: 43d2044f89662ddd16b9363995afc423
+sha1sum: bc310f3f310ed3f399107ca837b394e4ebab614b
+
+[aft_a200]
+brand: Sangoma
+model: AFT A200
+version: 11
+files: A200_0040_V11.BIN
+
+[A200_0040_V11.BIN]
+url: ftp://ftp.sangoma.com/firmware/A200_0040_V11.BIN
+size: 212392
+md5sum: 13287a623974a6aafc218f1dd03eff61
+sha1sum: 78028e235177cdc4e941cb4ea743150f2bb82a0b
+
+[aft_a400]
+brand: Sangoma
+model: AFT A400
+version: 11
+files: A400_0040_V11.BIN
+
+[A400_0040_V11.BIN]
+url: ftp://ftp.sangoma.com/firmware/A400_0040_V11.BIN
+size: 212392
+md5sum: 7940790760b2ea02ecb797f0cbd223b3
+sha1sum: 2df9a41b96b2381002db677886cdc03509e8705f
+
+[aft_a500d]
+brand: Sangoma
+model: AFT A500D
+version: 32
+files: A500_0040_V32.BIN
+
+[A500_0040_V32.BIN]
+url: ftp://ftp.sangoma.com/firmware/A500_0040_V32.BIN
+size: 212392
+md5sum: ece8a9d4599719b1bcc4d988c77060c4
+sha1sum: 3e2d7ec503d6ed920ccf7bb13f08025592cb45cb
+
+[aft_a14x]
+brand: Sangoma
+model: AFT A14X
+version: 6
+files: A140_0100_V06.BIN
+
+[A140_0100_V06.BIN]
+url: ftp://ftp.sangoma.com/firmware/A140_0100_V06.BIN
+size: 402936
+md5sum: 583d06fcadaf2a6c9d086fb4aa033f17
+sha1sum: da52d7aa7fe51a8a0aaca702148e2f2dbb324850
+
+[aft_echocan]
+brand: Sangoma
+model: Echo Canceller for all cards
+version: 3.3.15
+files: wanpipe-3.3.15.tgz
+
+[wanpipe-3.3.15.tgz]
+url: ftp://ftp.sangoma.com/linux/current_wanpipe/wanpipe-3.3.15.tgz
+size: 12891379
+md5sum: bc5f5416cb3e303e776b5e6a3ee54851
+sha1sum: 131bf260e727e232f547c3107ce4de6a23cc3936
