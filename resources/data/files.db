@@ -1,0 +1,135 @@
+; [file_FILEDEFNAME]
+; url: URL
+; size: SIZE
+; sha1sum: LOWERCASE_SHA1SUM
+; filename: FILENAME (opt: default=basename(URL))
+; downloader: [auth | default] (opt: default=default)
+
+[file_polycom-bootrom42]
+url: http://downloads.polycom.com/voice/voip/sp_ss_bootrom/spip_ssip_BootROM_4_2_2_release_sig.zip
+size: 21452104
+sha1sum: 6bb960aa48e0b9a515218b1735b4735bf4088687
+
+[file_polycom-sipapp32]
+url: http://downloads.polycom.com/voice/voip/sp_ss_sip/spip_ssip_vvx_3_2_3_release_sig_split.zip
+size: 93522406
+sha1sum: 3b709a6a764753e6a99e972779c06c71e4471fec
+
+
+
+[file_siemens-fw]
+url: http://gigaset.siemens.com/chagall/2/chagall214_02.bin
+size: 1835008
+sha1sum: 41a2f7cf79c0a961aa2fa49e4bfd2549dd6f5d09
+
+
+
+[file_thomson-st2022fw]
+filename: st2022_v4.69.zip
+url: http://www.thomsonbroadbandpartner.com/getfile.php?id=6957
+size: 6057065
+sha1sum: 278f981d50ad0a09623db381883569d18c7b7697
+
+[file_thomson-st2030fw]
+filename: st2030_v2.72.zip
+url: http://www.thomsonbroadbandpartner.com/getfile.php?id=7233
+size: 4643993
+sha1sum: 65b5a6cf179cbe6214ff48d840405933081b2dd0
+
+[file_thomson-tb30fw]
+filename: tb30_v1.72.zip
+url: http://www.thomsonbroadbandpartner.com/getfile.php?id=7190
+size: 4745006
+sha1sum: 22bb73764c5cc8ab045114a27f3a3e4336227f15
+
+
+
+[file_zenitel-ipstationfw]
+url: https://alphasupport.zenitel.com/alphawiki/downloads/A100G80200.01_10_3_4.zip
+size: 5003951
+sha1sum: 304c2037491f9ab2c75a89ad0791460cfd08a0d4
+downloader: auth
+
+
+
+[file_digium-oct61114-128fw]
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-128-1.05.01.tar.gz
+size: 165849
+sha1sum: bcf07434f4589d07d9b5f67f7b3a8fb115aa9229
+
+[file_digium-oct61114-064fw]
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-064-1.05.01.tar.gz
+size: 165869
+sha1sum: 2fb8e5f4f7aedb285ffa21632efd45af877eacd4
+
+[file_digium-tc400mfw]
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-tc400m-MR6.12.tar.gz
+size: 1750035
+sha1sum: 9206abda4c9cf192e8cae7e707f2e4e65beb8f87
+
+[file_digium-vpmadt032fw]
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-vpmadt032-1.07.tar.gz
+size: 41376
+sha1sum: fd470e7aec0db62e3750aa4819ff03b70c6e9977
+
+
+
+[file_sangoma-a101dmfw]
+url: ftp://ftp.sangoma.com/firmware/A101dm_0040_V37.BIN
+size: 212392
+sha1sum: 71f1906d8ec593f732198291a8dbe7c934edb999
+
+[file_sangoma-a102dmfw]
+url: ftp://ftp.sangoma.com/firmware/A102dm_0040_V37.BIN
+size: 212392
+sha1sum: 39491b91796269acbc16bbe8b6c1d848b9ecdd1a
+
+[file_sangoma-a104dmfw]
+url: ftp://ftp.sangoma.com/firmware/A104dm_0100_V43.BIN
+size: 402936
+sha1sum: fefbb2d0effd67fb642e43d04ff396e565acfcb1
+
+[file_sangoma-a108dmfw]
+url: ftp://ftp.sangoma.com/firmware/A108dm_0100_V43.BIN
+size: 402936
+sha1sum: 4afabcf22c5a2e64f2ba62e04a3a6dab7a619bf8
+
+[file_sangoma-a200fw]
+url: ftp://ftp.sangoma.com/firmware/A200_0040_V13.BIN
+size: 212392
+sha1sum: 6d15bbf1e37985573b217e2c6e2c09ab36ec51bf
+
+[file_sangoma-a400fw]
+url: ftp://ftp.sangoma.com/firmware/A400_0040_V11.BIN
+size: 212392
+sha1sum: 2df9a41b96b2381002db677886cdc03509e8705f
+
+[file_sangoma-a500fw]
+url: ftp://ftp.sangoma.com/firmware/A500_0040_V35.BIN
+size: 212392
+sha1sum: 1a2871119d02e1af30c0b84708448e4da453e5aa
+
+[file_sangoma-b600fw]
+url: ftp://ftp.sangoma.com/firmware/B600_0025_V02.BIN
+size: 169216
+sha1sum: ac3aba913ebdcc48309ccb0b62fa8d6366958b57
+
+[file_sangoma-b601fw]
+url: ftp://ftp.sangoma.com/firmware/B601_0025_V04.BIN
+size: 169216
+sha1sum: 9a6605cb2d2bb06c66af0a8841e882d9e2284b34
+
+[file_sangoma-b700fw]
+url: ftp://ftp.sangoma.com/firmware/B700_0040_V35.BIN
+size: 212392
+sha1sum: c8003ff4bac7f8a64514c860e90079c5e9806bf0
+
+[file_sangoma-a14xfw]
+url: ftp://ftp.sangoma.com/firmware/A140_0100_V07.BIN
+size: 402936
+sha1sum: 28ffa475ab151fecaac33b018720edf2b0c1bbfc
+
+[file_sangoma-echocan]
+url: ftp://ftp.sangoma.com/linux/current_wanpipe/wanpipe-3.5.18.tgz
+size: 15957879
+sha1sum: d6fd4c98bac0ea5718066cfed80367ca0cc5e02a

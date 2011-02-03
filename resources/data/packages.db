@@ -1,0 +1,172 @@
+; [pkg_PKGDEFNAME]
+; desc: DESCRIPTION
+; version: VERSION
+; hidden: [yes | no] (opt: default=no)
+; depends: DEPEND (DEPEND)* (opt)
+; files: FILEDEFNAME (FILEDEFNAME)* (opt)
+; install_proc: INSTDEFNAME (opt)
+
+# replaces: ?
+# conflict: ?
+# provides: ?
+
+[pkg_polycom-32]
+desc: Firmware and language files for Polycom SPIP 330, 335, 450, etc
+version: 3.2.3-1
+depends: pkg_polycom-bootrom42 pkg_polycom-sipapp32
+
+[pkg_polycom-bootrom42]
+desc: Bootrom for Polycom SPIP 330, etc
+version: 4.2.2-1
+hidden: yes
+files: file_polycom-bootrom42
+install_proc: install_polycom-bootrom42
+
+[pkg_polycom-sipapp32]
+desc: SIP application and language files for Polycom SPIP 330, 335, 450, etc
+version: 3.2.3-1
+hidden: yes
+files: file_polycom-sipapp32
+install_proc: install_polycom-sipapp32
+
+
+
+[pkg_siemens-c470ip]
+desc: Firmware for Siemens C470IP
+version: 02214-1
+files: file_siemens-fw
+install_proc: install_siemens-fw c470ip
+
+[pkg_siemens-s675ip]
+desc: Firmware for Siemens S675IP
+version: 02214-1
+files: file_siemens-fw
+install_proc: install_siemens-fw s675ip
+
+
+
+[pkg_thomson-st2022]
+desc: Firmware for Thomson ST2022
+version: 4.69-1
+files: file_thomson-st2022fw
+install_proc: install_thomson-fw v2022*.zz
+
+[pkg_thomson-st2030]
+desc: Firmware for Thomson ST2030
+version: 2.72-1
+files: file_thomson-st2030fw
+install_proc: install_thomson-fw v2030*.zz
+
+[pkg_thomson-tb30]
+desc: Firmware for Thomson TB30
+version: 1.72-1
+files: file_thomson-tb30fw
+install_proc: install_thomson-fw TB30S*.zz
+
+
+
+[pkg_zenitel-ipstation]
+desc: Firmware for all Zenitel IP stations
+version: 01.10.3.4-1
+files: file_zenitel-ipstationfw
+install_proc: install_zenitel-ipstationfw
+
+
+
+[pkg_digium-oct6114-128]
+desc: Firmware for Digium VPMOCT128M/VPM450M.
+version: 1.05.01
+files: file_digium-oct61114-128fw
+install_proc: install_digium-fw
+
+[pkg_digium-oct6114-064]
+desc: Firmware for Digium VPMOCT064M.
+version: 1.05.01
+files: file_digium-oct61114-064fw
+install_proc: install_digium-fw
+
+[pkg_digium-tc400m]
+desc: Firmware for Digium TC400M.
+version: MR6.12
+files: file_digium-tc400mfw
+install_proc: install_digium-fw
+
+[pkg_digium-vpmadt032]
+desc: Firmware for Digium VPMADT032.
+version: 1.07
+files: file_digium-vpmadt032fw
+install_proc: install_digium-fw
+
+
+
+[pkg_sangoma-a101dm]
+desc: Firmware for Sangoma AFT A101D.
+version: 37
+files: file_sangoma-a101dmfw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-a102dm]
+desc: Firmware for Sangoma AFT A102D.
+version: 37
+files: file_sangoma-a102dmfw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-a104dm]
+desc: Firmware for Sangoma AFT A104D.
+version: 43
+files: file_sangoma-a104dmfw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-a108dm]
+desc: Firmware for Sangoma AFT A108D.
+version: 43
+files: file_sangoma-a108dmfw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-a200]
+desc: Firmware for Sangoma AFT A200.
+version: 13
+files: file_sangoma-a200fw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-a400]
+desc: Firmware for Sangoma AFT A400.
+version: 11
+files: file_sangoma-a400fw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-a500]
+desc: Firmware for Sangoma AFT A500.
+version: 35
+files: file_sangoma-a500fw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-b600]
+desc: Firmware for Sangoma AFT B600.
+version: 02
+files: file_sangoma-b600fw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-b601]
+desc: Firmware for Sangoma AFT B601.
+version: 04
+files: file_sangoma-b601fw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-b700]
+desc: Firmware for Sangoma AFT B700.
+version: 35
+files: file_sangoma-b700fw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-a14x]
+desc: Firmware for Sangoma AFT A14X.
+version: 7
+files: file_sangoma-a14xfw
+install_proc: install_sangoma-fw
+
+[pkg_sangoma-echocan]
+desc: Echo canceller for all cards.
+version: 3.5.18
+files: file_sangoma-echocan
+install_proc: install-sangoma-echocan
