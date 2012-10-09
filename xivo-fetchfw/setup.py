@@ -12,7 +12,7 @@ setup(
     maintainer_email='technique@proformatique.com',
     url='http://wiki.xivo.fr/',
     license='GPLv3',
-    packages=['xivo-fetchfw'],
+    packages=['xivo_fetchfw'],
     scripts=['bin/xivo-fetchfw'],
     data_files=[('/etc/pf-xivo', ['resources/etc/xivo-fetchfw.conf']),
                 ('/var/lib/xivo-fetchfw/installable',
