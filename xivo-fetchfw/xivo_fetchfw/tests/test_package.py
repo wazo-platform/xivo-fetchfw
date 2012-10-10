@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import unittest
-import fetchfw.package as package
+import xivo_fetchfw.package as package
 
 
 class TestInstalledPackage(unittest.TestCase):
@@ -17,7 +17,7 @@ class TestInstalledPackage(unittest.TestCase):
         pkg_info = {'id': 'foo',
                     'description': 'Foo',
                     'version': '1',
-                    'files': [],}
+                    'files': [], }
         self.assertRaises(Exception, package.InstalledPackage, pkg_info)
 
 

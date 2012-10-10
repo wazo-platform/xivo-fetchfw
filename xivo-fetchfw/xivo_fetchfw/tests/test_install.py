@@ -4,7 +4,7 @@ import os
 import shutil
 import tempfile
 import unittest
-import fetchfw.install as install
+import xivo_fetchfw.install as install
 from xivo_fetchfw.util import list_paths
 
 TEST_RES_DIR = os.path.join(os.path.dirname(__file__), 'install')
