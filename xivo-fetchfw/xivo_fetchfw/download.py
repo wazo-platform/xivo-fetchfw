@@ -23,7 +23,7 @@ import logging
 import os
 import urllib2
 from binascii import b2a_hex
-from fetchfw.util import FetchfwError
+from xivo_fetchfw.util import FetchfwError
 
 logger = logging.getLogger(__name__)
 

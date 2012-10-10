@@ -4,8 +4,8 @@ import os
 import shutil
 import tempfile
 import unittest
-import fetchfw.install as install
-from fetchfw.util import list_paths 
+import xivo_fetchfw.install as install
+from xivo_fetchfw.util import list_paths
 
 TEST_RES_DIR = os.path.join(os.path.dirname(__file__), 'install')
 
@@ -27,10 +27,10 @@ class TestNullSource(unittest.TestCase):
     def setUp(self):
         self._tmp_dir = tempfile.mkdtemp()
         self._null_source = install.NullSource()
-    
+
     def tearDown(self):
         shutil.rmtree(self._tmp_dir)
-    
+
     def test_null_source_ok(self):
         self._null_source.pull(self._tmp_dir)
         self.assertEqual([], os.listdir(self._tmp_dir))
@@ -39,18 +39,18 @@ class TestNullSource(unittest.TestCase):
 class _TestStandardExtractFilter(object):
     # _FILE
     # _FILTER
-    
+
     def setUp(self):
         self._tmp_dir = tempfile.mkdtemp()
-    
+
     def tearDown(self):
         shutil.rmtree(self._tmp_dir)
-    
+
     def test_filter(self):
         filter = self._FILTER(self._FILE)
         filter.apply(TEST_RES_DIR, self._tmp_dir)
         self.assert_output_directory_content()
-    
+
     def assert_output_directory_content(self):
         self.assertEqual(['dir0/',
                           'dir0/file1.txt',
@@ -89,24 +89,24 @@ class TestExcludeFilter(unittest.TestCase):
     def setUp(self):
         self._tmp_src_dir = tempfile.mkdtemp()
         self._tmp_dst_dir = tempfile.mkdtemp()
-    
+
     def tearDown(self):
         shutil.rmtree(self._tmp_src_dir)
         shutil.rmtree(self._tmp_dst_dir)
-    
+
     def _create_file(self, filename, content=None):
         _create_file(self._tmp_src_dir, filename, content)
-    
+
     def _create_dir(self, dirname):
         _create_dir(self._tmp_src_dir, dirname)
-    
+
     def test_filter(self):
         self._create_file('file1')
         self._create_file('file2')
         filter = install.ExcludeFilter(['file1'])
         filter.apply(self._tmp_src_dir, self._tmp_dst_dir)
         self.assertEqual(['file2'], sorted(list_paths(self._tmp_dst_dir)))
-    
+
     def test_exclude_files_inside_directory(self):
         self._create_dir('dir1')
         self._create_file('dir1/file1')
@@ -119,24 +119,24 @@ class TestIncludeFilter(unittest.TestCase):
     def setUp(self):
         self._tmp_src_dir = tempfile.mkdtemp()
         self._tmp_dst_dir = tempfile.mkdtemp()
-    
+
     def tearDown(self):
         shutil.rmtree(self._tmp_src_dir)
         shutil.rmtree(self._tmp_dst_dir)
-    
+
     def _create_file(self, filename, content=None):
         _create_file(self._tmp_src_dir, filename, content)
-    
+
     def _create_dir(self, dirname):
         _create_dir(self._tmp_src_dir, dirname)
-    
+
     def test_filter(self):
         self._create_file('file1')
         self._create_file('file2')
         filter = install.IncludeFilter(['file1'])
         filter.apply(self._tmp_src_dir, self._tmp_dst_dir)
         self.assertEqual(['file1'], sorted(list_paths(self._tmp_dst_dir)))
-    
+
     def test_include_files_inside_directory(self):
         self._create_dir('dir1')
         self._create_dir('dir1/dir2')
@@ -152,29 +152,29 @@ class TestCopyFilter(unittest.TestCase):
     def setUp(self):
         self._tmp_src_dir = tempfile.mkdtemp()
         self._tmp_dst_dir = tempfile.mkdtemp()
-    
+
     def tearDown(self):
         shutil.rmtree(self._tmp_src_dir)
         shutil.rmtree(self._tmp_dst_dir)
-    
+
     def _create_file(self, filename, content=None):
         _create_file(self._tmp_src_dir, filename, content)
-    
+
     def _create_dir(self, dirname):
         _create_dir(self._tmp_src_dir, dirname)
-    
+
     def test_copy_file_to_file_is_ok(self):
         self._create_file('file1')
         filter = install.CopyFilter('file1', 'file')
         filter.apply(self._tmp_src_dir, self._tmp_dst_dir)
         self.assertEqual(['file'], sorted(list_paths(self._tmp_dst_dir)))
-    
+
     def test_copy_files_to_file_raise_error(self):
         self._create_file('file1')
         self._create_file('file2')
         filter = install.CopyFilter(['file1', 'file2'], 'file')
         self.assertRaises(Exception, filter.apply, self._tmp_src_dir, self._tmp_dst_dir)
-    
+
     def test_copy_files_to_dir_is_ok(self):
         self._create_file('file1')
         self._create_file('file2')
@@ -182,7 +182,7 @@ class TestCopyFilter(unittest.TestCase):
         filter.apply(self._tmp_src_dir, self._tmp_dst_dir)
         self.assertEqual(['dir/', 'dir/file1', 'dir/file2'],
                          sorted(list_paths(self._tmp_dst_dir)))
-    
+
     def test_copy_dirs_into_dir_is_ok(self):
         self._create_dir('dir1')
         self._create_dir('dir2')
@@ -190,12 +190,12 @@ class TestCopyFilter(unittest.TestCase):
         filter.apply(self._tmp_src_dir, self._tmp_dst_dir)
         self.assertEqual(['dir/', 'dir/dir1/', 'dir/dir2/'],
                          sorted(list_paths(self._tmp_dst_dir)))
-    
+
     def test_copy_dir_into_file_raise_error(self):
         self._create_dir('dir1')
         filter = install.CopyFilter('dir1', 'file1')
         self.assertRaises(Exception, filter.apply, self._tmp_src_dir, self._tmp_dst_dir)
-    
+
     def test_copy_dirs_into_file_raise_error(self):
         self._create_dir('dir1')
         self._create_dir('dir2')

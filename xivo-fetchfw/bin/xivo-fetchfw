@@ -21,8 +21,8 @@ __license__ = """
 import logging
 import sys
 from operator import itemgetter
-from fetchfw import cli, config, download, package, params, storage, util
-from fetchfw import commands
+from xivo_fetchfw import cli, config, download, package, params, storage, util
+from xivo_fetchfw import commands
 
 logger = logging.getLogger('xivo-fetchfw')
 

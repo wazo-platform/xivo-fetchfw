@@ -19,7 +19,7 @@ __license__ = """
 
 import copy
 import logging
-from fetchfw.util import FetchfwError, install_paths, remove_paths, cmp_version
+from xivo_fetchfw.util import FetchfwError, install_paths, remove_paths, cmp_version
 
 logger = logging.getLogger(__name__)
 
