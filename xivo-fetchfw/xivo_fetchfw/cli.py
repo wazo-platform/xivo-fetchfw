@@ -19,9 +19,9 @@ __license__ = """
 
 import logging
 import progressbar
-from fetchfw.package import DefaultInstallerController, DefaultUninstallerController, \
+from xivo_fetchfw.package import DefaultInstallerController, DefaultUninstallerController, \
     PackageError, DefaultUpgraderController
-from fetchfw.download import ProgressBarHook
+from xivo_fetchfw.download import ProgressBarHook
 
 logger = logging.getLogger(__name__)
 

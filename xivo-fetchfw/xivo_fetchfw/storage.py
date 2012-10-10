@@ -23,8 +23,8 @@ import logging
 import json
 import os
 from binascii import a2b_hex
-from fetchfw import download, install, util
-from fetchfw.package import InstallablePackage, InstalledPackage
+from xivo_fetchfw import download, install, util
+from xivo_fetchfw.package import InstallablePackage, InstalledPackage
 
 logger = logging.getLogger(__name__)
 
@@ -340,7 +340,7 @@ class BasePkgStorage(object):
     def values(self):
         return self._pkgs.values()
 
-    def get_dependencies(self, pkg_id, maxdepth=-1, filter_fun=None,
+    def get_dependencies(self, pkg_id, maxdepth= -1, filter_fun=None,
                          ignore_missing=False):
         """Return the set of direct and indirect dependencies of pkg_id.
         
@@ -354,7 +354,7 @@ class BasePkgStorage(object):
         return self.get_dependencies_many([pkg_id], maxdepth, filter_fun,
                                           ignore_missing)
 
-    def get_dependencies_many(self, pkg_ids, maxdepth=-1, filter_fun=None,
+    def get_dependencies_many(self, pkg_ids, maxdepth= -1, filter_fun=None,
                               ignore_missing=False):
         """Similar to get_depencies but accept a list of package IDs instead
         of only one package ID.

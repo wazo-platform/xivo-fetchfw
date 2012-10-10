@@ -29,7 +29,7 @@ import tarfile
 import tempfile
 import zipfile
 from fnmatch import fnmatch
-from fetchfw.util import FetchfwError
+from xivo_fetchfw.util import FetchfwError
 
 logger = logging.getLogger(__name__)
 

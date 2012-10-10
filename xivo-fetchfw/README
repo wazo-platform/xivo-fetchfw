@@ -1,4 +1,4 @@
-fetchfw -- a simple "out-of-control" package manager in python.
+xivo_fetchfw -- a simple "out-of-control" package manager in python.
 
 fetchfw main goal is to provide installation/upgrade/uninstallation of
 packages for which the main content is not redistributable.

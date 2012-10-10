@@ -18,7 +18,7 @@ __license__ = """
 """
 
 from ConfigParser import RawConfigParser
-from fetchfw.params import ConfigSpec
+from xivo_fetchfw.params import ConfigSpec
 
 
 def _new_config_spec():

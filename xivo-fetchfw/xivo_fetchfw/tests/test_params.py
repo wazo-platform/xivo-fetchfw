@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import unittest
-from fetchfw import params
+from xivo_fetchfw import params
 
 
 class TestFilterSection(unittest.TestCase):
