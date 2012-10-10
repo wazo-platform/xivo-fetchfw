@@ -26,8 +26,8 @@ def _new_config_spec():
 
     # [general] section definition
     cfg_spec.add_param('general.root_dir', default='/')
-    cfg_spec.add_param('general.db_dir', default='/var/lib/pf-xivo-fetchfw')
-    cfg_spec.add_param('general.cache_dir', default='/var/cache/pf-xivo-fetchfw')
+    cfg_spec.add_param('general.db_dir', default='/var/lib/xivo-fetchfw')
+    cfg_spec.add_param('general.cache_dir', default='/var/cache/xivo-fetchfw')
 
     @cfg_spec.add_param_decorator('general.auth_sections', default=[])
     def _auth_sections_fun(raw_value):
