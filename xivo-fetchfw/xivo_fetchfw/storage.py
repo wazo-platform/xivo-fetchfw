@@ -40,29 +40,29 @@ class ParsingError(StorageError):
 class DefaultRemoteFileBuilder(object):
     """A remote file builder takes a config object (RawConfigParser) and a
     file section and builds a remote file (RemoteFile) from it.
-    
+
     Here's an example section:
-    
+
     [some_section_name]
     filename: foo.gz    ; optional
     url: http://example.org/foo.gz
     size: 29252
     sha1sum: 56c59081b1bd29c97f352b62c9667c409ca99f69
     downloader: default      ; optional
-    
+
     """
     def __init__(self, cache_dir, downloaders):
         """Initialize a new remote file builder.
-        
+
         cache_dir -- the directory where downloaded files are going to be
           saved
         downloaders -- a dictionary where keys are strings and values are
           downloaders (see fetchfw.download).
-        
+
         When a remote file is built, if no downloader is specified in the
         section, the builder will look for the key 'default' in the
         downloaders dictionary.
-        
+
         """
         self._cache_dir = cache_dir
         self._downloaders = downloaders
@@ -91,11 +91,11 @@ class DefaultRemoteFileBuilder(object):
 
 class DefaultFilterBuilder(object):
     """A filter builder takes a list of string tokens and returns a filter object.
-    
+
     For example, if 'fb' is a DefaultFilterBuilder object, then:
       fb.build_node(['untar', 'test.tar'])
     will return a <TarFilter('test.tar')> object.
-    
+
     """
     def _build_unzip(self, args):
         if len(args) != 1:
@@ -145,9 +145,9 @@ class DefaultFilterBuilder(object):
     def build_node(self, tokens):
         """
         Raise a ValueError if arguments are not in the right number or invalid.
-        
+
         Pre: len(tokens) >= 1
-        
+
         """
         type, args = tokens[0], tokens[1:]
         method_name = '_build_' + type
@@ -161,18 +161,18 @@ class DefaultFilterBuilder(object):
 
 class DefaultInstallMgrFactory(object):
     """
-    
+
     Note that unless you really know what you're doing, you probably don't
     want to instantiate this class directly, but instead create instances
     of this class via a DefaultInstallMgrFactoryBuilder.
-    
+
     Here's an example section (we suppose a DefaultFilterBuilder):
-    
+
     [some_section_name]
     a-b: untar $FILE1
     b-c: exclude $ARG1
     c-d: cp */*.txt var/lib/foo/
-    
+
     """
     def __init__(self, config, section, filter_builder, global_vars):
         # XXX it could be "better" if we could create an intermediate representation
@@ -238,12 +238,12 @@ class DefaultInstallMgrFactoryBuilder(object):
 class DefaultPkgBuilder(object):
     """A package builder takes a config object (RawConfigParser) and a
     pkg section and builds an installable package (InstallablePackage) from it.
-    
+
     It also takes a package id, a dict of available remotes files and a dict
     of installation manager factories to build a package.
-    
+
     Here's an example section:
-    
+
     [some_section_name]
     description: Firmware for Digium HX8.
     version: 2.06
@@ -302,10 +302,10 @@ class DefaultPkgBuilder(object):
 class BasePkgStorage(object):
     """Note to be instantiated directly but to serve as a base class for
     package storage classes.
-    
+
     If you derive from this class, instances must haves a '_pkgs' attribute
-    which is a dictionary where keys are package ids and values are package. 
-    
+    which is a dictionary where keys are package ids and values are package.
+
     """
     def __getitem__(self, key):
         return self._pkgs[key]
@@ -340,25 +340,25 @@ class BasePkgStorage(object):
     def values(self):
         return self._pkgs.values()
 
-    def get_dependencies(self, pkg_id, maxdepth= -1, filter_fun=None,
+    def get_dependencies(self, pkg_id, maxdepth=-1, filter_fun=None,
                          ignore_missing=False):
         """Return the set of direct and indirect dependencies of pkg_id.
-        
+
         maxdepth -- -1 to get recursively all the dependencies, 0 to return an
           empty set or a positive number to get the dependencies up to this
           depth
         filter_fun -- a function taking a package id and returning true if the
           package is to be added as a dependencies (and its child, up to maxdepth)
-        
+
         """
         return self.get_dependencies_many([pkg_id], maxdepth, filter_fun,
                                           ignore_missing)
 
-    def get_dependencies_many(self, pkg_ids, maxdepth= -1, filter_fun=None,
+    def get_dependencies_many(self, pkg_ids, maxdepth=-1, filter_fun=None,
                               ignore_missing=False):
         """Similar to get_depencies but accept a list of package IDs instead
         of only one package ID.
-        
+
         """
         # return immediately if maxdepth is 0, this simplify the implementation
         if maxdepth == 0:
@@ -557,7 +557,7 @@ class DefaultInstalledPkgStorage(BasePkgStorage):
     def get_requisites(self, pkg_id):
         """Return the set of direct requisites of pkg_id, i.e. the set of
         package IDs which depends directly on pkg_id.
-        
+
         """
         # we check first since we are using a defaultdict and don't want to
         # create a new instance if pkg_id is not there

@@ -79,7 +79,7 @@ class DefaultDownloader(object):
         raised in this method will be caught and wrapped around an exception who
         derives from DownloadError. Derived class may override this method if
         needed.
-       
+
         """
         return self._opener.open(url, timeout=timeout)
 
@@ -106,7 +106,7 @@ class BaseRemoteFile(object):
         url -- the URL/object to pass to the downloader
         downloader -- the file downloader
         hook_factories -- a list of callable objects that return download hook
-        
+
         """
         self._url = url
         self._downloader = downloader
@@ -117,9 +117,9 @@ class BaseRemoteFile(object):
 
     def download(self, supp_hooks=[]):
         """Download the file and run it through the hooks.
-        
+
         Download hooks are stopped in the reverse order they are started.
-        
+
         """
         logger.debug('Downloading %s', self._url)
         hooks = supp_hooks + [factory() for factory in self._hook_factories]
@@ -164,20 +164,20 @@ class BaseRemoteFile(object):
 
 class RemoteFile(object):
     """A BaseRemoteFile with a few extra attributes:
-    
+
     size -- the size of the remote file
     filename -- the filename of the file that will be written to the filesystem
     path -- the complete path of the file that will be written to the filesystem
     exists -- a method that returns true if the remote file exists on the filesystem
-    
+
     """
     def __init__(self, path, size, base_remote_file):
         """
         path -- the path where the file will be written
-        
+
         Note that you probably want to use the "new_remote_file" function
         instead of directly using this constructor.
-        
+
         """
         self.path = path
         self.size = size
@@ -190,7 +190,7 @@ class RemoteFile(object):
     def exists(self):
         """Return True if the destination path of the file to download refers to
         an existing path.
-        
+
         """
         return os.path.isfile(self.path)
 
@@ -208,52 +208,52 @@ class DownloadHook(object):
     """Base class for download hooks."""
     def start(self):
         """Called just before the download is started.
-        
+
         If this method returns without raising an exception, this hook is
         guaranteed to have one of it's complete/fail method called and its
         stop method called.
-        
+
         """
         pass
 
     def update(self, data):
         """Called every time a certain amount of data from the download is
         received.
-        
+
         """
         pass
 
     def complete(self):
         """Called just after the download has completed.
-        
+
         An exception MAY be raised if this hook consider the download not to
         have successfully completed.
-        
+
         """
         pass
 
     def fail(self, exc_value):
         """Called just after the download has failed.
-        
+
         exc_value is the exception that caused the download to fail.
-        
+
         Note that this method can be called even if the complete method has
         been called earlier. This happens if another hook in the chain decided
         that the download was in fact not complete.
-        
+
         This method MUST NOT raise an exception.
-        
+
         """
         pass
 
     def stop(self):
         """Called just after the download is stopped, either because the
         download completed succesfully or failed.
-        
-        This method is always called if the method 
-        
+
+        This method is always called if the method
+
         This method MUST NOT raise an exception.
-        
+
         """
         pass
 
@@ -372,10 +372,10 @@ class AbortHook(DownloadHook):
 
 def new_handlers(proxies=None):
     """Return a list of standard handlers to be used by downloaders.
-    
+
     proxies -- a dictionary mapping protocol names to URLs of proxies, or
       None
-    
+
     """
     if proxies:
         return [urllib2.ProxyHandler(proxies)]
@@ -385,10 +385,10 @@ def new_handlers(proxies=None):
 
 def new_downloaders_from_handlers(handlers=None):
     """Return a 2-items dictionary ret, for which:
-    
+
     ret['default'] is a DefaultDownloader
     ret['auth'] is an AuthenticatingDownloader
-    
+
     """
     auth = AuthenticatingDownloader(handlers)
     default = DefaultDownloader(handlers)
@@ -398,9 +398,9 @@ def new_downloaders_from_handlers(handlers=None):
 def new_downloaders(proxies=None):
     """Create standard handlers and downloaders and return a 2-items
     dictionary ret, for which:
-    
+
     ret['default'] is a DefaultDownloader
     ret['auth'] is an AuthenticatingDownloader
-    
+
     """
     return new_downloaders_from_handlers(new_handlers(proxies))

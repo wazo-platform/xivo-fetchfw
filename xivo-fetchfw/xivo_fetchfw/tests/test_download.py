@@ -18,6 +18,7 @@ class TestBaseRemoteFile(unittest.TestCase):
     def _new_fobj_mock(self):
         # Note that results in is reverse order (i.e. 'foo' will be returned first)
         results = ['', 'foo']
+
         def read(size):
             return results.pop()
 

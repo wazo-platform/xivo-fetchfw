@@ -30,6 +30,7 @@ class PackageError(FetchfwError):
 
 _COMMON_MANDATORY_KEYS = ['id', 'version', 'description']
 
+
 def _check_pkg_info(pkg_info, mandatory_keys):
     for key in mandatory_keys:
         if key not in pkg_info:
@@ -45,7 +46,7 @@ class InstallablePackage(object):
 
     def __init__(self, pkg_info, remote_files, install_mgr):
         """Create a new installable package.
-        
+
         pkg_info -- a dictionary with the following standardised keys:
           id -- id of the package (mandatory)
           version -- version of the package. See util.cmp_version for valid
@@ -57,7 +58,7 @@ class InstallablePackage(object):
             (optional, default [])
         remotes_files -- a list of remote file
         install_mgr -- an installer manager or None
-        
+
         Note that pkg_info values must be only of these type:
         - int
         - float
@@ -65,9 +66,9 @@ class InstallablePackage(object):
         - unicode string
         - list
         - dict
-        
+
         All pkg_info keys must match \w+ and contains only character from the ASCII set.
-        
+
         """
         _check_pkg_info(pkg_info, self._MANDATORY_KEYS)
         _add_pkg_info_defaults(pkg_info)
@@ -81,7 +82,7 @@ class InstallablePackage(object):
 
     def new_installed_package(self):
         # Note that for this to works, self must already have all mandatory keys
-        # in it's info 
+        # in it's info
         new_pkg_info = copy.deepcopy(self.pkg_info)
         return InstalledPackage(new_pkg_info)
 
@@ -94,14 +95,14 @@ class InstalledPackage(object):
 
     def __init__(self, pkg_info):
         """Create a new installed package.
-        
+
         pkg_info -- same as pkg_info for installable package but adds the
           following standardized keys:
           explicit_install -- a boolean, true if the package was explictly
             installed (mandatory)
           files -- a list of files that were created on the host filesysmtem
             during installation (mandatory)
-          
+
         """
         _check_pkg_info(pkg_info, self._MANDATORY_KEYS)
         _add_pkg_info_defaults(pkg_info)
@@ -246,8 +247,8 @@ class PackageManager(object):
             logger.error("Error while removing files of pkg %s: %s" % (pkg_id, e))
             if removed_paths:
                 logger.error("These files have been removed from %s although the"
-                                 "package will still be shown as installed: %s" %
-                                 (root_dir, removed_path))
+                             "package will still be shown as installed: %s" %
+                             (root_dir, removed_path))
             raise
         else:
             try:
@@ -328,10 +329,10 @@ class PackageManager(object):
             raw_upgrade_list = self._get_raw_upgrade_list()
 
             # 2. preprocess stuff
-            # 2.1. 
+            # 2.1.
             upgrade_list = upgrader_ctrl.preprocess_raw_upgrade_list(raw_upgrade_list)
 
-            # 2.2. from this list, get any package that should be 
+            # 2.2. from this list, get any package that should be
             #      uninstalled/installed at the same time
             upgrade_specs = upgrader_ctrl.preprocess_upgrade_list(upgrade_list)
 
@@ -385,11 +386,11 @@ class PackageManager(object):
 
 class InstallerController(object):
     """The method are shown in the order they are called.
-    
+
     All installer controller should inherit from this one. Although this class
     is a valid installer controller, it's so basic that you mostly do not want
     to use it directly.
-    
+
     """
 
     def __init__(self, installable_pkg_sto, installed_pkg_sto):
@@ -398,36 +399,36 @@ class InstallerController(object):
     def pre_installation(self):
         """Called before anything else, i.e. just after installer controller
         creation.
-        
-        Return value is ignored. 
-        
+
+        Return value is ignored.
+
         """
         pass
 
     def preprocess_raw_pkg_ids(self, raw_pkg_ids):
         """Return a list of package IDs from the given list of package IDs.
-        
+
         Every returned package ID must be in the installable package storage.
-        
+
         In this function, you could do things like:
         - remove package from the ignore list (?)
         - print a warning message and raise an exception if a pkg id is
           invalid
-        
+
         """
         return raw_pkg_ids
 
     def preprocess_raw_pkgs(self, raw_installable_pkgs):
         """Return a list of package from the given list of packages.
-        
+
         In this function, you could do things like:
         - add dependencies
         - remove the package that are already installed
         - print a warning if a package to be installed is older than an
           already installed package
-        
+
         Note that you can modify the list and the packages given in arguments.
-        
+
         """
         for installable_pkg in raw_installable_pkgs:
             installable_pkg.pkg_info['explicit_install'] = True
@@ -435,10 +436,10 @@ class InstallerController(object):
 
     def preprocess_raw_remote_files(self, raw_remote_files):
         """Return a list of remote file from the given list of remote files.
-        
+
         In this function, you could do things like:
         - remove already downloaded remote files
-        
+
         """
         return [xfile for xfile in raw_remote_files if not xfile.exists()]
 
@@ -473,7 +474,7 @@ class InstallerController(object):
     def post_installation(self, exc_value):
         """Called after anything else (will be called if pre_installation returned successfully)
         exc_value is None if no error, else the exception value
-        
+
         """
         pass
 
@@ -506,11 +507,12 @@ class DefaultInstallerController(InstallerController):
             installable_pkg.pkg_info['explicit_install'] = True
         if not self._nodeps:
             pkg_ids = set(pkg.pkg_info['id'] for pkg in installable_pkgs)
+
             def filter_fun(dep_pkg_id):
                 return dep_pkg_id not in self._installed_pkg_sto and \
-                       dep_pkg_id not in pkg_ids
+                    dep_pkg_id not in pkg_ids
             dependencies = self._installable_pkg_sto.get_dependencies_many(
-                    pkg_ids, filter_fun=filter_fun)
+                pkg_ids, filter_fun=filter_fun)
             for dep_pkg_id in dependencies:
                 dep_pkg = self._installable_pkg_sto[dep_pkg_id].clone()
                 dep_pkg.pkg_info['explicit_install'] = False
@@ -582,13 +584,14 @@ class DefaultUninstallerController(UninstallerController):
             # some cases are complex to handle, this is why this might
             # seems overly complex
             to_remove_ids = set(pkg.pkg_info['id'] for pkg in installed_pkgs)
+
             def filter_fun(dep_pkg_id):
                 # next line should never raise a KeyError since we are asking
                 # to ignore missing dependencies
                 dep_pkg = self._installed_pkg_sto[dep_pkg_id]
                 return not dep_pkg.pkg_info['explicit_install']
             candidate1_ids = self._installed_pkg_sto.get_dependencies_many(
-                    to_remove_ids, filter_fun=filter_fun, ignore_missing=True)
+                to_remove_ids, filter_fun=filter_fun, ignore_missing=True)
             candidate2_ids = set(candidate1_ids)
             candidate2_ids.difference_update(to_remove_ids)
             augm_candidate1_ids = set(candidate1_ids)
@@ -597,7 +600,7 @@ class DefaultUninstallerController(UninstallerController):
                 requisite_ids = self._installed_pkg_sto.get_requisites(candidate_id)
                 if not requisite_ids.issubset(augm_candidate1_ids):
                     dependency_ids = self._installed_pkg_sto.get_dependencies(
-                            candidate_id, ignore_missing=True)
+                        candidate_id, ignore_missing=True)
                     candidate2_ids.discard(candidate_id)
                     candidate2_ids.difference_update(dependency_ids)
             for candidate_id in candidate2_ids:
@@ -617,7 +620,7 @@ class UpgraderController(object):
         """Return the list of tuple (installed pkg, installable pkg) to
         upgrade from the list of (installed pkg, installable pkg) tuple
         that have a different version than their installable counterpart.
-        
+
         """
         # By default, upgrade all package that are not in sync, which is
         # not what you want to do for more evolved package management
@@ -627,10 +630,10 @@ class UpgraderController(object):
         """From the list of known to be upgraded pkgs, return a list of tuple
         (installed_pkg, [<new_to_install_pkg>], [<to_uninstall_pkg>])) such
         that both list doesn't contains the pkg of the installed pkg.
-        
+
         Also, if a new package to install is found in more than in one list, it
         will be discard in the later list.
-        
+
         """
         return [(ed_pkg, able_pkg, [], []) for (ed_pkg, able_pkg) in upgrade_list]
 
@@ -691,7 +694,7 @@ class DefaultUpgraderController(UpgraderController):
         self._nodeps = nodeps
 
     def _upgrade_list_filter_function(self, (installed_pkg, installable_pkg)):
-        # Return true if installed_pkg is not in the ignore list and if 
+        # Return true if installed_pkg is not in the ignore list and if
         # installable_pkg version is higher than installed_pkg version
         pkg_id = installed_pkg.pkg_info['id']
         if pkg_id in self._ignore:
@@ -711,11 +714,12 @@ class DefaultUpgraderController(UpgraderController):
             install_list = []
             if not self._nodeps:
                 pkg_id = installed_pkg.pkg_info['id']
+
                 def filter_fun(dep_pkg_id):
                     return dep_pkg_id not in self._installed_pkg_sto and \
-                           dep_pkg_id not in scheduled_pkg_ids
+                        dep_pkg_id not in scheduled_pkg_ids
                 dependencies = self._installable_pkg_sto.get_dependencies(
-                        pkg_id, filter_fun=filter_fun)
+                    pkg_id, filter_fun=filter_fun)
                 for dep_pkg_id in dependencies:
                     scheduled_pkg_ids.add(dep_pkg_id)
                     dep_pkg = self._installable_pkg_sto[dep_pkg_id].clone()

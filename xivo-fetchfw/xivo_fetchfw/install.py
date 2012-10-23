@@ -53,10 +53,10 @@ class _InstallationProcess(object):
 
     def execute(self):
         """Execute the installation.
-        
+
         Return the directory (subdirectory of dir) which contains the result
         of the installation process.
-        
+
         """
         if self._executed:
             raise Exception('Installation process already executed')
@@ -131,12 +131,12 @@ class _InstallationProcess(object):
 
     def cleanup(self):
         """Remove all files and directory created during the installation.
-        
+
         Note that this includes the files in the result directory.
-        
+
         It is safe to call this method even if the install process has not
         been executed or to call this method more than once.
-        
+
         """
         if self._need_cleanup:
             shutil.rmtree(self._base_dir, True)
@@ -147,7 +147,7 @@ class InstallationManager(object):
     """An installation manager..."""
     def __init__(self, installation_graph):
         """Build an InstallationManager.
-        
+
         Installation_graph is a dictionary, for example:
           {'filters':
               {'ZipFilter1': (<ZipFilter object>, 'TarFilter1'),
@@ -156,14 +156,14 @@ class InstallationManager(object):
            'sources':
               {'FilesystemLinkSource1': <FilesystemLinkSource object>}
           }
-        
+
         Note that node id MUST match the regex \w+.
-        
+
         A filter is an object with a 'apply(src_directory, dst_directory)' method.
         A source is an object with a 'pull(dst_directory)' method.
-        
+
         Raise an InstallationGraphError if the installation graph is invalid.
-        
+
         """
         self._sources = installation_graph['sources']
         self._filters = installation_graph['filters']
@@ -223,13 +223,13 @@ class InstallationManager(object):
     def new_installation_process(self, dir=None):
         """Return an installation process instance, i.e. an object with an
         "execute" and "cleanup" method.
-        
+
         See _InstallationProcess for more info on these methods.
-        
+
         Temporaries directory and files will be created in subdirectories of
         dir, which can be None, in the case the default system temporary
         directory will be used.
-        
+
         """
         return _InstallationProcess(self._sources, self._filters, dir)
 
@@ -238,7 +238,7 @@ class _GlobHelper(object):
     """The python glob module works only with the notion of the current directory.
     This class is used to facilitate the application of one or more glob patterns
     inside arbitrary directories.
-    
+
     """
     def __init__(self, pathnames, error_on_no_matches=True):
         """pathnames can be either a single path name or an iterable of path names.
@@ -260,7 +260,7 @@ class _GlobHelper(object):
     def iglob_in_dir(self, src_directory):
         """Apply the glob patterns in src_directory and return an iterator over
         each file matched.
-        
+
         """
         no_matches = True
         for rel_pathname in self._pathnames:
@@ -276,17 +276,17 @@ class _GlobHelper(object):
 class FilesystemLinkSource(object):
     """A source which create symlink of existing files to the destination
     directory.
-    
+
     You should be careful if you plan on using this source with directories,
     i.e. you might be looking for trouble if you are creating links to parent
     directories of the destination directory.
-    
+
     """
     def __init__(self, pathnames):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
           patterns
-        
+
         """
         if isinstance(pathnames, basestring):
             self._pathnames = [pathnames]
@@ -303,7 +303,7 @@ class NonGlobbingFilesystemLinkSource(object):
     def __init__(self, pathnames):
         """
         pathnames -- a single pathname or an iterator over multiple pathnames
-        
+
         """
         if isinstance(pathnames, basestring):
             self._pathnames = [pathnames]
@@ -323,13 +323,13 @@ class NonGlobbingFilesystemLinkSource(object):
 class FilesystemCopySource(object):
     """A cleaner alternative to FilesystemLinkSource if you are worried about
     race condition, side effects, etc.
-    
+
     """
     def __init__(self, pathnames):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
           patterns
-        
+
         """
         if isinstance(pathnames, basestring):
             self._pathnames = [pathnames]
@@ -348,9 +348,9 @@ class FilesystemCopySource(object):
 
 class NullSource(object):
     """A source that add nothing to the destination directory.
-    
+
     Mostly useful for testing purposes.
-    
+
     """
     def pull(self, dst_directory):
         pass
@@ -359,13 +359,13 @@ class NullSource(object):
 class ZipFilter(object):
     """A filter who transform a directory containing zip files to a directory containing
     the content of these zip files.
-    
+
     """
     def __init__(self, pathnames):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
           patterns
-        
+
         """
         self._glob_helper = _GlobHelper(pathnames)
 
@@ -379,13 +379,13 @@ class TarFilter(object):
     """A filter who transform a directory containing tar files to a directory containing
     the content of these tar files. The tar files can be either uncompressed, gzipped
     or bz2-ipped.
-    
+
     """
     def __init__(self, pathnames):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
           patterns
-        
+
         """
         self._glob_helper = _GlobHelper(pathnames)
 
@@ -398,11 +398,11 @@ class TarFilter(object):
 class RarFilter(object):
     """A filter who transform a directory containing rar files to a directory
     containing the content of these rar files.
-    
+
     Note that it depends on the "unrar" executable to be present on the host
     system. On Debian squeeze, this executable is found in the "unrar"
     package (non-free version).
-    
+
     """
     _CMD_PREFIX = ['unrar', 'e', '-idq', '-y']
 
@@ -410,7 +410,7 @@ class RarFilter(object):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
           patterns
-        
+
         """
         self._glob_helper = _GlobHelper(pathnames)
 
@@ -426,17 +426,17 @@ class RarFilter(object):
 class Filter7z(object):
     """A filter who transform a directory containing 7z files to a directory
     containing the content of these 7z files.
-    
+
     Note that it depends on the "7zr" executable to be present on the host
     system. On Debian squeeze, this executable is found in the "p7zip" package.
-    
+
     Also, note that the 7zr has a somehow weird behaviour when specifying an
     output directory, files inside directory of the archive will be all
     extracted in the same base directory.
-    
+
     This class is not named '7zFilter' because this is an invalid python
     identifier.
-    
+
     """
     _CMD_PREFIX = ['7zr', 'e', '-bd']
 
@@ -444,7 +444,7 @@ class Filter7z(object):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
           patterns
-        
+
         """
         self._glob_helper = _GlobHelper(pathnames)
 
@@ -462,7 +462,7 @@ class Filter7z(object):
 class CiscoUnsignFilter(object):
     """A filter who transform a directory containing a Cisco-signed gzip file to a directory
     containing the gzipped file inside the signed file.
-    
+
     """
     _BUF_SIZE = 512
     _GZIP_MAGIC_NUMBER = '\x1f\x8b'  # see http://www.gzip.org/zlib/rfc-gzip.html#file-format
@@ -472,7 +472,7 @@ class CiscoUnsignFilter(object):
         it must match only ONE file or an error will be raised. This is for convenience, so
         that if you don't know the exact name of a file, you can still use a glob pattern to
         match it.
-        
+
         """
         self._glob_helper = _GlobHelper(signed_pathname)
         self._unsigned_pathname = os.path.normpath(unsigned_pathname)
@@ -505,21 +505,21 @@ class IncludeExcludeFilter(object):
           being the absolute name of the file. The call returns true if the
           file is to be included in the destination directory, or false to
           exclude it.
-        
+
         The relative name is relative to the source directory, i.e. if the
         source directory contains a directory named 'dir1' that contains a
         file named 'file1', the relative name for this file would be
         'dir1/file1'.
-        
+
         Note that if false is returned for a file that is a directory, the
         filter_fun object won't be called for any files under this directory
         because it wouldn't make sense to include a file if you excluded the
         parent directory.
-        
+
         That said, if true is returned for a directory, the files under this
         directory are not automatically included and the filter_fun will be
         called for every child files of this directory.
-         
+
         """
         self._filter_fun = filter_fun
 
@@ -546,11 +546,11 @@ class IncludeExcludeFilter(object):
 def ExcludeFilter(pathnames):
     """A filter which excludes some files of the source directory from the destination
     directory. Excluded files can be either files, directories or both.
-    
+
     Takes the following arguments:
       pathnames -- a single glob pattern or an iterator over multiple glob
         patterns
-    
+
     """
     if isinstance(pathnames, basestring):
         pathnames = [pathnames]
@@ -568,11 +568,11 @@ def ExcludeFilter(pathnames):
 def IncludeFilter(pathnames):
     """A filter which includes some files of the source directory from the destination
     directory. Included files can be either files, directories or both.
-    
+
     Takes the following arguments:
       pathnames -- a single glob pattern or an iterator over multiple glob
         patterns
-    
+
     """
     if isinstance(pathnames, basestring):
         pathnames = [pathnames]
@@ -580,6 +580,7 @@ def IncludeFilter(pathnames):
         pathnames = list(pathnames)
 
     included_dirs = set()
+
     def filter_fun(rel_file, abs_file):
         # include rel_file if its a child of an already included directory
         rel_dirname = os.path.dirname(rel_file)
@@ -599,7 +600,7 @@ def IncludeFilter(pathnames):
 class CopyFilter(object):
     """A filter which copy one or more files or directories to a certain path
     in the destination directory.
-    
+
     """
 
     def __init__(self, pathnames, dst):
@@ -609,7 +610,7 @@ class CopyFilter(object):
         dst -- either a directory name, if it ends with '/', or else a file name.
           This must be explicit because the installer create any missing directory
           when copying files. This is a relative destination.
-        
+
         """
         self._glob_helper = _GlobHelper(pathnames)
         self._dst = dst
@@ -654,9 +655,9 @@ class CopyFilter(object):
 
 class NullFilter(object):
     """A filter that add nothing to the destination directory.
-    
+
     Mostly useful for testing purposes.
-    
+
     """
     def apply(self, src_directory, dst_directory):
         pass

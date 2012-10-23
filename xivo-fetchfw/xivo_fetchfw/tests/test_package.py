@@ -32,5 +32,3 @@ class TestInstallablePackage(unittest.TestCase):
         pkg_info = {'id': 'foo',
                     'description': 'Foo'}
         self.assertRaises(Exception, package.InstallablePackage, pkg_info, [], None)
-
-

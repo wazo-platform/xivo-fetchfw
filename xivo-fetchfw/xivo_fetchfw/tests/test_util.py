@@ -220,7 +220,7 @@ class TestListPaths(unittest.TestCase):
                           'dir1/dir2/',
                           'dir1/dir2/dir3/',
                           'dir1/dir2/dir3/file1'],
-                          result)
+                         result)
 
 
 class TestInstallPaths(unittest.TestCase):

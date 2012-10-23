@@ -94,7 +94,7 @@ class ConfigSpec(object):
           If MANDATORY, then an error is raised if the parameter is missing.
         fun -- a function taking one argument, raw_value, and return
           the "cleaned" value. Can also be None.
-        
+
         """
         if '.' not in param_id:
             raise ValueError('no dot character in param: %s' % param_id)
@@ -107,12 +107,12 @@ class ConfigSpec(object):
         template_id -- an unique id for representing the unknown section
         fun -- a function taking one argument, raw_value, and return
           the "cleaned" value. Can also be None.
-        
+
         Dynamic parameters are a way to process section which names is not
         known in advance. For this to work, you need to set a unknown section
         hook function that will examine each unknown section are return the
         correspondent template id.
-        
+
         """
         template_dict = self._dyn_params[template_id]
         if option_id in template_dict:
@@ -124,7 +124,7 @@ class ConfigSpec(object):
         """
         fun -- a function taking two arguments, option_id and raw_value, and return
           the "cleaned" value. Can also be None.
-        
+
         """
         if '.' in section_id:
             raise ValueError('dot character in section: %s' % section_id)
@@ -136,10 +136,10 @@ class ConfigSpec(object):
         """
         fun -- a function taking three arguments, config_dict, section_id,
           section_dict, and return the template id of the section or None.
-        
+
         The unknown section hook is call after all known section have been
         processed, and it is call for every unknown section seen.
-        
+
         """
         self._unknown_section_hook = fun
 
@@ -173,7 +173,7 @@ class ConfigSpec(object):
     def read_config(self, config_parser):
         """Return a dictionary where keys are parameter ids and values are
         parameter values.
-        
+
         """
         config_dict = {}
         unknown_sections = collections.defaultdict(dict)
@@ -231,11 +231,11 @@ class ConfigSpec(object):
 
 def filter_section(config_dict, section_id):
     """Return a dictionary containing all the options of a given section.
-    
+
     >>> d = {'foo.a': 1, 'foo.b': 2, 'bar.c': 3}
     >>> filter_section(d, 'foo')
     {'a': 1, 'b': 2}
-    
+
     """
     if '.' in section_id:
         raise ValueError('dot character in section: %s' % section_id)
@@ -250,6 +250,7 @@ def filter_section(config_dict, section_id):
 
 _BOOL_TRUE = ['True', 'true']
 _BOOL_FALSE = ['False', 'false']
+
 
 def bool_(raw_value):
     """Return a bool from a string."""

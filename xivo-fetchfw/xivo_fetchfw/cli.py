@@ -36,7 +36,7 @@ class CliInstallerController(DefaultInstallerController):
         if not self._nodeps:
             print "resolving dependencies..."
         installable_pkgs = DefaultInstallerController.preprocess_raw_pkgs(
-                self, raw_installable_pkgs)
+            self, raw_installable_pkgs)
         print "Targets (%d):" % len(installable_pkgs)
         for pkg in installable_pkgs:
             print "    ", pkg
@@ -90,7 +90,7 @@ class CliUpgraderController(DefaultUpgraderController):
         if not self._nodeps:
             print "resolving dependencies..."
         installed_specs = DefaultUpgraderController.preprocess_upgrade_list(
-                self, upgrade_list)
+            self, upgrade_list)
         if not installed_specs:
             print " there is nothing to do"
             self._nothing_to_do = True

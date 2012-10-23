@@ -34,9 +34,10 @@ class FetchfwError(Exception):
 
 _APPLY_SUBS_REGEX = re.compile(r'(?<!\\)\$(?:{(\w*)}|(\w*))')
 
+
 def apply_subs(string, variables):
     """Apply and return string with variable substitution applied.
-    
+
     >>> apply_subs('$FOO', {'FOO': 'foo'})
     'foo'
     >>> apply_subs('${FOO}bar', {'FOO': 'foo'})
@@ -47,12 +48,12 @@ def apply_subs(string, variables):
     'foo/bar'
     >>> apply_subs('$N\$', {'N': '20'})
     '20$'
-    
+
     Raise a KeyError if a substitution is not defined in variables.
-    
+
     Raise a ValueError if the substitution string is invalid, like
     using zero-length substitution variables ("a$." for example).
-    
+
     """
     def aux(m):
         var_name = m.group(1)
@@ -91,10 +92,10 @@ def _split_version(raw_version):
 def cmp_version(version1, version2):
     """Compare version1 with version2 and return an integer according to the
     outcome.
-    
+
     The return value is negative if version1 < version2, zero if
-    version1 == version2 or positive if version1 > version2. 
-    
+    version1 == version2 or positive if version1 > version2.
+
     The version string must match the following regex, else the behaviour
     is not defined:
       ^(\d+:)?(\w+(?:\.\w+)*)(-\d+)?$
@@ -102,7 +103,7 @@ def cmp_version(version1, version2):
       the first group is the epoch (missing is equivalent to "0:")
       the second group is the version
       the last group is the release (missing is equivalent to "-0")
-    
+
     """
     # common case optimization
     if version1 == version2:
@@ -164,23 +165,23 @@ def _recursive_listdir_tuple(directory):
 def recursive_listdir(directory):
     """Return an iterator that yield recursively all the files and directories
     inside the given directory.
-    
+
     The directories are visited a bit more every time a new element is yielded
     from the iterator.
-    
+
     Note that if the given directory doesn't exist, an error will be raised
     only on the first iteration and not during the function call.
-    
+
     For example, if:
     $ mkdir test-dir
     $ touch test-dir/file1
     $ mkdir test-dir/dir2
     $ touch test-dir/dir2/file2
-    
+
     then:
     > sorted(recursive_listdir('test-dir'))
     ['dir2', 'dir2/file2', 'file1']
-    
+
     """
     return itertools.imap(operator.itemgetter(1), _recursive_listdir_tuple(directory))
 
@@ -189,15 +190,15 @@ def list_paths(directory):
     """Return an iterator that yield recursively all the files and directories
     inside the given directory, adding a one character tag at the end of
     non-regular files.
-    
+
     Directories are returned with a '/' character appended.
-    
+
     Be careful if your directories contains files other than regular files
     and directories (i.e. symbolic links, block device, etc) i.e. any non
     "regular files" or directories, since the behaviour is not defined.
-    
+
     Except than that, the behaviour is the same as recursive_listdir.
-    
+
     """
     for abs_path, path in _recursive_listdir_tuple(directory):
         if os.path.isdir(abs_path):
@@ -210,32 +211,32 @@ def install_paths(src_directory, dst_directory):
     """Copy recursively all the files from src_directory to dst_directory,
     yielding the copied files/directories at the same rate the files are
     copied.
-    
+
     Directories are returned with a '/' character appended at the end.
-    
+
     Note that if directories already exist in dst_directory, no error are
     raised and the directory is yielded like if it would have been created.
     Existing files are overriden without warning, so be careful.
-    
+
     Also, note that both src_directory and dst_directory must already exist or
     an error will be raised on the first iteration.
-    
+
     For example, if:
     $ mkdir test-dir
     $ touch test-dir/file1
     $ mkdir test-dir/dir2
     $ touch test-dir/dir2/file2
-    
+
     then:
     > sorted(install_paths('test-dir', 'test-dir2'))
     ['file1', 'dir2/', 'dir2/file2']
     > sorted(list_paths('test-dir2'))
     ['dir2/', 'dir2/file2', 'file1']
-    
+
     Note that you are looking for trouble if src_directory is the same as
     dst_directory or if both directories share a same subtree (i.e. one is
     the parent of the other).
-    
+
     """
     for src_abs_path, path in _recursive_listdir_tuple(src_directory):
         dst_abs_path = os.path.join(dst_directory, path)
@@ -259,31 +260,31 @@ def install_paths(src_directory, dst_directory):
 def remove_paths(paths, directory):
     """Remove all the given paths from directory, yielding the removed paths
     at the same rate they are removed.
-    
+
     paths must be an iterable of relative paths, with directories ending with '/'.
-    
+
     Note that the function takes care of removing the files inside a directory
     before trying to remove the directory.
-    
+
     An exception is not thrown in the following cases and in fact the path
     will be returned as if the removing was succesful:
     - removing a non-empty directory
     - removing a file/directory that doesn't exist
-    
+
     In any other error case, an exception will be raised.
-    
+
     For example, if:
     $ mkdir test-dir
     $ touch test-dir/file1
     $ mkdir test-dir/dir2
     $ touch test-dir/dir2/file2
-    
+
     then:
     > sorted(remove_paths(['file1', 'dir2/', 'dir2/file2'], 'test-dir'))
     ['file1', 'dir2/', 'dir2/file2']
     > list(list_paths('test-dir'))
     []
-    
+
     """
     non_empty_directories = []
     for path in sorted(paths, reverse=True):
