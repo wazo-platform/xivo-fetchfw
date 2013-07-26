@@ -20,8 +20,11 @@ import hashlib
 import logging
 import os
 import urllib2
+
 from binascii import b2a_hex
 from xivo_fetchfw.util import FetchfwError
+from xivo_fetchfw.cisco.firmware_download import download_firmware
+from xivo_fetchfw.cisco.models import ModelInfo
 
 logger = logging.getLogger(__name__)
 
@@ -93,6 +96,43 @@ class AuthenticatingDownloader(DefaultDownloader):
         # Note that if the realm and uri are the same that for an already
         # added user/passwd, it will be replaced by the new value
         self._pwd_manager.add_password(realm, uri, user, passwd)
+
+
+class CiscoDownloader(DefaultDownloader):
+
+    _URI_SCHEME = 'cisco:'
+
+    def _do_download(self, url, timeout):
+        model_info = self._new_model_info_from_uri(url)
+        opener = _OpenerWithTimeout(self._opener, timeout)
+        return download_firmware(model_info, opener)
+
+    @classmethod
+    def _new_model_info_from_uri(cls, uri):
+        # Example:
+        #     cisco:flowid=5964,mdfid=282414110,softwareid=282463187,release=6.1.11
+        if not uri.startswith(cls._URI_SCHEME):
+            raise ValueError('bad uri scheme; should be %s' % cls._URI_SCHEME)
+        uri_data = uri[len(cls._URI_SCHEME):]
+
+        tokens = [tuple(word.split('=', 1)) for word in uri_data.split(',')]
+        flow_id_token = tokens[0]
+        if flow_id_token[0] != 'flowid':
+            raise ValueError('bad uri scheme; first element must be flowid')
+        flow_id = flow_id_token[1]
+        url_params = tokens[1:]
+
+        return ModelInfo(flow_id, url_params)
+
+
+class _OpenerWithTimeout(object):
+
+    def __init__(self, opener, timeout):
+        self._opener = opener
+        self._timeout = timeout
+
+    def open(self, url, data=None):
+        return self._opener.open(url, data, self._timeout)
 
 
 class BaseRemoteFile(object):
@@ -386,19 +426,17 @@ def new_downloaders_from_handlers(handlers=None):
 
     ret['default'] is a DefaultDownloader
     ret['auth'] is an AuthenticatingDownloader
+    ret['cisco'] is a CiscoDownloader
 
     """
     auth = AuthenticatingDownloader(handlers)
     default = DefaultDownloader(handlers)
-    return {'auth': auth, 'default': default}
+    cisco = CiscoDownloader(handlers)
+    return {'auth': auth, 'default': default, 'cisco': cisco}
 
 
 def new_downloaders(proxies=None):
-    """Create standard handlers and downloaders and return a 2-items
-    dictionary ret, for which:
-
-    ret['default'] is a DefaultDownloader
-    ret['auth'] is an AuthenticatingDownloader
+    """Create standard handlers and downloaders.
 
     """
     return new_downloaders_from_handlers(new_handlers(proxies))

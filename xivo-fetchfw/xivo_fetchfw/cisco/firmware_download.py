@@ -21,8 +21,7 @@ from xivo_fetchfw.cisco import metadata_download, guid_extract, file_download
 def download_firmware(model_info, opener):
     url = model_info.generate_url()
     guid = _extract_guid(url, opener)
-    flowid = model_info.flow_id
-    return _download_firmware(guid, flowid, opener)
+    return _download_firmware(guid, model_info.flow_id, opener)
 
 
 def _extract_guid(url, opener):
