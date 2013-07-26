@@ -18,7 +18,7 @@
 import unittest
 import os
 
-from mock import patch, Mock
+from mock import Mock
 from xivo_fetchfw.cisco.guid_extract import NoGuidFoundError, GuidDownloadError
 from xivo_fetchfw.cisco import guid_extract as extractor
 
@@ -68,25 +68,25 @@ class TestGuidExtract(unittest.TestCase):
 
         self.assertRaises(NoGuidFoundError, extractor.extract_from_html, html)
 
-    @patch('urllib.urlopen')
-    def test_extract_from_url(self, urlopen_mock):
+    def test_extract_from_url(self):
         url = "http://example.com"
 
         reader_mock = Mock()
         reader_mock.read.return_value = self._html_from_sample_download_page()
-        urlopen_mock.return_value = reader_mock
+        opener = Mock()
+        opener.open.return_value = reader_mock
 
-        result = extractor.extract_from_url(url)
+        result = extractor.extract_from_url(url, opener)
 
         self.assertEquals(self.SAMPLE_GUID, result)
-        urlopen_mock.assert_called_once_with(url)
+        opener.open.assert_called_once_with(url)
 
-    @patch('urllib.urlopen')
-    def test_extract_from_url_with_download_error(self, urlopen_mock):
+    def test_extract_from_url_with_download_error(self):
         url = "http://example.com"
 
         reader_mock = Mock()
         reader_mock.read.side_effect = IOError()
-        urlopen_mock.return_value = reader_mock
+        opener = Mock()
+        opener.open.return_value = reader_mock
 
-        self.assertRaises(GuidDownloadError, extractor.extract_from_url, url)
+        self.assertRaises(GuidDownloadError, extractor.extract_from_url, url, opener)

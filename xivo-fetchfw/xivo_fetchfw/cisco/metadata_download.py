@@ -17,16 +17,15 @@
 
 import json
 import urllib
-import urllib2
 
 from xivo_fetchfw.cisco.errors import MetadataError
 
 DOWNLOAD_URL = "http://www.cisco.com/cisco/software/cart/service?a=downloadnow&imageGuId=%s&sa=&rnp=&k9=&eula=&atc=N&flowid=%s&config=&hAcl="
 
 
-def download_metadata(guid, flowid):
+def download_metadata(guid, flowid, opener):
     url = DOWNLOAD_URL % (guid, flowid)
-    reader = urllib2.urlopen(url)
+    reader = opener.open(url)
 
     metadata = _decode_metadata(reader.read())
 

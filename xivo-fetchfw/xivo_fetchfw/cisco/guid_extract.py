@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import urllib2
-
 from BeautifulSoup import BeautifulSoup
 
 INPUT_ID = "sdpriDownloadNow0"
@@ -37,14 +35,14 @@ class GuidDownloadError(IOError):
         IOError.__init__(self, message)
 
 
-def extract_from_url(url):
-    html = _download_html(url)
+def extract_from_url(url, opener):
+    html = _download_html(url, opener)
     return extract_from_html(html)
 
 
-def _download_html(url):
+def _download_html(url, opener):
     try:
-        return urllib2.urlopen(url).read()
+        return opener.open(url).read()
     except IOError:
         raise GuidDownloadError()
 

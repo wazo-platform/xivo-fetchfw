@@ -16,14 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import urllib
-import urllib2
 
 
-def download_from_metadata(metadata):
+def download_from_metadata(metadata, opener):
     if metadata['is_cloud']:
         params = urllib.urlencode({'X-Authentication-Control': metadata['random_number']})
-        reader = urllib2.urlopen(metadata['download_url'], params)
+        reader = opener.open(metadata['download_url'], params)
     else:
-        reader = urllib2.urlopen(metadata['download_url'])
+        reader = opener.open(metadata['download_url'])
 
     return reader

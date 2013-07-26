@@ -19,7 +19,7 @@ import unittest
 import os
 import json
 
-from mock import patch, Mock
+from mock import Mock
 from xivo_fetchfw.cisco.metadata_download import MetadataError, download_metadata
 
 FLOWID = 'flowid'
@@ -34,11 +34,11 @@ class TestMetadataDownload(unittest.TestCase):
     SAMPLE_ISCLOUD = True
     SAMPLE_FILENAME = 'SPA8000_6.1.11_FW.zip'
 
-    @patch('urllib2.urlopen')
-    def test_extract_download_metadata(self, mock_urlopen):
+    def test_extract_download_metadata(self):
         reader = Mock()
         reader.read.return_value = self._json_from_sample()
-        mock_urlopen.return_value = reader
+        opener = Mock()
+        opener.open.return_value = reader
 
         expected_json_url = 'http://www.cisco.com/cisco/software/cart/service?a=downloadnow&imageGuId=%s&sa=&rnp=&k9=&eula=&atc=N&flowid=%s&config=&hAcl=' % (GUID, FLOWID)
 
@@ -47,8 +47,9 @@ class TestMetadataDownload(unittest.TestCase):
                     'is_cloud': self.SAMPLE_ISCLOUD,
                     'filename': self.SAMPLE_FILENAME}
 
-        result = download_metadata(GUID, FLOWID)
-        mock_urlopen.assert_called_once_with(expected_json_url)
+        result = download_metadata(GUID, FLOWID, opener)
+
+        opener.open.assert_called_once_with(expected_json_url)
         self.assertEquals(result, expected)
 
     def _json_from_sample(self):
@@ -57,25 +58,26 @@ class TestMetadataDownload(unittest.TestCase):
         samplejson = open(path).read()
         return samplejson
 
-    @patch('urllib2.urlopen')
-    def test_extract_download_metadata_no_json(self, mock_urlopen):
+    def test_extract_download_metadata_no_json(self):
         reader = Mock()
         reader.read.return_value = ''
-        mock_urlopen.return_value = reader
+        opener = Mock()
+        opener.open.return_value = reader
 
-        self.assertRaises(MetadataError, download_metadata, GUID, FLOWID)
+        self.assertRaises(MetadataError, download_metadata, GUID, FLOWID, opener)
 
-    @patch('urllib2.urlopen')
-    def test_extract_download_metadata_no_properties(self, mock_urlopen):
+    def test_extract_download_metadata_no_properties(self):
         reader = Mock()
         reader.read.return_value = '{}'
-        mock_urlopen.return_value = reader
-        self.assertRaises(MetadataError, download_metadata, GUID, FLOWID)
+        opener = Mock()
+        opener.open.return_value = reader
 
-    @patch('urllib2.urlopen')
-    def test_extract_download_metadata_no_url_list(self, mock_urlopen):
+        self.assertRaises(MetadataError, download_metadata, GUID, FLOWID, opener)
+
+    def test_extract_download_metadata_no_url_list(self):
         reader = Mock()
         reader.read.return_value = json.dumps({'dwldValidationSerResponse': {}})
-        mock_urlopen.return_value = reader
+        opener = Mock()
+        opener.open.return_value = reader
 
-        self.assertRaises(MetadataError, download_metadata, GUID, FLOWID)
+        self.assertRaises(MetadataError, download_metadata, GUID, FLOWID, opener)

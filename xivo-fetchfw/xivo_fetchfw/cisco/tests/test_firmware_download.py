@@ -19,7 +19,7 @@ import unittest
 
 from mock import patch, Mock
 from xivo_fetchfw.cisco.firmware_download import download_firmware
-from xivo_fetchfw.cisco.errors import DownloadError, MetadataError
+from xivo_fetchfw.cisco.errors import MetadataError
 
 MODEL = "SPA9000"
 URL = "http://example.com"
@@ -39,9 +39,12 @@ class TestFirmwareDownloader(unittest.TestCase):
         extract_from_url.return_value = GUID
         download_from_metadata.side_effect = MetadataError('model')
 
-        self.assertRaises(MetadataError, download_firmware, MODEL)
+        opener = Mock()
+
+        self.assertRaises(MetadataError, download_firmware, MODEL, opener)
+
         generate_url.assert_called_once_with(MODEL)
-        extract_from_url.assert_called_once_with(URL)
+        extract_from_url.assert_called_once_with(URL, opener)
 
     @patch('xivo_fetchfw.cisco.models.generate_url')
     @patch('xivo_fetchfw.cisco.models.flowid_for_model')
@@ -54,11 +57,13 @@ class TestFirmwareDownloader(unittest.TestCase):
         flowid_for_model.return_value = FLOWID
 
         metadata = Mock()
+        opener = Mock()
 
         download_metadata.return_value = metadata
 
-        download_firmware(MODEL)
+        download_firmware(MODEL, opener)
+
         generate_url.assert_called_once_with(MODEL)
-        extract_from_url.assert_called_once_with(URL)
+        extract_from_url.assert_called_once_with(URL, opener)
         flowid_for_model.assert_called_once_with(MODEL)
-        download_from_metadata.assert_called_once_with(metadata)
+        download_from_metadata.assert_called_once_with(metadata, opener)

@@ -18,25 +18,25 @@
 from xivo_fetchfw.cisco import models, metadata_download, guid_extract, file_download
 
 
-def download_firmware(model):
+def download_firmware(model, opener):
     url = _url_for_model(model)
-    guid = _extract_guid(url, model)
+    guid = _extract_guid(url, opener)
     flowid = _flowid_for_model(model)
-    return _download_firmware(guid, flowid)
+    return _download_firmware(guid, flowid, opener)
 
 
 def _url_for_model(model):
     return models.generate_url(model)
 
 
-def _extract_guid(url, model):
-    return guid_extract.extract_from_url(url)
+def _extract_guid(url, opener):
+    return guid_extract.extract_from_url(url, opener)
 
 
 def _flowid_for_model(model):
     return models.flowid_for_model(model)
 
 
-def _download_firmware(guid, flowid):
-    metadata = metadata_download.download_metadata(guid, flowid)
-    return file_download.download_from_metadata(metadata)
+def _download_firmware(guid, flowid, opener):
+    metadata = metadata_download.download_metadata(guid, flowid, opener)
+    return file_download.download_from_metadata(metadata, opener)

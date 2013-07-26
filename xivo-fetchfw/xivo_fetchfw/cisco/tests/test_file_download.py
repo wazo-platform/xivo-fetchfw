@@ -18,9 +18,8 @@
 import unittest
 import urllib
 
-from mock import patch, Mock, mock_open
+from mock import Mock, sentinel
 from xivo_fetchfw.cisco import file_download
-from xivo_fetchfw.cisco.errors import DownloadError
 
 GUID = 'testguid'
 FLOWID = 'flowid'
@@ -32,8 +31,7 @@ FILENAME = 'filename'
 
 class TestFileDownload(unittest.TestCase):
 
-    @patch('urllib2.urlopen')
-    def test_download_from_metadata(self, urlopen):
+    def test_download_from_metadata(self):
         metadata = {'download_url': DOWNLOAD_URL,
                     'is_cloud': IS_CLOUD,
                     'random_number': RANDOM_NUMBER,
@@ -41,25 +39,24 @@ class TestFileDownload(unittest.TestCase):
 
         expected_params = urllib.urlencode({'X-Authentication-Control': RANDOM_NUMBER})
 
-        reader = Mock()
-        reader.read.return_value = ''
-        urlopen.return_value = reader
+        opener = Mock()
+        opener.open.return_value = sentinel.reader
 
-        fobj = file_download.download_from_metadata(metadata)
-        urlopen.assert_called_with(DOWNLOAD_URL, expected_params)
-        self.assertTrue(fobj is reader)
+        reader = file_download.download_from_metadata(metadata, opener)
 
-    @patch('urllib2.urlopen')
-    def test_download_from_metadata_not_cloud(self, urlopen):
+        opener.open.assert_called_with(DOWNLOAD_URL, expected_params)
+        self.assertTrue(reader is sentinel.reader)
+
+    def test_download_from_metadata_not_cloud(self):
         metadata = {'download_url': DOWNLOAD_URL,
                     'is_cloud': False,
                     'random_number': RANDOM_NUMBER,
                     'filename': FILENAME}
 
-        reader = Mock()
-        reader.read.return_value = ''
-        urlopen.return_value = reader
+        opener = Mock()
+        opener.open.return_value = sentinel.reader
 
-        fobj = file_download.download_from_metadata(metadata)
-        urlopen.assert_called_with(DOWNLOAD_URL)
-        self.assertTrue(fobj is reader)
+        reader = file_download.download_from_metadata(metadata, opener)
+
+        opener.open.assert_called_with(DOWNLOAD_URL)
+        self.assertTrue(reader is sentinel.reader)
