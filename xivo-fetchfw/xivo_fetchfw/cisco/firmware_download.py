@@ -15,26 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_fetchfw.cisco import models, metadata_download, guid_extract, file_download
+from xivo_fetchfw.cisco import metadata_download, guid_extract, file_download
 
 
-def download_firmware(model, opener):
-    url = _url_for_model(model)
+def download_firmware(model_info, opener):
+    url = model_info.generate_url()
     guid = _extract_guid(url, opener)
-    flowid = _flowid_for_model(model)
+    flowid = model_info.flow_id
     return _download_firmware(guid, flowid, opener)
-
-
-def _url_for_model(model):
-    return models.generate_url(model)
 
 
 def _extract_guid(url, opener):
     return guid_extract.extract_from_url(url, opener)
-
-
-def _flowid_for_model(model):
-    return models.flowid_for_model(model)
 
 
 def _download_firmware(guid, flowid, opener):

@@ -20,8 +20,8 @@ import unittest
 from mock import patch, Mock
 from xivo_fetchfw.cisco.firmware_download import download_firmware
 from xivo_fetchfw.cisco.errors import MetadataError
+from xivo_fetchfw.cisco.models import ModelInfo
 
-MODEL = "SPA9000"
 URL = "http://example.com"
 GUID = "1234567890ABCDEFGHIJ1234567890ABCDEFGHIJ"
 FLOWID = '5285'
@@ -29,41 +29,39 @@ FLOWID = '5285'
 
 class TestFirmwareDownloader(unittest.TestCase):
 
-    @patch('xivo_fetchfw.cisco.models.generate_url')
-    @patch('xivo_fetchfw.cisco.models.flowid_for_model')
     @patch('xivo_fetchfw.cisco.guid_extract.extract_from_url')
     @patch('xivo_fetchfw.cisco.metadata_download.download_metadata')
     @patch('xivo_fetchfw.cisco.file_download.download_from_metadata')
-    def test_download_for_invalid_metadata(self, download_from_metadata, download_metadata, extract_from_url, flowid_for_model, generate_url):
-        generate_url.return_value = URL
+    def test_download_for_invalid_metadata(self, download_from_metadata, download_metadata, extract_from_url):
+        model_info = Mock(ModelInfo)
+        model_info.flow_id = FLOWID
+        model_info.generate_url.return_value = URL
         extract_from_url.return_value = GUID
         download_from_metadata.side_effect = MetadataError('model')
 
         opener = Mock()
 
-        self.assertRaises(MetadataError, download_firmware, MODEL, opener)
+        self.assertRaises(MetadataError, download_firmware, model_info, opener)
 
-        generate_url.assert_called_once_with(MODEL)
+        model_info.generate_url.assert_called_once_with()
         extract_from_url.assert_called_once_with(URL, opener)
 
-    @patch('xivo_fetchfw.cisco.models.generate_url')
-    @patch('xivo_fetchfw.cisco.models.flowid_for_model')
     @patch('xivo_fetchfw.cisco.guid_extract.extract_from_url')
     @patch('xivo_fetchfw.cisco.metadata_download.download_metadata')
     @patch('xivo_fetchfw.cisco.file_download.download_from_metadata')
-    def test_download(self, download_from_metadata, download_metadata, extract_from_url, flowid_for_model, generate_url):
-        generate_url.return_value = URL
+    def test_download(self, download_from_metadata, download_metadata, extract_from_url):
+        model_info = Mock(ModelInfo)
+        model_info.flow_id = FLOWID
+        model_info.generate_url.return_value = URL
         extract_from_url.return_value = GUID
-        flowid_for_model.return_value = FLOWID
 
         metadata = Mock()
         opener = Mock()
 
         download_metadata.return_value = metadata
 
-        download_firmware(MODEL, opener)
+        download_firmware(model_info, opener)
 
-        generate_url.assert_called_once_with(MODEL)
+        model_info.generate_url.assert_called_once_with()
         extract_from_url.assert_called_once_with(URL, opener)
-        flowid_for_model.assert_called_once_with(MODEL)
         download_from_metadata.assert_called_once_with(metadata, opener)

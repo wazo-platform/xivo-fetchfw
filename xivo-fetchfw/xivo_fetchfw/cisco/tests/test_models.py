@@ -17,31 +17,17 @@
 
 import unittest
 
-from xivo_fetchfw.cisco import models
+from xivo_fetchfw.cisco.models import ModelInfo
 
 
-class TestGenerateUrl(unittest.TestCase):
-
-    def test_generate_url_no_model(self):
-        models.MODELS.clear()
-        model = 'SPA8000'
-
-        self.assertRaises(models.NoInfoOnModelError, models.generate_url, model)
+class TestModelInfo(unittest.TestCase):
 
     def test_generate_url(self):
-        model = 'SPA8000'
-        models.MODELS[model] = [('mdfid', '282414110'), ('flowid', '5964'), ('softwareid', '282463187'), ('release', '6.1.11')]
+        flow_id = '5964'
+        url_params = [('mdfid', '282414110'), ('softwareid', '282463187'), ('release', '6.1.11')]
+        model_info = ModelInfo(flow_id, url_params)
 
         expected = "http://www.cisco.com/cisco/software/release.html?mdfid=282414110&softwareid=282463187&release=6.1.11"
-        result = models.generate_url(model)
-
-        self.assertEquals(result, expected)
-
-    def test_flowid_for_model(self):
-        model = 'SPA8000'
-        models.MODELS[model] = [('mdfid', '282414110'), ('flowid', '5964'), ('softwareid', '282463187'), ('release', '6.1.11')]
-
-        expected = '5964'
-        result = models.flowid_for_model(model)
+        result = model_info.generate_url()
 
         self.assertEquals(result, expected)
