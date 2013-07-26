@@ -19,7 +19,7 @@ import unittest
 import os
 
 from mock import Mock
-from xivo_fetchfw.cisco.guid_extract import NoGuidFoundError, GuidDownloadError
+from xivo_fetchfw.cisco.guid_extract import NoGuidFoundError
 from xivo_fetchfw.cisco import guid_extract as extractor
 
 
@@ -80,13 +80,3 @@ class TestGuidExtract(unittest.TestCase):
 
         self.assertEquals(self.SAMPLE_GUID, result)
         opener.open.assert_called_once_with(url)
-
-    def test_extract_from_url_with_download_error(self):
-        url = "http://example.com"
-
-        reader_mock = Mock()
-        reader_mock.read.side_effect = IOError()
-        opener = Mock()
-        opener.open.return_value = reader_mock
-
-        self.assertRaises(GuidDownloadError, extractor.extract_from_url, url, opener)

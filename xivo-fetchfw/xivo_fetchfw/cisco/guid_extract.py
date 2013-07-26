@@ -28,23 +28,13 @@ class NoGuidFoundError(ValueError):
         ValueError.__init__(self, message)
 
 
-class GuidDownloadError(IOError):
-
-    def __init__(self):
-        message = "error while downloading page with GUID for firmware"
-        IOError.__init__(self, message)
-
-
 def extract_from_url(url, opener):
     html = _download_html(url, opener)
     return extract_from_html(html)
 
 
 def _download_html(url, opener):
-    try:
-        return opener.open(url).read()
-    except IOError:
-        raise GuidDownloadError()
+    return opener.open(url).read()
 
 
 def extract_from_html(html):

@@ -16,13 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-class DownloadError(IOError):
-
-    def __init__(self, message=''):
-        message = "error while downloading firmware. %s" % message
-        IOError.__init__(self, message)
-
-
 class MetadataError(ValueError):
 
     def __init__(self, message=''):
