@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import urllib
+import urllib2
 
 from BeautifulSoup import BeautifulSoup
 
@@ -44,7 +44,7 @@ def extract_from_url(url):
 
 def _download_html(url):
     try:
-        return urllib.urlopen(url).read()
+        return urllib2.urlopen(url).read()
     except IOError:
         raise GuidDownloadError()
 

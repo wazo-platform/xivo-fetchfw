@@ -24,7 +24,6 @@ from xivo_fetchfw.cisco.errors import DownloadError
 
 GUID = 'testguid'
 FLOWID = 'flowid'
-LOCATION = '/tmp'
 DOWNLOAD_URL = 'http://example.com'
 RANDOM_NUMBER = '4-H5Wvi8A0WrHnuCRM0WY0HOaN%2FgAcJ7NtYdENIQ84qvtGw%2FrE80wFpM3dRmIt8CDh'
 IS_CLOUD = True
@@ -33,7 +32,7 @@ FILENAME = 'filename'
 
 class TestFileDownload(unittest.TestCase):
 
-    @patch('urllib.urlopen')
+    @patch('urllib2.urlopen')
     def test_download_from_metadata(self, urlopen):
         metadata = {'download_url': DOWNLOAD_URL,
                     'is_cloud': IS_CLOUD,
@@ -41,48 +40,26 @@ class TestFileDownload(unittest.TestCase):
                     'filename': FILENAME}
 
         expected_params = urllib.urlencode({'X-Authentication-Control': RANDOM_NUMBER})
-        expected_path = '%s/%s' % (LOCATION, FILENAME)
 
         reader = Mock()
-        reader.getcode.return_value = 200
         reader.read.return_value = ''
         urlopen.return_value = reader
 
-        opener = mock_open()
-        with patch('xivo_fetchfw.cisco.file_download.open', opener, create=True):
-            file_download.download_from_metadata(metadata, LOCATION)
-            opener.assert_called_once_with(expected_path, 'wb')
-            urlopen.assert_called_with(DOWNLOAD_URL, expected_params)
-            reader.read.assert_any_call(1024 * 1024)
+        fobj = file_download.download_from_metadata(metadata)
+        urlopen.assert_called_with(DOWNLOAD_URL, expected_params)
+        self.assertTrue(fobj is reader)
 
-    @patch('urllib.urlopen')
-    def test_download_from_metadata_wrong_http_status(self, urlopen):
-        metadata = {'download_url': DOWNLOAD_URL,
-                    'is_cloud': IS_CLOUD,
-                    'random_number': RANDOM_NUMBER,
-                    'filename': FILENAME}
-
-        reader = Mock()
-        reader.getcode.return_value = 400
-        urlopen.return_value = reader
-        self.assertRaises(DownloadError, file_download.download_from_metadata, metadata, LOCATION)
-
-    @patch('urllib.urlopen')
+    @patch('urllib2.urlopen')
     def test_download_from_metadata_not_cloud(self, urlopen):
         metadata = {'download_url': DOWNLOAD_URL,
                     'is_cloud': False,
                     'random_number': RANDOM_NUMBER,
                     'filename': FILENAME}
 
-        expected_path = '%s/%s' % (LOCATION, FILENAME)
         reader = Mock()
-        reader.getcode.return_value = 200
         reader.read.return_value = ''
         urlopen.return_value = reader
 
-        opener = mock_open()
-        with patch('xivo_fetchfw.cisco.file_download.open', opener, create=True):
-            file_download.download_from_metadata(metadata, LOCATION)
-            opener.assert_called_once_with(expected_path, 'wb')
-            urlopen.assert_called_with(DOWNLOAD_URL)
-            reader.read.assert_any_call(1024 * 1024)
+        fobj = file_download.download_from_metadata(metadata)
+        urlopen.assert_called_with(DOWNLOAD_URL)
+        self.assertTrue(fobj is reader)

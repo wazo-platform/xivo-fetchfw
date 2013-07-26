@@ -16,14 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_fetchfw.cisco import models, metadata_download, guid_extract, file_download
-from xivo_fetchfw.cisco.errors import DownloadError
 
 
-def download_firmware(model, download_location):
+def download_firmware(model):
     url = _url_for_model(model)
     guid = _extract_guid(url, model)
     flowid = _flowid_for_model(model)
-    _download_firmware(guid, flowid, model, download_location)
+    return _download_firmware(guid, flowid)
 
 
 def _url_for_model(model):
@@ -38,9 +37,6 @@ def _flowid_for_model(model):
     return models.flowid_for_model(model)
 
 
-def _download_firmware(guid, flowid, model, location):
+def _download_firmware(guid, flowid):
     metadata = metadata_download.download_metadata(guid, flowid)
-    try:
-        file_download.download_from_metadata(metadata, location)
-    except IOError:
-        raise DownloadError(model)
+    return file_download.download_from_metadata(metadata)

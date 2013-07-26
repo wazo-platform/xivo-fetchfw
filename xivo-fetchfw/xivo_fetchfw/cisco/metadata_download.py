@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import urllib
 import json
+import urllib
+import urllib2
 
 from xivo_fetchfw.cisco.errors import MetadataError
 
@@ -25,10 +26,7 @@ DOWNLOAD_URL = "http://www.cisco.com/cisco/software/cart/service?a=downloadnow&i
 
 def download_metadata(guid, flowid):
     url = DOWNLOAD_URL % (guid, flowid)
-    reader = urllib.urlopen(url)
-
-    if reader.getcode() >= 400:
-        raise MetadataError('HTTP Status: %s' % reader.getcode())
+    reader = urllib2.urlopen(url)
 
     metadata = _decode_metadata(reader.read())
 

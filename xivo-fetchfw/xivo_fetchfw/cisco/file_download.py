@@ -16,26 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import urllib
-import os
-
-from xivo_fetchfw.cisco.errors import DownloadError
-
-BUFFER = 1024 * 1024
+import urllib2
 
 
-def download_from_metadata(metadata, location):
+def download_from_metadata(metadata):
     if metadata['is_cloud']:
         params = urllib.urlencode({'X-Authentication-Control': metadata['random_number']})
-        reader = urllib.urlopen(metadata['download_url'], params)
+        reader = urllib2.urlopen(metadata['download_url'], params)
     else:
-        reader = urllib.urlopen(metadata['download_url'])
+        reader = urllib2.urlopen(metadata['download_url'])
 
-    if reader.getcode() >= 400:
-        raise DownloadError('HTTP Status: %s' % reader.getcode())
-
-    path = os.path.join(location, metadata['filename'])
-    with open(path, 'wb') as writer:
-        data = reader.read(BUFFER)
-        while data:
-            writer.write(data)
-            data = reader.read(BUFFER)
+    return reader

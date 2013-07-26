@@ -34,18 +34,9 @@ class TestMetadataDownload(unittest.TestCase):
     SAMPLE_ISCLOUD = True
     SAMPLE_FILENAME = 'SPA8000_6.1.11_FW.zip'
 
-    @patch('urllib.urlopen')
-    def test_extract_download_metadata_error_status_code(self, mock_urlopen):
-        reader = Mock()
-        reader.getcode.return_value = 400
-        mock_urlopen.return_value = reader
-
-        self.assertRaises(MetadataError, download_metadata, GUID, FLOWID)
-
-    @patch('urllib.urlopen')
+    @patch('urllib2.urlopen')
     def test_extract_download_metadata(self, mock_urlopen):
         reader = Mock()
-        reader.getcode.return_value = 200
         reader.read.return_value = self._json_from_sample()
         mock_urlopen.return_value = reader
 
@@ -66,27 +57,24 @@ class TestMetadataDownload(unittest.TestCase):
         samplejson = open(path).read()
         return samplejson
 
-    @patch('urllib.urlopen')
+    @patch('urllib2.urlopen')
     def test_extract_download_metadata_no_json(self, mock_urlopen):
         reader = Mock()
-        reader.getcode.return_value = 200
         reader.read.return_value = ''
         mock_urlopen.return_value = reader
 
         self.assertRaises(MetadataError, download_metadata, GUID, FLOWID)
 
-    @patch('urllib.urlopen')
+    @patch('urllib2.urlopen')
     def test_extract_download_metadata_no_properties(self, mock_urlopen):
         reader = Mock()
-        reader.getcode.return_value = 200
         reader.read.return_value = '{}'
         mock_urlopen.return_value = reader
         self.assertRaises(MetadataError, download_metadata, GUID, FLOWID)
 
-    @patch('urllib.urlopen')
+    @patch('urllib2.urlopen')
     def test_extract_download_metadata_no_url_list(self, mock_urlopen):
         reader = Mock()
-        reader.getcode.return_value = 200
         reader.read.return_value = json.dumps({'dwldValidationSerResponse': {}})
         mock_urlopen.return_value = reader
 

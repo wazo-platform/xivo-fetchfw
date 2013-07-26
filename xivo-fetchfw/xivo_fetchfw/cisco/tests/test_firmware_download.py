@@ -22,7 +22,6 @@ from xivo_fetchfw.cisco.firmware_download import download_firmware
 from xivo_fetchfw.cisco.errors import DownloadError, MetadataError
 
 MODEL = "SPA9000"
-LOCATION = "/tmp"
 URL = "http://example.com"
 GUID = "1234567890ABCDEFGHIJ1234567890ABCDEFGHIJ"
 FLOWID = '5285'
@@ -40,26 +39,9 @@ class TestFirmwareDownloader(unittest.TestCase):
         extract_from_url.return_value = GUID
         download_from_metadata.side_effect = MetadataError('model')
 
-        self.assertRaises(MetadataError, download_firmware, MODEL, LOCATION)
+        self.assertRaises(MetadataError, download_firmware, MODEL)
         generate_url.assert_called_once_with(MODEL)
         extract_from_url.assert_called_once_with(URL)
-
-    @patch('xivo_fetchfw.cisco.models.generate_url')
-    @patch('xivo_fetchfw.cisco.models.flowid_for_model')
-    @patch('xivo_fetchfw.cisco.guid_extract.extract_from_url')
-    @patch('xivo_fetchfw.cisco.metadata_download.download_metadata')
-    @patch('xivo_fetchfw.cisco.file_download.download_from_metadata')
-    def test_download_when_file_download_fails(self, download_from_metadata, download_metadata, extract_from_url, flowid_for_model, generate_url):
-        generate_url.return_value = URL
-        flowid_for_model.return_value = FLOWID
-
-        extract_from_url.return_value = GUID
-        download_from_metadata.side_effect = IOError()
-
-        self.assertRaises(DownloadError, download_firmware, MODEL, LOCATION)
-        generate_url.assert_called_once_with(MODEL)
-        extract_from_url.assert_called_once_with(URL)
-        flowid_for_model.assert_called_once_with(MODEL)
 
     @patch('xivo_fetchfw.cisco.models.generate_url')
     @patch('xivo_fetchfw.cisco.models.flowid_for_model')
@@ -75,8 +57,8 @@ class TestFirmwareDownloader(unittest.TestCase):
 
         download_metadata.return_value = metadata
 
-        download_firmware(MODEL, LOCATION)
+        download_firmware(MODEL)
         generate_url.assert_called_once_with(MODEL)
         extract_from_url.assert_called_once_with(URL)
         flowid_for_model.assert_called_once_with(MODEL)
-        download_from_metadata.assert_called_once_with(metadata, LOCATION)
+        download_from_metadata.assert_called_once_with(metadata)
