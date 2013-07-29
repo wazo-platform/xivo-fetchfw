@@ -17,7 +17,7 @@ setup(
     scripts=['bin/xivo-fetchfw'],
     data_files=[('/etc/pf-xivo', ['resources/etc/xivo-fetchfw.conf']),
                 ('/var/lib/xivo-fetchfw/installable',
-                      ['resources/data/files.db',
-                       'resources/data/install.db',
-                       'resources/data/packages.db'])]
+                 ['resources/data/files.db',
+                  'resources/data/install.db',
+                  'resources/data/packages.db'])]
 )
