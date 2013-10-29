@@ -21,13 +21,13 @@ install: digium-fw
 [pkg_digium-oct6114-128]
 description: Firmware for Digium VPMOCT128M/VPM450M.
 version: 1.05.01
-files: digium-oct61114-128fw
+files: digium-oct6114-128fw
 install: digium-fw
 
 [pkg_digium-oct6114-064]
 description: Firmware for Digium VPMOCT064M.
 version: 1.05.01
-files: digium-oct61114-064fw
+files: digium-oct6114-064fw
 install: digium-fw
 
 [pkg_digium-oct6114-032]

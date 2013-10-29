@@ -15,12 +15,12 @@ url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-vpmoct
 size: 443985
 sha1sum: 743a3356d5c3ba6dd5ad759550f598879049cd2e
 
-[file_digium-oct61114-128fw]
+[file_digium-oct6114-128fw]
 url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-128-1.05.01.tar.gz
 size: 165849
 sha1sum: bcf07434f4589d07d9b5f67f7b3a8fb115aa9229
 
-[file_digium-oct61114-064fw]
+[file_digium-oct6114-064fw]
 url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-064-1.05.01.tar.gz
 size: 165869
 sha1sum: 2fb8e5f4f7aedb285ffa21632efd45af877eacd4
