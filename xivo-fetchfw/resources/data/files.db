@@ -25,6 +25,11 @@ url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct611
 size: 165869
 sha1sum: 2fb8e5f4f7aedb285ffa21632efd45af877eacd4
 
+[file_digium-oct6114-032fw]
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-032-1.05.01.tar.gz
+size: 165866
+sha1sum: b03907cd899e121f62d320591b28644c0b615c3c
+
 [file_digium-tc400mfw]
 url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-tc400m-MR6.12.tar.gz
 size: 1750035

@@ -30,6 +30,12 @@ version: 1.05.01
 files: digium-oct61114-064fw
 install: digium-fw
 
+[pkg_digium-oct6114-032]
+description: Firmware for echo canceller on Digium TE133/TE134.
+version: 1.05.01
+files: digium-oct6114-032fw
+install: digium-fw
+
 [pkg_digium-tc400m]
 description: Firmware for Digium TC400M.
 version: MR6.12
