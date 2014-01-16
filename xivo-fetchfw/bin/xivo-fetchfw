@@ -53,7 +53,7 @@ def _init_logging():
 
 class _XivoFetchfwCommand(commands.AbstractCommand):
     def configure_parser(self, parser):
-        parser.add_argument('--config', default='/etc/pf-xivo/xivo-fetchfw.conf',
+        parser.add_argument('--config', default='/etc/xivo/xivo-fetchfw.conf',
                             help='set an alternate configuration file')
         parser.add_argument('--debug', action='store_true', default=False,
                             help='display debug messages')
