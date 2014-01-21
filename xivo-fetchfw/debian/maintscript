@@ -1,0 +1,3 @@
+# see: dh_installdeb(1)
+
+mv_conffile /etc/pf-xivo/xivo-fetchfw.conf /etc/xivo/xivo-fetchfw.conf 14.02

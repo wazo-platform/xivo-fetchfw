@@ -1,0 +1,200 @@
+xivo-fetchfw (14.01~20140108.151155.79a59d7-wheezy-2) xivo-dev; urgency=low
+
+  * use maintscript for the rename from pf-xivo to xivo
+
+ -- Pascal Cadotte Michaud <pcadottemichaud@avencall.com>  Tue, 14 Jan 2014 11:30:57 -0500
+
+xivo-fetchfw (12.20~20121010.160342.d142860-4) squeeze-xivo-skaro-dev; urgency=low
+
+  * fix version 
+
+ -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Thu, 11 Oct 2012 13:42:22 -0400
+
+xivo-fetchfw (12.20~20121010.160342.d142860-3) squeeze-xivo-skaro-dev; urgency=low
+
+  * fix version 
+
+ -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Thu, 11 Oct 2012 13:04:03 -0400
+
+xivo-fetchfw (12.20~20121010.160342.d142860-2) squeeze-xivo-skaro-dev; urgency=low
+
+  * fix version  
+
+ -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Thu, 11 Oct 2012 12:57:58 -0400
+
+xivo-fetchfw (12.19-1) squeeze-xivo-skaro-dev; urgency=low
+
+  * rename package 
+
+ -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Tue, 09 Oct 2012 13:42:13 -0400
+
+pf-xivo-fetchfw (4:1.2~alpha-1.4-1) squeeze-xivo-skaro-dev; urgency=low
+
+  * Fix version for packaging-farm
+
+ -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Wed, 28 Sep 2011 15:05:46 -0400
+
+pf-xivo-fetchfw (4:1.2~20110704.194720.51b210e-1) squeeze-xivo-skaro-dev; urgency=low
+
+  * Update package version (svn to git).
+
+ -- Etienne Lessard <edesrocherslessard@avencall.com>  Mon, 22 Aug 2011 08:27:00 -0400
+
+pf-xivo-fetchfw (3:1.2~svn11102-0) squeeze-xivo-skaro-dev; urgency=low
+
+  * Remove var/lib/pf-xivo-fetchfw from dirs.
+
+ -- Etienne Lessard <edesrocherslessard@avencall.com>  Wed, 22 Jun 2011 14:32:01 -0400
+
+pf-xivo-fetchfw (3:1.2~svn11095-2) lenny-xivo-skaro-dev; urgency=low
+
+  * Add /var/lib/pf-xivo-fetchfw/installed to dirs.
+
+ -- Etienne Lessard <edesrocherslessard@avencall.com>  Wed, 22 Jun 2011 10:25:17 -0400
+
+pf-xivo-fetchfw (3:1.2~svn11095-0) lenny-xivo-skaro-dev; urgency=low
+
+  * Replace /var/{cache,lib}/pf-xivo/fetchfw to /var/{cache,lib}/pf-xivo-fetchfw
+
+ -- Etienne Lessard <edesrocherslessard@avencall.com>  Wed, 22 Jun 2011 09:16:43 -0400
+
+pf-xivo-fetchfw (3:1.2~svn10106-0) lenny-xivo-skaro-dev; urgency=low
+
+  * New upstream relase 
+
+ -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Thu, 03 Feb 2011 16:18:50 +0100
+
+pf-xivo-fetchfw (3:1.2~svn9784-1) lenny-xivo-skaro-dev; urgency=low
+
+  * [AUTOBUILD] New upstream development snapshot.
+
+ -- Proformatique Maintainance Team <technique@proformatique.com>  Fri, 14 Jan 2011 21:55:32 +0100
+
+pf-xivo-fetchfw (2:1.1~svn7384-2) etch-xivo-gallifrey-dev; urgency=low
+
+  * Modified package section "comm" to "admin".
+
+ -- Adrien DELLE CAVE (Decryptus) <decryptus@proformatique.com>  Tue, 12 Jan 2010 19:50:14 +0100
+
+pf-xivo-fetchfw (0.4.3~svn5179-0) etch-xivo-k-9-dev; urgency=low
+
+  * Renamed: pf-xivo-phones-firmware -> pf-xivo-fetchfw
+
+ -- Sylvain Boily <sboily@proformatique.com>  Thu, 22 Jan 2009 16:05:02 +0100
+
+pf-xivo-phones-firmware (0.4~svn3111-3) etch-xivo-k-9-dev; urgency=low
+
+  * Replaced all occurrences to Xivo by XIVO in copyright file.
+
+ -- Adrien DELLE CAVE (Decryptus) <decryptus@proformatique.com>  Wed, 23 Jul 2008 00:45:27 +0200
+
+pf-xivo-phones-firmware (0.4~svn3111-2) etch-xivo-k-9-dev; urgency=low
+
+  * Added ${python:Versions} ${python:Depends} and ${python:Provides} 
+
+ -- Guillaume Knispel <gknispel@proformatique.com>  Thu, 10 Jul 2008 16:45:51 +0200
+
+pf-xivo-phones-firmware (0.4~svn3111-0) etch-xivo-k-9-dev; urgency=low
+
+  * Fixed license to GNU GPLv2+
+
+ -- Guillaume Knispel <gknispel@proformatique.com>  Mon, 26 May 2008 17:13:55 +0200
+
+pf-xivo-phones-firmware (0.4~svn2760-2) etch-xivo-k-9-dev; urgency=low
+
+  * Fixed missing depends on unzip.
+
+ -- Marc Dequènes (Duck) <mdequenes@proformatique.com>  Tue, 08 Apr 2008 13:15:19 +0200
+
+pf-xivo-phones-firmware (0.4~svn2760-0) etch-xivo-k-9-dev; urgency=low
+
+  * Package new engine used to fetch firmwares instead of embedding it
+    in here:
+    - new layout
+    - switched to distutils
+    - updated description
+
+ -- Marc Dequènes (Duck) <mdequenes@proformatique.com>  Mon, 07 Apr 2008 17:36:01 +0200
+
+pf-xivo-phones-firmware (0.4~svn2687-0) etch-xivo-k-9-dev; urgency=low
+
+  * Remove Cisco firmware
+
+ -- Adrien DELLE CAVE (Decryptus) <decryptus@proformatique.com>  Tue, 25 Mar 2008 12:51:16 +0100
+
+pf-xivo-phones-firmware (0.2~svn1838-1) etch-testing; urgency=low
+
+  * Do not install swissvoice.inf and Linksys links anymore.
+
+ -- Corentin Le Gall <clegall@proformatique.com>  Wed,  7 Nov 2007 16:43:57 +0100
+
+pf-xivo-phones-firmware (0.2~svn1838-0) etch-testing; urgency=low
+
+  * Moved config files from here to base-config
+
+ -- Corentin Le Gall <clegall@proformatique.com>  Wed,  7 Nov 2007 15:45:24 +0100
+
+pf-xivo-phones-firmware (0.2~svn1726-0) etch-testing; urgency=low
+
+  * Preparing new development snapshot.
+    Added dynamic links for linksys phones.
+
+ -- Corentin Le Gall <clegall@proformatique.com>  Wed, 31 Oct 2007 19:06:40 +0100
+
+pf-xivo-phones-firmware (0.2~svn1723-0) etch-testing; urgency=low
+
+  * Preparing new development snapshot.
+    Added dynamic links for linksys phones.
+
+ -- Corentin Le Gall <clegall@proformatique.com>  Wed, 31 Oct 2007 17:18:13 +0100
+
+pf-xivo-phones-firmware (0.2~svn1713-2) etch-testing; urgency=low
+
+  * Right filename.
+
+ -- Corentin Le Gall <clegall@proformatique.com>  Wed, 31 Oct 2007 11:22:30 +0100
+
+pf-xivo-phones-firmware (0.2~svn1713-1) etch-testing; urgency=low
+
+  * Preparing new development snapshot.
+    Added dynamic links for linksys phones.
+
+ -- Corentin Le Gall <clegall@proformatique.com>  Tue, 30 Oct 2007 18:17:32 +0100
+
+pf-xivo-phones-firmware (0.1~svn878-0) etch; urgency=low
+
+  * Preparing new development snapshot.
+    Install list updated.
+
+ -- Corentin Le Gall <clegall@proformatique.com>  Thu, 14 Jun 2007 10:56:22 +0200
+
+pf-xivo-phones-firmware (0.1~svn712-2) etch; urgency=low
+
+  * Updated files to install
+
+ -- Corentin Le Gall <clegall@proformatique.com>  Wed, 13 Jun 2007 18:15:36 +0200
+
+pf-xivo-phones-firmware (0.1~svn712-1) etch; urgency=low
+
+  * New upstream release
+
+ -- Marc Dequènes (Duck) <mdequenes@proformatique.com>  Thu, 24 May 2007 17:40:37 +0200
+
+pf-xivo-phones-firmware (0.1~svn699-1) etch; urgency=low
+
+  * New upstream development snapshot.
+
+ -- Marc Dequènes (Duck) <mdequenes@proformatique.com>  Wed, 23 May 2007 16:19:16 +0200
+
+pf-xivo-phones-firmware (0.1~svn684-1) etch; urgency=low
+
+  * Updated copyright information to inform about firmware issues.
+
+ -- Corentin Le Gall <clegall@proformatique.com>  Tue, 22 May 2007 16:15:12 +0200
+
+pf-xivo-phones-firmware (0.1~svn670-1) etch; urgency=low
+
+  * Initial Release.
+
+ -- Corentin Le Gall <corentin@proformatique.com>  Tue, 17 Apr 2007 18:12:35 +0200
+
