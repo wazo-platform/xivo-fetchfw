@@ -36,6 +36,24 @@ version: 1.05.01
 files: digium-oct6114-032fw
 install: digium-fw
 
+[pkg_digium-te133]
+description: Firmware for Digium TE133.
+version: 780017
+files: digium-te133fw
+install: digium-fw
+
+[pkg_digium-te134]
+description: Firmware for Digium TE134.
+version: 780017
+files: digium-te134fw
+install: digium-fw
+
+[pkg_digium-te435]
+description: Firmware for Digium TE435.
+version: e0017
+files: digium-te435fw
+install: digium-fw
+
 [pkg_digium-tc400m]
 description: Firmware for Digium TC400M.
 version: MR6.12
