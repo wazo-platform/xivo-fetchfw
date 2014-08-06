@@ -46,7 +46,7 @@ size: 231242
 sha1sum: fc7a7e226cfc6d738e234bd0d0abdba64a959f02
 
 [file_digium-te436fw]
-http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te436-10017.tar.gz
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te436-10017.tar.gz
 size: 210601
 sha1sum: d83946d0d3440023faf9910162e6f5f35e024b2e
 
