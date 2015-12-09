@@ -1,4 +1,4 @@
-xivo-fetchfw (14.01~20140108.151155.79a59d7-wheezy-2) xivo-dev; urgency=low
+xivo-fetchfw (14.01~20140108.151155.79a59d7) xivo-dev; urgency=low
 
   * use maintscript for the rename from pf-xivo to xivo
 
