@@ -29,3 +29,11 @@ Dependencies
   * http://pypi.python.org/pypi/progressbar
 * some unit tests depend on the "mock" python package
   * http://pypi.python.org/pypi/mock
+
+Running unit tests
+------------------
+
+```
+pip install tox
+tox --recreate -e py27
+```
