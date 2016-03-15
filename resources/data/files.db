@@ -31,9 +31,9 @@ size: 165866
 sha1sum: b03907cd899e121f62d320591b28644c0b615c3c
 
 [file_digium-te133fw]
-url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te133-780019.tar.gz
-size: 229578
-sha1sum: 979338273554c982d3dd7e94a396a5be6b1874cb
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te133-7a001e.tar.gz
+size: 242987
+sha1sum: ebfa6a4dff68554efd7c1a2060c0e259191b2a7d
 
 [file_digium-te134fw]
 url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te134-780017.tar.gz
@@ -41,9 +41,9 @@ size: 185478
 sha1sum: 04b17dc005360eb7edc737925b95cc4ec76273cd
 
 [file_digium-te435fw]
-url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te435-e0019.tar.gz
-size: 231242
-sha1sum: fc7a7e226cfc6d738e234bd0d0abdba64a959f02
+url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te435-13001e.tar.gz
+size: 238504
+sha1sum: 61d2b1873e92f59f7c80890ef49673e385cd99dc
 
 [file_digium-te436fw]
 url: http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te436-10017.tar.gz

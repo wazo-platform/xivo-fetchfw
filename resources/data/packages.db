@@ -38,7 +38,7 @@ install: digium-fw
 
 [pkg_digium-te133]
 description: Firmware for Digium TE133/TE131.
-version: 780019
+version: 7a001e
 files: digium-te133fw
 install: digium-fw
 
@@ -50,7 +50,7 @@ install: digium-fw
 
 [pkg_digium-te435]
 description: Firmware for Digium TE435/TE235.
-version: e0019
+version: 13001e
 files: digium-te435fw
 install: digium-fw
 
