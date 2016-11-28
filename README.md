@@ -1,6 +1,6 @@
 xivo-fetchfw
 =========
-[![Build Status](https://travis-ci.org/xivo-pbx/xivo-fetchfw.png?branch=master)](https://travis-ci.org/xivo-pbx/xivo-fetchfw)
+[![Build Status](https://travis-ci.org/wazo-pbx/xivo-fetchfw.png?branch=master)](https://travis-ci.org/wazo-pbx/xivo-fetchfw)
 
 A simple "out-of-control" package manager in python.
 
