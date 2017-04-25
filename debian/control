@@ -9,9 +9,6 @@ X-Python-Version: >= 2.7
 Package: xivo-fetchfw
 Architecture: all
 Depends: ${python:Depends}, ${misc:Depends}, python-beautifulsoup (>= 3.2.0), python-progressbar
-Provides: ${python:Provides}, pf-xivo-fetchfw
-Conflicts: pf-xivo-fetchfw
-Replaces: pf-xivo-fetchfw
 Description: Wazo Phones and Cards Firmwares Fetch Engine
  Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.
