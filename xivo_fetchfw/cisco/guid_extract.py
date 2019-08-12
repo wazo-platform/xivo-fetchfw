@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 INPUT_ID = "sdpriDownloadNow0"
 PREFIX = "sdpriDownloadNow"
@@ -51,8 +51,7 @@ def _find_guid_tag(soup):
 
 
 def _extract_guid_from_tag(tag):
-    classes = tag['class'].split(' ')
-    for classname in classes:
+    for classname in tag['class']:
         if classname.startswith(PREFIX):
             return classname[len(PREFIX):]
     raise NoGuidFoundError()
