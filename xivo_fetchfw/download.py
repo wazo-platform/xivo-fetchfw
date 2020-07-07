@@ -1,19 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2010-2014 Avencall
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>
+# Copyright 2010-2020 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import contextlib
 import hashlib
@@ -53,6 +41,7 @@ class DefaultDownloader(object):
             self._opener = urllib2.build_opener()
         else:
             self._opener = urllib2.build_opener(*handlers)
+        self._opener.addheaders = [('User-agent', 'xivo-fetchfw/1.0')]
 
     def download(self, url, timeout=_TIMEOUT):
         """Open the URL url and return a file-like object."""
