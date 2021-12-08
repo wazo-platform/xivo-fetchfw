@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2014 Avencall
+# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 import errno
 import itertools
 import logging
@@ -9,6 +10,8 @@ import operator
 import os
 import re
 import shutil
+from six.moves import zip
+from six.moves import map
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +75,18 @@ def _split_version(raw_version):
     else:
         rel = 0
     return epoch, rest.split('.'), rel
+
+
+def cmp(x, y):
+    """
+    Replacement for built-in function cmp that was removed in Python 3
+
+    Compare the two objects x and y and return an integer according to
+    the outcome. The return value is negative if x < y, zero if x == y
+    and strictly positive if x > y.
+    """
+
+    return (x > y) - (x < y)
 
 
 def cmp_version(version1, version2):
@@ -168,7 +183,7 @@ def recursive_listdir(directory):
     ['dir2', 'dir2/file2', 'file1']
 
     """
-    return itertools.imap(operator.itemgetter(1), _recursive_listdir_tuple(directory))
+    return map(operator.itemgetter(1), _recursive_listdir_tuple(directory))
 
 
 def list_paths(directory):
@@ -228,7 +243,7 @@ def install_paths(src_directory, dst_directory):
         if os.path.isdir(src_abs_path):
             try:
                 os.mkdir(dst_abs_path)
-            except OSError, e:
+            except OSError as e:
                 if e.errno == errno.EEXIST and os.path.isdir(dst_abs_path):
                     # dst_abs_path already exist and is a dictionary
                     pass
@@ -286,7 +301,7 @@ def remove_paths(paths, directory):
                 logger.debug("Deleting '%s' as directory", abs_path)
                 try:
                     os.rmdir(abs_path)
-                except OSError, e:
+                except OSError as e:
                     if e.errno == errno.ENOTEMPTY:
                         logger.debug("Could not delete directory '%s' because it is not empty", path)
                         non_empty_directories.append(abs_path)
@@ -298,7 +313,7 @@ def remove_paths(paths, directory):
             logger.debug("Deleting '%s' as file", abs_path)
             try:
                 os.remove(abs_path)
-            except OSError, e:
+            except OSError as e:
                 if e.errno == errno.ENOENT:
                     logger.warning("Could not delete file '%s' because it does not exist", abs_path)
                 else:

@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2014 Avencall
+# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 import collections
-import ConfigParser
+import six.moves.configparser
 import logging
 import json
 import os
 from binascii import a2b_hex
 from xivo_fetchfw import download, install, util
 from xivo_fetchfw.package import InstallablePackage, InstalledPackage
+import six
 
 logger = logging.getLogger(__name__)
 
@@ -308,22 +310,22 @@ class BasePkgStorage(object):
         return self._pkgs.get(key, *args)
 
     def items(self):
-        return self._pkgs.items()
+        return list(self._pkgs.items())
 
     def iterkeys(self):
-        return self._pkgs.iterkeys()
+        return six.iterkeys(self._pkgs)
 
     def itervalues(self):
-        return self._pkgs.itervalues()
+        return six.itervalues(self._pkgs)
 
     def iteritems(self):
-        return self._pkgs.iteritems()
+        return six.iteritems(self._pkgs)
 
     def keys(self):
-        return self._pkgs.keys()
+        return list(self._pkgs.keys())
 
     def values(self):
-        return self._pkgs.values()
+        return list(self._pkgs.values())
 
     def get_dependencies(self, pkg_id, maxdepth=-1, filter_fun=None,
                          ignore_missing=False):
@@ -393,16 +395,16 @@ class DefaultInstallablePkgStorage(BasePkgStorage):
     def _read_db_files(self):
         # Read the files in the db dir and return a config parser object
         db_dir = self._db_dir
-        config = ConfigParser.RawConfigParser()
+        config = six.moves.configparser.RawConfigParser()
         try:
             for rel_path in os.listdir(db_dir):
                 if not rel_path.startswith('.'):
                     path = os.path.join(db_dir, rel_path)
                     with open(path) as fobj:
                         config.readfp(fobj)
-        except IOError, e:
+        except IOError as e:
             raise StorageError("could not open/read file '%s': %s" % (path, e))
-        except ConfigParser.ParsingError, e:
+        except six.moves.configparser.ParsingError as e:
             raise StorageError("could not parse file '%s': %s" % (path, e))
         return config
 

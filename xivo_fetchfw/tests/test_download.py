@@ -2,6 +2,7 @@
 # Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 import hashlib
 import mock
 import os
@@ -10,8 +11,8 @@ import tempfile
 import unittest
 import xivo_fetchfw.download as download
 
-CONTENT = 'foobar'
-CORRUPTED_CONTENT = 'barfoo'
+CONTENT = b'foobar'
+CORRUPTED_CONTENT = b'barfoo'
 
 
 class TestBaseRemoteFile(unittest.TestCase):
@@ -141,13 +142,13 @@ class TestSHA1Hook(unittest.TestCase):
         self._hook.complete()
 
     def test_doesnt_raise_error_on_ok_splitted_data(self):
-        mid = len(CONTENT) / 2
+        mid = len(CONTENT) // 2
         self._hook.update(CONTENT[:mid])
         self._hook.update(CONTENT[mid:])
         self._hook.complete()
 
     def test_doesnt_raise_error_on_external_fail(self):
-        self._hook.update('foo')
+        self._hook.update(b'foo')
         self._hook.fail(Exception('dummy'))
 
     def test_raise_error_on_corrupted_data(self):

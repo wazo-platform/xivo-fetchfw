@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 import os
 import shutil
 import tempfile
@@ -17,7 +18,7 @@ def _create_file(base_path, filename, content=None):
         content = 'test\n'
     abs_filename = os.path.join(base_path, filename)
     with open(abs_filename, 'wb') as fobj:
-        fobj.write(content)
+        fobj.write(content.encode('utf-8'))
 
 
 def _create_dir(base_path, dirname):

@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 import mock
 import os
 import tempfile
 import unittest
 import xivo_fetchfw.storage as storage
-from ConfigParser import RawConfigParser
+from six.moves.configparser import RawConfigParser
 
 TEST_RES_DIR = os.path.join(os.path.dirname(__file__), 'storage')
 
