@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import hashlib
@@ -12,29 +12,6 @@ import xivo_fetchfw.download as download
 
 CONTENT = 'foobar'
 CORRUPTED_CONTENT = 'barfoo'
-
-
-class TestCiscoDownloader(unittest.TestCase):
-
-    def test_new_model_info_from_uri(self):
-        flow_id = '5964'
-        url_params = [('mdfid', '282414110'), ('softwareid', '282463187'), ('release', '6.1.11')]
-        uri = 'cisco:flowid=%s,%s' % (flow_id, ','.join('%s=%s' % p for p in url_params))
-
-        model_info = download.CiscoDownloader._new_model_info_from_uri(uri)
-
-        self.assertEqual(flow_id, model_info.flow_id)
-        self.assertEqual(url_params, model_info.url_params)
-
-    def test_new_model_info_from_uri_bad_scheme(self):
-        uri = 'http://example.org'
-
-        self.assertRaises(ValueError, download.CiscoDownloader._new_model_info_from_uri, uri)
-
-    def test_new_model_info_from_uri_no_flowid(self):
-        uri = 'cisco:foo=bar'
-
-        self.assertRaises(ValueError, download.CiscoDownloader._new_model_info_from_uri, uri)
 
 
 class TestBaseRemoteFile(unittest.TestCase):
@@ -206,12 +183,10 @@ class TestHelperFunctions(unittest.TestCase):
         dlers = download.new_downloaders()
         dlers.pop('auth')
         dlers.pop('default')
-        dlers.pop('cisco')
         self.assertFalse(dlers)
 
     def test_new_downloaders_from_handlers_has_correct_keys(self):
         dlers = download.new_downloaders()
         dlers.pop('auth')
         dlers.pop('default')
-        dlers.pop('cisco')
         self.assertFalse(dlers)
