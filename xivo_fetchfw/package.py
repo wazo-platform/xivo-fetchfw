@@ -681,10 +681,10 @@ class DefaultUpgraderController(UpgraderController):
         self._ignore = [] if ignore is None else ignore
         self._nodeps = nodeps
 
-    def _upgrade_list_filter_function(self, xxx_todo_changeme):
+    def _upgrade_list_filter_function(self, pkgs):
         # Return true if installed_pkg is not in the ignore list and if
         # installable_pkg version is higher than installed_pkg version
-        (installed_pkg, installable_pkg) = xxx_todo_changeme
+        (installed_pkg, installable_pkg) = pkgs
         pkg_id = installed_pkg.pkg_info['id']
         if pkg_id in self._ignore:
             return False
