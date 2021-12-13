@@ -18,7 +18,6 @@ Architecture: all
 Depends:
     ${python:Depends},
     ${misc:Depends},
-    python-bs4 (>= 4.0.0),
     python-progressbar,
     python-six
 Description: Wazo Phones and Cards Firmwares Fetch Engine
@@ -34,7 +33,6 @@ Architecture: all
 Depends:
     ${python3:Depends},
     ${misc:Depends},
-    python3-bs4 (>= 4.0.0),
     python3-progressbar,
     python3-six
 Description: Wazo Phones and Cards Firmwares Fetch Engine - Python 3
