@@ -1,0 +1,2 @@
+resources/etc/xivo-fetchfw.conf etc/xivo
+resources/data/* var/lib/xivo-fetchfw/installable
