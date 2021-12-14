@@ -1,18 +1,15 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import
 from __future__ import print_function
-import six
-from six.moves import map
-__license__ = """
-    Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
-    SPDX-License-Identifier: GPL-3.0-or-later
-"""
-
 import logging
+import six
 import sys
 from operator import itemgetter
+from six.moves import map
 from xivo_fetchfw import cli, config, download, package, params, storage, util
 from xivo_fetchfw import commands
 
