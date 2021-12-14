@@ -1,10 +1,17 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
-export PYBUILD_NAME=xivo_fetchfw
-export PYBUILD_DESTDIR_python2=debian/xivo-fetchfw/
-export PYBUILD_DESTDIR_python3=debian/xivo-fetchfw-python3/
+export PYBUILD_NAME=xivo-fetchfw
+export PYBUILD_DESTDIR_python2=debian/xivo-lib-fetchfw/
+export PYBUILD_DESTDIR_python3=debian/xivo-lib-fetchfw-python3/
 export PYBUILD_DISABLE=test
 
 %:
 	dh $@ --with python2,python3 --buildsystem=pybuild
+
+override_dh_auto_install:
+	dh_auto_install
+
+	mkdir -p debian/xivo-fetchfw/usr
+	mv $(CURDIR)/debian/xivo-lib-fetchfw-python3/usr/bin $(CURDIR)/debian/xivo-fetchfw/usr/
+	rm -rf $(CURDIR)/debian/xivo-lib-fetchfw/usr/bin
