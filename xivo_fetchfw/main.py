@@ -162,7 +162,3 @@ class _RemoveSubcommand(commands.AbstractSubcommand):
         pkg_mgr = parsed_args.pkg_mgr
         ctrl_factory = cli.CliUninstallerController.new_factory(recursive=True)
         pkg_mgr.uninstall(pkg_ids, parsed_args.root, ctrl_factory)
-
-
-if __name__ == '__main__':
-    main()

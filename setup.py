@@ -15,4 +15,7 @@ setup(
     url='http://wazo.community',
     license='GPLv3',
     packages=find_packages(),
+    entry_points={
+        'console_scripts': ['xivo-fetchfw = xivo_fetchfw.main:main'],
+    },
 )
