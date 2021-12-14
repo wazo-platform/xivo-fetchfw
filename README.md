@@ -1,5 +1,4 @@
-xivo-fetchfw
-=========
+# xivo-fetchfw
 [![Build Status](https://jenkins.wazo.community/buildStatus/icon?job=xivo-fetchfw)](https://jenkins.wazo.community/job/xivo-fetchfw)
 
 A simple "out-of-control" package manager in python.
@@ -15,25 +14,21 @@ been created in the process so you can remove them later.
 
 That said, you can also use it as a simple, general-purpose, package manager.
 
-Requirements
-============
+## Requirements
 
-Minimum python version is python 2.6. Does not work on python 3.
+Minimum python version is python 2.6.
 
-Dependencies
-============
+## Dependencies
 
-* Beautiful Soup
-  * http://www.crummy.com/software/BeautifulSoup/
-* xivo_fetchfw depends on progressbar
+* `six` for python 2 and 3 compatibility
+* xivo_fetchfw depends on `progressbar`
   * http://pypi.python.org/pypi/progressbar
-* some unit tests depend on the "mock" python package
+* some unit tests depend on the `mock` python package
   * http://pypi.python.org/pypi/mock
 
-Running unit tests
-------------------
+## Running unit tests
 
 ```
 pip install tox
-tox --recreate -e py27
+tox --recreate
 ```
