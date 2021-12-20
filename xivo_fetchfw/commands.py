@@ -56,7 +56,7 @@ class Subcommands(object):
         self._subcommands.append(subcommand)
 
     def configure_parser(self, parser):
-        subparsers = parser.add_subparsers()
+        subparsers = parser.add_subparsers(required=True, dest='_subcommand')
         for subcommand in self._subcommands:
             subcommand_parser = subparsers.add_parser(subcommand.name)
             subcommand_parser.set_defaults(_subcommand=subcommand)
