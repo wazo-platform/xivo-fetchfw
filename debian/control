@@ -16,7 +16,6 @@ X-Python3-Version: >= 3.5
 Package: xivo-fetchfw
 Architecture: all
 Depends:
-    xivo-lib-fetchfw (=${binary:Version}),
     xivo-lib-fetchfw-python3 (=${binary:Version}),
     ${python:Depends},
     ${python3:Depends},
