@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-# Copyright 2010-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 import contextlib
 import hashlib
 import logging
 import os
-import urllib2
+import six
+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
 
 from binascii import b2a_hex
 from xivo_fetchfw.util import FetchfwError
-from xivo_fetchfw.cisco.firmware_download import download_firmware
-from xivo_fetchfw.cisco.models import ModelInfo
 
 logger = logging.getLogger(__name__)
 
@@ -37,22 +37,22 @@ class DefaultDownloader(object):
 
     def __init__(self, handlers=None):
         if handlers is None:
-            self._opener = urllib2.build_opener()
+            self._opener = six.moves.urllib.request.build_opener()
         else:
-            self._opener = urllib2.build_opener(*handlers)
+            self._opener = six.moves.urllib.request.build_opener(*handlers)
         self._opener.addheaders = [('User-agent', 'xivo-fetchfw/1.0')]
 
     def download(self, url, timeout=_TIMEOUT):
         """Open the URL url and return a file-like object."""
         try:
             return self._do_download(url, timeout)
-        except urllib2.HTTPError, e:
+        except six.moves.urllib.error.HTTPError as e:
             logger.warning("HTTPError while downloading '%s': %s", self._get_url(url), e)
             if e.code == 401:
                 raise InvalidCredentialsError("unauthorized access to '%s'" % self._get_url(url))
             else:
                 raise DownloadError(e)
-        except urllib2.URLError, e:
+        except six.moves.urllib.error.URLError as e:
             logger.warning("URLError while downloading '%s': %s", self._get_url(url), e)
             raise DownloadError(e)
 
@@ -76,41 +76,14 @@ class DefaultDownloader(object):
 class AuthenticatingDownloader(DefaultDownloader):
     def __init__(self, handlers=None):
         DefaultDownloader.__init__(self, handlers)
-        self._pwd_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        self._opener.add_handler(urllib2.HTTPBasicAuthHandler(self._pwd_manager))
-        self._opener.add_handler(urllib2.HTTPDigestAuthHandler(self._pwd_manager))
+        self._pwd_manager = six.moves.urllib.request.HTTPPasswordMgrWithDefaultRealm()
+        self._opener.add_handler(six.moves.urllib.request.HTTPBasicAuthHandler(self._pwd_manager))
+        self._opener.add_handler(six.moves.urllib.request.HTTPDigestAuthHandler(self._pwd_manager))
 
     def add_password(self, realm, uri, user, passwd):
         # Note that if the realm and uri are the same that for an already
         # added user/passwd, it will be replaced by the new value
         self._pwd_manager.add_password(realm, uri, user, passwd)
-
-
-class CiscoDownloader(DefaultDownloader):
-
-    _URI_SCHEME = 'cisco:'
-
-    def _do_download(self, url, timeout):
-        model_info = self._new_model_info_from_uri(url)
-        opener = _OpenerWithTimeout(self._opener, timeout)
-        return download_firmware(model_info, opener)
-
-    @classmethod
-    def _new_model_info_from_uri(cls, uri):
-        # Example:
-        #     cisco:flowid=5964,mdfid=282414110,softwareid=282463187,release=6.1.11
-        if not uri.startswith(cls._URI_SCHEME):
-            raise ValueError('bad uri scheme; should be %s' % cls._URI_SCHEME)
-        uri_data = uri[len(cls._URI_SCHEME):]
-
-        tokens = [tuple(word.split('=', 1)) for word in uri_data.split(',')]
-        flow_id_token = tokens[0]
-        if flow_id_token[0] != 'flowid':
-            raise ValueError('bad uri scheme; first element must be flowid')
-        flow_id = flow_id_token[1]
-        url_params = tokens[1:]
-
-        return ModelInfo(flow_id, url_params)
 
 
 class _OpenerWithTimeout(object):
@@ -163,7 +136,7 @@ class BaseRemoteFile(object):
                         hook.update(data)
             for hook in reversed(hooks):
                 hook.complete()
-        except Exception, e:
+        except Exception as e:
             # preserve traceback info
             try:
                 raise
@@ -321,7 +294,7 @@ class WriteToFileHook(DownloadHook):
                 else:
                     filename = self._tmp_filename
                 os.remove(filename)
-            except OSError, e:
+            except OSError as e:
                 logger.error("error while removing '%s': %s", filename, e)
 
     @classmethod
@@ -404,7 +377,7 @@ def new_handlers(proxies=None):
 
     """
     if proxies:
-        return [urllib2.ProxyHandler(proxies)]
+        return [six.moves.urllib.request.ProxyHandler(proxies)]
     else:
         return []
 
@@ -414,13 +387,11 @@ def new_downloaders_from_handlers(handlers=None):
 
     ret['default'] is a DefaultDownloader
     ret['auth'] is an AuthenticatingDownloader
-    ret['cisco'] is a CiscoDownloader
 
     """
     auth = AuthenticatingDownloader(handlers)
     default = DefaultDownloader(handlers)
-    cisco = CiscoDownloader(handlers)
-    return {'auth': auth, 'default': default, 'cisco': cisco}
+    return {'auth': auth, 'default': default}
 
 
 def new_downloaders(proxies=None):

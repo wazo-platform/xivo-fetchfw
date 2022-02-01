@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2014 Avencall
+# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from ConfigParser import RawConfigParser
+from __future__ import absolute_import
+from six.moves.configparser import RawConfigParser
 from xivo_fetchfw.params import ConfigSpec
 
 

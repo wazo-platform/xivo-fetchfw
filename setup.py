@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 from setuptools import setup
 from setuptools import find_packages
 
@@ -14,4 +15,7 @@ setup(
     url='http://wazo.community',
     license='GPLv3',
     packages=find_packages(),
+    entry_points={
+        'console_scripts': ['xivo-fetchfw = xivo_fetchfw.main:main'],
+    },
 )

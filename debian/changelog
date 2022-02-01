@@ -1,3 +1,9 @@
+xivo-fetchfw (22.01~20211215.145657) wazo-dev-buster; urgency=medium
+
+  * Split packages in three: python2, python3 and binary
+
+ -- Wazo Maintainers <dev@wazo.community>  Wed, 15 Dec 2021 14:56:57 -0500
+
 xivo-fetchfw (14.01~20140108.151155.79a59d7) xivo-dev; urgency=low
 
   * use maintscript for the rename from pf-xivo to xivo

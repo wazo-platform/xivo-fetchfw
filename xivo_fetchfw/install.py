@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2014 Avencall
+# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 import collections
 import contextlib
 import glob
@@ -15,6 +16,7 @@ import tempfile
 import zipfile
 from fnmatch import fnmatch
 from xivo_fetchfw.util import FetchfwError
+import six
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +82,7 @@ class _InstallationProcess(object):
         # Return a 'requirement map', i.e. a dictionary which keys are node id
         # and values are node id that depends on the key
         req_map = dict((node_id, []) for node_id in itertools.chain(self._sources, self._filters))
-        for filter_id, (_, filter_dependency) in self._filters.iteritems():
+        for filter_id, (_, filter_dependency) in six.iteritems(self._filters):
             req_map[filter_dependency].append(filter_id)
         return req_map
 
@@ -90,7 +92,7 @@ class _InstallationProcess(object):
         os.mkdir(result_dir)
         input_dirs = {}
         output_dirs = {}
-        for node_id, requirements in req_map.iteritems():
+        for node_id, requirements in six.iteritems(req_map):
             if not requirements:
                 # terminal node
                 output_dirs[node_id] = result_dir
@@ -172,7 +174,7 @@ class InstallationManager(object):
         # exception if there's a filter such that it depends on an unknown node.
         sources = self._sources
         filters = self._filters
-        for filter_id, filter_value in filters.iteritems():
+        for filter_id, filter_value in six.iteritems(filters):
             node_dependency = filter_value[1]
             if node_dependency not in filters and node_dependency not in sources:
                 raise InstallationGraphError("filter '%s' depends on unknown filter/source '%s'" %
@@ -181,7 +183,7 @@ class InstallationManager(object):
     def _check_no_useless_source(self):
         # Check if every sources participate in the installation process, i.e. raise an exception
         # if there's a source such that no other filter depend on it.
-        dependencies = (v[1] for v in self._filters.itervalues())
+        dependencies = (v[1] for v in six.itervalues(self._filters))
         unused_sources = set(self._sources).difference(dependencies)
         if unused_sources:
             raise InstallationGraphError("these sources doesn't participate in the installation: %s" %
@@ -228,7 +230,7 @@ class _GlobHelper(object):
     def __init__(self, pathnames, error_on_no_matches=True):
         """pathnames can be either a single path name or an iterable of path names.
         """
-        if isinstance(pathnames, basestring):
+        if isinstance(pathnames, six.string_types):
             self._pathnames = [os.path.normpath(pathnames)]
         else:
             self._pathnames = [os.path.normpath(pathname) for pathname in pathnames]
@@ -273,7 +275,7 @@ class FilesystemLinkSource(object):
           patterns
 
         """
-        if isinstance(pathnames, basestring):
+        if isinstance(pathnames, six.string_types):
             self._pathnames = [pathnames]
         else:
             self._pathnames = list(pathnames)
@@ -290,7 +292,7 @@ class NonGlobbingFilesystemLinkSource(object):
         pathnames -- a single pathname or an iterator over multiple pathnames
 
         """
-        if isinstance(pathnames, basestring):
+        if isinstance(pathnames, six.string_types):
             self._pathnames = [pathnames]
         else:
             self._pathnames = list(pathnames)
@@ -316,7 +318,7 @@ class FilesystemCopySource(object):
           patterns
 
         """
-        if isinstance(pathnames, basestring):
+        if isinstance(pathnames, six.string_types):
             self._pathnames = [pathnames]
         else:
             self._pathnames = list(pathnames)
@@ -450,7 +452,7 @@ class CiscoUnsignFilter(object):
 
     """
     _BUF_SIZE = 512
-    _GZIP_MAGIC_NUMBER = '\x1f\x8b'  # see http://www.gzip.org/zlib/rfc-gzip.html#file-format
+    _GZIP_MAGIC_NUMBER = b'\x1f\x8b'  # see http://www.gzip.org/zlib/rfc-gzip.html#file-format
 
     def __init__(self, signed_pathname, unsigned_pathname):
         """Note: signed_pathname can be a glob pattern, but when the pattern is expanded,
@@ -537,7 +539,7 @@ def ExcludeFilter(pathnames):
         patterns
 
     """
-    if isinstance(pathnames, basestring):
+    if isinstance(pathnames, six.string_types):
         pathnames = [pathnames]
     else:
         pathnames = list(pathnames)
@@ -559,7 +561,7 @@ def IncludeFilter(pathnames):
         patterns
 
     """
-    if isinstance(pathnames, basestring):
+    if isinstance(pathnames, six.string_types):
         pathnames = [pathnames]
     else:
         pathnames = list(pathnames)
@@ -618,7 +620,7 @@ class CopyFilter(object):
                 self._apply_dir(src_directory, abs_dst)
             else:
                 self._apply_file(src_directory, abs_dst)
-        except EnvironmentError, e:
+        except EnvironmentError as e:
             logger.error("Error during execution of copy filter", exc_info=True)
             raise InstallationError(e)
 

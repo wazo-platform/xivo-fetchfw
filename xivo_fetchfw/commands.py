@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 import argparse
 import sys
 
@@ -55,7 +56,7 @@ class Subcommands(object):
         self._subcommands.append(subcommand)
 
     def configure_parser(self, parser):
-        subparsers = parser.add_subparsers()
+        subparsers = parser.add_subparsers(required=True, dest='_subcommand')
         for subcommand in self._subcommands:
             subcommand_parser = subparsers.add_parser(subcommand.name)
             subcommand_parser.set_defaults(_subcommand=subcommand)

@@ -1,14 +1,14 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
+# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
-__license__ = """
-    Copyright (C) 2010-2011  Avencall
-    SPDX-License-Identifier: GPL-3.0-or-later
-"""
-
+from __future__ import absolute_import
+from __future__ import print_function
 import logging
+import six
 import sys
 from operator import itemgetter
+from six.moves import map
 from xivo_fetchfw import cli, config, download, package, params, storage, util
 from xivo_fetchfw import commands
 
@@ -21,12 +21,12 @@ def main():
         commands.execute_command(_XivoFetchfwCommand())
     except cli.UserCancellationError:
         pass
-    except util.FetchfwError, e:
-        print >> sys.stderr, "error:", e
+    except util.FetchfwError as e:
+        print("error:", e, file=sys.stderr)
         logger.debug('Stack trace:', exc_info=True)
         sys.exit(1)
-    except Exception, e:
-        print >> sys.stderr, "Unexpected exception:", e
+    except Exception as e:
+        print("Unexpected exception:", e, file=sys.stderr)
         logger.debug('Stack trace:', exc_info=True)
         sys.exit(1)
 
@@ -69,8 +69,8 @@ class _XivoFetchfwCommand(commands.AbstractCommand):
         config_filename = parsed_args.config
         try:
             config_dict = config.read_config(config_filename)
-        except Exception, e:
-            print >> sys.stderr, "error: config file '%s': %s" % (cfg_filename, e)
+        except Exception as e:
+            print("error: config file '%s': %s" % (cfg_filename, e), file=sys.stderr)
             logger.debug('Stack trace:', exc_info=True)
             sys.exit(1)
         else:
@@ -105,9 +105,9 @@ class _InstallSubcommand(commands.AbstractSubcommand):
                 installable_version = pkg_mgr.installable_pkg_sto[pkg_id].pkg_info['version']
                 cmp_result = util.cmp_version(installed_version, installable_version)
                 if cmp_result == 0:
-                    print "warning: %s is up to date -- reinstalling" % installed_pkg
+                    print("warning: %s is up to date -- reinstalling" % installed_pkg)
                 else:
-                    print >> sys.stderr, "error: %s is already installed" % installed_pkg
+                    print("error: %s is already installed" % installed_pkg, file=sys.stderr)
                     sys.exit(1)
         ctrl_factory = cli.CliInstallerController.new_factory()
         pkg_mgr.install(pkg_ids, parsed_args.root, ctrl_factory)
@@ -139,16 +139,16 @@ class _SearchSubcommand(commands.AbstractSubcommand):
                 if pkg_id in pkg_mgr.installed_pkg_sto:
                     installed_version = pkg_mgr.installed_pkg_sto[pkg_id].pkg_info['version']
                     if installed_version != installable_pkg.pkg_info['version']:
-                        print installable_pkg, "[installed: %s]" % installed_version
+                        print(installable_pkg, "[installed: %s]" % installed_version)
                     else:
-                        print installable_pkg, "[installed]"
+                        print(installable_pkg, "[installed]")
                 else:
-                    print installable_pkg
-                print '   ', installable_pkg.pkg_info['description']
+                    print(installable_pkg)
+                print('   ', installable_pkg.pkg_info['description'])
 
 
 def _sorted_itervalues(dict_):
-    return map(itemgetter(1), sorted(dict_.iteritems(), key=itemgetter(0)))
+    return list(map(itemgetter(1), sorted(six.iteritems(dict_), key=itemgetter(0))))
 
 
 class _RemoveSubcommand(commands.AbstractSubcommand):
@@ -161,7 +161,3 @@ class _RemoveSubcommand(commands.AbstractSubcommand):
         pkg_mgr = parsed_args.pkg_mgr
         ctrl_factory = cli.CliUninstallerController.new_factory(recursive=True)
         pkg_mgr.uninstall(pkg_ids, parsed_args.root, ctrl_factory)
-
-
-if __name__ == '__main__':
-    main()

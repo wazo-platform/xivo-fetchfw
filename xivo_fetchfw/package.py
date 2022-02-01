@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2014 Avencall
+# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import absolute_import
 import copy
 import logging
 from xivo_fetchfw.util import FetchfwError, install_paths, remove_paths, cmp_version
+import six
+from six.moves import filter
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +112,7 @@ class PackageManager(object):
             # this rely on the fact that remove_paths is a generator
             for removed_path in remove_paths(installed_paths, root_dir):
                 removed_paths.append(removed_path)
-        except Exception, e:
+        except Exception as e:
             # error while removing files we were succesfull at installating
             non_removed_paths = list(set(installed_paths).difference(removed_paths))
             logger.warning('Error while removing already installed files: %s' %
@@ -126,7 +129,7 @@ class PackageManager(object):
         try:
             for installed_path in install_paths(result_dir, root_dir):
                 installed_paths.append(installed_path)
-        except Exception, e:
+        except Exception as e:
             logger.error('Error during installation of pkg %s in %s: %s' %
                          (pkg_id, root_dir, e))
             # preserve stack trace while removing installed files
@@ -157,7 +160,7 @@ class PackageManager(object):
             installed_pkg = installable_pkg.new_installed_package()
 
             self.installed_pkg_sto.upsert_pkg(installed_pkg)
-        except Exception, e:
+        except Exception as e:
             logger.error("Error while commiting pkg %s to storage: %s" %
                          (pkg_id, e))
             # preserve stack trace while removing installed files
@@ -189,8 +192,8 @@ class PackageManager(object):
 
             # 2.3. get the list of remote files to download
             # this is a quick way to get the list of unique remote files
-            raw_remote_files = dict((remote_file.path, remote_file) for pkg in pkgs
-                                    for remote_file in pkg.remote_files).values()
+            raw_remote_files = list(dict((remote_file.path, remote_file) for pkg in pkgs
+                                    for remote_file in pkg.remote_files).values())
             remote_files = installer_ctrl.preprocess_raw_remote_files(raw_remote_files)
 
             # 3. download remote files
@@ -206,14 +209,14 @@ class PackageManager(object):
                 self._install_pkg(pkg, root_dir)
                 installer_ctrl.post_install_pkg(pkg)
             installer_ctrl.post_install(pkgs)
-        except Exception, e:
+        except Exception as e:
             # preserve stack trace
             try:
                 raise
             finally:
                 try:
                     installer_ctrl.post_installation(e)
-                except Exception, e:
+                except Exception as e:
                     logger.error("Error during installer post installation: %s",
                                  e, exc_info=True)
         else:
@@ -228,7 +231,7 @@ class PackageManager(object):
         try:
             for removed_path in remove_paths(installed_paths, root_dir):
                 removed_paths.append(removed_path)
-        except Exception, e:
+        except Exception as e:
             logger.error("Error while removing files of pkg %s: %s" % (pkg_id, e))
             if removed_paths:
                 logger.error("These files have been removed from %s although the"
@@ -238,7 +241,7 @@ class PackageManager(object):
         else:
             try:
                 self.installed_pkg_sto.delete_pkg(pkg_id)
-            except Exception, e:
+            except Exception as e:
                 logger.error("Error while commiting pkg %s to storage: %s" %
                              (pkg_id, e))
                 if removed_paths:
@@ -273,14 +276,14 @@ class PackageManager(object):
                 self._uninstall_pkg(pkg, root_dir)
                 uninstaller_ctrl.post_uninstall_pkg(pkg)
             uninstaller_ctrl.post_uninstall(pkgs)
-        except Exception, e:
+        except Exception as e:
             # preserve stack trace
             try:
                 raise
             finally:
                 try:
                     uninstaller_ctrl.post_uninstallation(e)
-                except Exception, e:
+                except Exception as e:
                     logger.error('Error during uninstaller post uninstallation: %s',
                                  e, exc_info=True)
         else:
@@ -290,7 +293,7 @@ class PackageManager(object):
         # Return a list of tuple (<installed package>, <installable_pkg>) for
         # which the version differs
         raw_upgrade_list = []
-        for installed_pkg in self.installed_pkg_sto.itervalues():
+        for installed_pkg in six.itervalues(self.installed_pkg_sto):
             pkg_id = installed_pkg.pkg_info['id']
             if pkg_id in self.installable_pkg_sto:
                 installable_pkg = self.installable_pkg_sto[pkg_id]
@@ -327,7 +330,7 @@ class PackageManager(object):
                 for pkg in [installable_pkg] + install_list:
                     for remote_file in pkg.remote_files:
                         raw_remote_files_dict[remote_file.path] = remote_file
-            raw_remote_files = raw_remote_files_dict.values()
+            raw_remote_files = list(raw_remote_files_dict.values())
             remote_files = upgrader_ctrl.preprocess_raw_remote_files(raw_remote_files)
 
             # 3. download remote files
@@ -355,14 +358,14 @@ class PackageManager(object):
                 self._install_pkg(installable_pkg, root_dir)
                 upgrader_ctrl.post_upgrade_pkg(installed_pkg)
             upgrader_ctrl.post_upgrade(upgrade_specs)
-        except Exception, e:
+        except Exception as e:
             # preserve stack trace
             try:
                 raise
             finally:
                 try:
                     upgrader_ctrl.post_upgradation(e)
-                except Exception, e:
+                except Exception as e:
                     logger.error('Error during upgrader post upgradation: %s',
                                  e, exc_info=True)
         else:
@@ -678,9 +681,10 @@ class DefaultUpgraderController(UpgraderController):
         self._ignore = [] if ignore is None else ignore
         self._nodeps = nodeps
 
-    def _upgrade_list_filter_function(self, (installed_pkg, installable_pkg)):
+    def _upgrade_list_filter_function(self, pkgs):
         # Return true if installed_pkg is not in the ignore list and if
         # installable_pkg version is higher than installed_pkg version
+        (installed_pkg, installable_pkg) = pkgs
         pkg_id = installed_pkg.pkg_info['id']
         if pkg_id in self._ignore:
             return False
@@ -690,7 +694,7 @@ class DefaultUpgraderController(UpgraderController):
         return cmp_version(installable_version, installed_version) > 0
 
     def preprocess_raw_upgrade_list(self, raw_upgrade_list):
-        return filter(self._upgrade_list_filter_function, raw_upgrade_list)
+        return list(filter(self._upgrade_list_filter_function, raw_upgrade_list))
 
     def preprocess_upgrade_list(self, upgrade_list):
         installed_specs = []
