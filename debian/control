@@ -29,7 +29,6 @@ Description: Wazo Phones and Cards Firmwares Fetch Engine
 
 Package: xivo-lib-fetchfw
 Architecture: all
-Provides: xivo-fetchfw (<= 21.10)
 Conflicts: xivo-fetchfw (<= 21.10)
 Replaces: xivo-fetchfw (<= 21.10)
 Depends:
