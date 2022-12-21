@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
 import os
 import shutil
 import tempfile
@@ -39,7 +37,7 @@ class TestNullSource(unittest.TestCase):
         self.assertEqual([], os.listdir(self._tmp_dir))
 
 
-class _TestStandardExtractFilter(object):
+class _TestStandardExtractFilter:
     # _FILE
     # _FILTER
 

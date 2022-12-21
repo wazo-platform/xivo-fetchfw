@@ -1,15 +1,11 @@
-# -*- coding: utf-8 -*-
-# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
-from __future__ import print_function
 import logging
 import progressbar
 from xivo_fetchfw.package import DefaultInstallerController, DefaultUninstallerController, \
     PackageError, DefaultUpgraderController
 from xivo_fetchfw.download import ProgressBarHook
-from six.moves import input
 
 logger = logging.getLogger(__name__)
 

@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
 import copy
 import logging
 from xivo_fetchfw.util import FetchfwError, install_paths, remove_paths, cmp_version
-import six
-from six.moves import filter
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +25,7 @@ def _add_pkg_info_defaults(pkg_info):
     pkg_info.setdefault('depends', [])
 
 
-class InstallablePackage(object):
+class InstallablePackage:
     _MANDATORY_KEYS = _COMMON_MANDATORY_KEYS
 
     def __init__(self, pkg_info, remote_files, install_mgr):
@@ -78,7 +74,7 @@ class InstallablePackage(object):
         return "%s %s" % (self.pkg_info['id'], self.pkg_info['version'])
 
 
-class InstalledPackage(object):
+class InstalledPackage:
     _MANDATORY_KEYS = _COMMON_MANDATORY_KEYS + ['files', 'explicit_install']
 
     def __init__(self, pkg_info):
@@ -100,7 +96,7 @@ class InstalledPackage(object):
         return "%s %s" % (self.pkg_info['id'], self.pkg_info['version'])
 
 
-class PackageManager(object):
+class PackageManager:
     def __init__(self, installable_pkg_sto, installed_pkg_sto):
         self.installable_pkg_sto = installable_pkg_sto
         self.installed_pkg_sto = installed_pkg_sto
@@ -293,7 +289,7 @@ class PackageManager(object):
         # Return a list of tuple (<installed package>, <installable_pkg>) for
         # which the version differs
         raw_upgrade_list = []
-        for installed_pkg in six.itervalues(self.installed_pkg_sto):
+        for installed_pkg in self.installed_pkg_sto.values():
             pkg_id = installed_pkg.pkg_info['id']
             if pkg_id in self.installable_pkg_sto:
                 installable_pkg = self.installable_pkg_sto[pkg_id]
@@ -372,7 +368,7 @@ class PackageManager(object):
             upgrader_ctrl.post_upgradation(None)
 
 
-class InstallerController(object):
+class InstallerController:
     """The method are shown in the order they are called.
 
     All installer controller should inherit from this one. Although this class
@@ -508,7 +504,7 @@ class DefaultInstallerController(InstallerController):
         return installable_pkgs
 
 
-class UninstallerController(object):
+class UninstallerController:
     # TODO add comments
 
     def __init__(self, installable_pkg_sto, installed_pkg_sto):
@@ -596,7 +592,7 @@ class DefaultUninstallerController(UninstallerController):
         return installed_pkgs
 
 
-class UpgraderController(object):
+class UpgraderController:
     # TODO add comments
     def __init__(self, installable_pkg_sto, installed_pkg_sto):
         pass

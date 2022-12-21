@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
-import unittest
+from unittest import TestCase
 from xivo_fetchfw import params
 
 
-class TestFilterSection(unittest.TestCase):
+class TestFilterSection(TestCase):
     def test_strip_section_name(self):
         config_dict = {'foo.a': 1}
         section_id = 'foo'
@@ -47,7 +45,7 @@ class TestFilterSection(unittest.TestCase):
                          expected)
 
 
-class TestBool(unittest.TestCase):
+class TestBool(TestCase):
     def test_true_raw_values(self):
         self.assertTrue(params.bool_('True'))
         self.assertTrue(params.bool_('true'))

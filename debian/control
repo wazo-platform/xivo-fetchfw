@@ -5,51 +5,17 @@ Maintainer: Wazo Maintainers <dev@wazo.community>
 Build-Depends:
     debhelper (>= 9),
     dh-python,
-    python-all (>= 2.7),
-    python-setuptools,
     python3-all,
     python3-setuptools
 Standards-Version: 3.9.6
-X-Python-Version: >= 2.7
-X-Python3-Version: >= 3.5
-
-Package: xivo-fetchfw
-Architecture: all
-Depends:
-    xivo-lib-fetchfw-python3 (=${binary:Version}),
-    ${python:Depends},
-    ${python3:Depends},
-    ${misc:Depends},
-Description: Wazo Phones and Cards Firmwares Fetch Engine
- Wazo is a system based on a powerful IPBX, to bring an easy to
- install solution for telephony and related services.
- .
- This package contains the engine used to fetch the necessary
- firmwares for Wazo IP phones and cards.
-
-Package: xivo-lib-fetchfw
-Architecture: all
-Conflicts: xivo-fetchfw (<= 21.10)
-Replaces: xivo-fetchfw (<= 21.10)
-Depends:
-    ${python:Depends},
-    ${misc:Depends},
-    python-progressbar,
-    python-six
-Description: Wazo Phones and Cards Firmwares Fetch Engine - Python 2 module
- Wazo is a system based on a powerful IPBX, to bring an easy to
- install solution for telephony and related services.
- .
- This package contains the engine used to fetch the necessary
- firmwares for Wazo IP phones and cards.
+X-Python3-Version: >= 3.7
 
 Package: xivo-lib-fetchfw-python3
 Architecture: all
 Depends:
     ${python3:Depends},
     ${misc:Depends},
-    python3-progressbar,
-    python3-six
+    python3-progressbar
 Description: Wazo Phones and Cards Firmwares Fetch Engine - Python 3 module
  Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.

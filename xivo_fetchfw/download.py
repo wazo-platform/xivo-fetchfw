@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
 import contextlib
 import hashlib
 import logging
 import os
-import six
-import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
 
 from binascii import b2a_hex
+from urllib import request
+from urllib.error import HTTPError, URLError
+from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler, HTTPDigestAuthHandler, ProxyHandler
+
 from xivo_fetchfw.util import FetchfwError
 
 logger = logging.getLogger(__name__)
@@ -32,27 +32,27 @@ class AbortedDownloadError(DownloadError):
     pass
 
 
-class DefaultDownloader(object):
+class DefaultDownloader:
     _TIMEOUT = 15.0
 
     def __init__(self, handlers=None):
         if handlers is None:
-            self._opener = six.moves.urllib.request.build_opener()
+            self._opener = request.build_opener()
         else:
-            self._opener = six.moves.urllib.request.build_opener(*handlers)
+            self._opener = request.build_opener(*handlers)
         self._opener.addheaders = [('User-agent', 'xivo-fetchfw/1.0')]
 
     def download(self, url, timeout=_TIMEOUT):
         """Open the URL url and return a file-like object."""
         try:
             return self._do_download(url, timeout)
-        except six.moves.urllib.error.HTTPError as e:
+        except HTTPError as e:
             logger.warning("HTTPError while downloading '%s': %s", self._get_url(url), e)
             if e.code == 401:
                 raise InvalidCredentialsError("unauthorized access to '%s'" % self._get_url(url))
             else:
                 raise DownloadError(e)
-        except six.moves.urllib.error.URLError as e:
+        except URLError as e:
             logger.warning("URLError while downloading '%s': %s", self._get_url(url), e)
             raise DownloadError(e)
 
@@ -75,10 +75,10 @@ class DefaultDownloader(object):
 
 class AuthenticatingDownloader(DefaultDownloader):
     def __init__(self, handlers=None):
-        DefaultDownloader.__init__(self, handlers)
-        self._pwd_manager = six.moves.urllib.request.HTTPPasswordMgrWithDefaultRealm()
-        self._opener.add_handler(six.moves.urllib.request.HTTPBasicAuthHandler(self._pwd_manager))
-        self._opener.add_handler(six.moves.urllib.request.HTTPDigestAuthHandler(self._pwd_manager))
+        super().__init__(handlers)
+        self._pwd_manager = HTTPPasswordMgrWithDefaultRealm()
+        self._opener.add_handler(HTTPBasicAuthHandler(self._pwd_manager))
+        self._opener.add_handler(HTTPDigestAuthHandler(self._pwd_manager))
 
     def add_password(self, realm, uri, user, passwd):
         # Note that if the realm and uri are the same that for an already
@@ -86,7 +86,7 @@ class AuthenticatingDownloader(DefaultDownloader):
         self._pwd_manager.add_password(realm, uri, user, passwd)
 
 
-class _OpenerWithTimeout(object):
+class _OpenerWithTimeout:
 
     def __init__(self, opener, timeout):
         self._opener = opener
@@ -96,7 +96,7 @@ class _OpenerWithTimeout(object):
         return self._opener.open(url, data, self._timeout)
 
 
-class BaseRemoteFile(object):
+class BaseRemoteFile:
     """A remote file that can be downloaded."""
     _BLOCK_SIZE = 4096
 
@@ -161,7 +161,7 @@ class BaseRemoteFile(object):
                     logger.error('hook.stop raised an exception', exc_info=True)
 
 
-class RemoteFile(object):
+class RemoteFile:
     """A BaseRemoteFile with a few extra attributes:
 
     size -- the size of the remote file
@@ -203,7 +203,7 @@ class RemoteFile(object):
         return cls(path, size, base_remote_file)
 
 
-class DownloadHook(object):
+class DownloadHook:
     """Base class for download hooks."""
     def start(self):
         """Called just before the download is started.
@@ -260,7 +260,7 @@ class DownloadHook(object):
 class WriteToFileHook(DownloadHook):
     """Write a download to a file."""
     def __init__(self, filename):
-        DownloadHook.__init__(self)
+        super().__init__()
         self._filename = filename
         # XXX usage of a fixed suffix might not be the best idea since we could
         #     overwrite a 'valid' file with this name, that said we want both files
@@ -311,7 +311,7 @@ class SHA1Hook(DownloadHook):
         """
         sha1sum -- the raw sha1 sum (NOT an hex representation).
         """
-        DownloadHook.__init__(self)
+        super().__init__()
         self._sha1sum = sha1sum
         self._hash = None
 
@@ -338,7 +338,7 @@ class SHA1Hook(DownloadHook):
 class ProgressBarHook(DownloadHook):
     """Update a progress bar matching the download status."""
     def __init__(self, pbar):
-        DownloadHook.__init__(self)
+        super().__init__()
         self._pbar = pbar
         self._size = 0
 
@@ -356,7 +356,7 @@ class ProgressBarHook(DownloadHook):
 class AbortHook(DownloadHook):
     """Abort a download at will by raising an exception in a call to update."""
     def __init__(self):
-        DownloadHook.__init__(self)
+        super().__init__()
         self._abort = False
 
     def update(self, data):
@@ -377,7 +377,7 @@ def new_handlers(proxies=None):
 
     """
     if proxies:
-        return [six.moves.urllib.request.ProxyHandler(proxies)]
+        return [ProxyHandler(proxies)]
     else:
         return []
 

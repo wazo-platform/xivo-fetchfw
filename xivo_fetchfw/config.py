@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
-from six.moves.configparser import RawConfigParser
+from configparser import RawConfigParser
 from xivo_fetchfw.params import ConfigSpec
 
 
@@ -43,8 +41,8 @@ _CONFIG_SPEC = _new_config_spec()
 
 def read_config(filename):
     config_parser = RawConfigParser()
-    # case sensitive options (used for section 'global_vars')
+    # case-sensitive options (used for section 'global_vars')
     config_parser.optionxform = str
-    with open(filename) as fobj:
-        config_parser.readfp(fobj)
+    with open(filename) as f:
+        config_parser.read_file(f)
     return _CONFIG_SPEC.read_config(config_parser)

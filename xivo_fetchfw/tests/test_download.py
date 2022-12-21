@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
 import hashlib
-import mock
+from unittest.mock import Mock
 import os
 import shutil
 import tempfile
@@ -25,14 +23,14 @@ class TestBaseRemoteFile(unittest.TestCase):
         def read(size):
             return results.pop()
 
-        fobj = mock.Mock()
+        fobj = Mock()
         fobj.read.side_effect = read
         return fobj
 
     def setUp(self):
-        downloader = mock.Mock()
+        downloader = Mock()
         downloader.download.return_value = self._new_fobj_mock()
-        hook = mock.Mock()
+        hook = Mock()
         self._downloader = downloader
         self._hook = hook
 
@@ -75,7 +73,7 @@ class TestBaseRemoteFile(unittest.TestCase):
         self._hook.stop.assert_called_once_with()
 
     def test_hook_stop_not_called_if_started_not_called(self):
-        raise_hook = mock.Mock()
+        raise_hook = Mock()
         raise_hook.start.side_effect = Exception('dummy')
         rfile = download.BaseRemoteFile(self.URL, self._downloader)
 

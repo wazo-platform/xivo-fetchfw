@@ -16,15 +16,12 @@ That said, you can also use it as a simple, general-purpose, package manager.
 
 ## Requirements
 
-Minimum python version is python 2.6.
+Minimum python version is python 3.7.
 
 ## Dependencies
 
-* `six` for python 2 and 3 compatibility
 * xivo_fetchfw depends on `progressbar`
   * http://pypi.python.org/pypi/progressbar
-* some unit tests depend on the `mock` python package
-  * http://pypi.python.org/pypi/mock
 
 ## Running unit tests
 
