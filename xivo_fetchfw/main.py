@@ -65,7 +65,7 @@ class _XivoFetchfwCommand(commands.AbstractCommand):
         try:
             config_dict = config.read_config(config_filename)
         except Exception as e:
-            print("error: config file '%s': %s" % (cfg_filename, e), file=sys.stderr)
+            print(f"error: config file '{cfg_filename}': {e}", file=sys.stderr)
             logger.debug('Stack trace:', exc_info=True)
             sys.exit(1)
         else:

@@ -391,10 +391,10 @@ class DefaultInstallablePkgStorage(BasePkgStorage):
                     path = os.path.join(db_dir, rel_path)
                     with open(path) as f:
                         config.read_file(f)
-        except IOError as e:
-            raise StorageError("could not open/read file '%s': %s" % (path, e))
+        except OSError as e:
+            raise StorageError(f"could not open/read file '{path}': {e}")
         except ParsingError as e:
-            raise StorageError("could not parse file '%s': %s" % (path, e))
+            raise StorageError(f"could not parse file '{path}': {e}")
         return config
 
     def _split_sections(self, config):
@@ -475,7 +475,7 @@ class DefaultInstalledPkgStorage(BasePkgStorage):
 
     def _load_pkg_info(self, pkg_id):
         filename = os.path.join(self._db_dir, pkg_id)
-        with open(filename, 'r') as fobj:
+        with open(filename) as fobj:
             # XXX json.load returns string as unicode strings but we are using
             #     plain string in the rest of the code. Using unicode would be
             #     great but config parser, used for the installable storage,

@@ -163,7 +163,7 @@ class ConfigSpec:
         unknown_sections = collections.defaultdict(dict)
         for section_id in config_parser.sections():
             for option_id, raw_value in config_parser.items(section_id):
-                param_id = "%s.%s" % (section_id, option_id)
+                param_id = f"{section_id}.{option_id}"
                 if param_id in self._params:
                     config_dict[param_id] = self._process_param(param_id, raw_value)
                 elif section_id in self._sections:
@@ -182,7 +182,7 @@ class ConfigSpec:
                         for option_id, raw_value in section_dict.items():
                             if option_id in cur_dyn_params:
                                 fun = cur_dyn_params[option_id][1]
-                                param_id = '%s.%s' % (section_id, option_id)
+                                param_id = f'{section_id}.{option_id}'
                                 if fun is None:
                                     config_dict[param_id] = raw_value
                                 else:
@@ -191,7 +191,7 @@ class ConfigSpec:
                                 raise ValueError("unknown dynamic option %s for template %s" %
                                                  (option_id, template_id))
                         for option_id, (default, _) in cur_dyn_params.items():
-                            param_id = '%s.%s' % (section_id, option_id)
+                            param_id = f'{section_id}.{option_id}'
                             if param_id not in config_dict:
                                 if default is self.MANDATORY:
                                     raise ValueError('missing dyn parameter: %s' % param_id)

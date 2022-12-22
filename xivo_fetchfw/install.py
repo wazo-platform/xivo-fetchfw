@@ -78,7 +78,7 @@ class _InstallationProcess:
     def _build_requirement_map(self):
         # Return a 'requirement map', i.e. a dictionary which keys are node id
         # and values are node id that depends on the key
-        req_map = dict((node_id, []) for node_id in itertools.chain(self._sources, self._filters))
+        req_map = {node_id: [] for node_id in itertools.chain(self._sources, self._filters)}
         for filter_id, (_, filter_dependency) in self._filters.items():
             req_map[filter_dependency].append(filter_id)
         return req_map
@@ -617,7 +617,7 @@ class CopyFilter:
                 self._apply_dir(src_directory, abs_dst)
             else:
                 self._apply_file(src_directory, abs_dst)
-        except EnvironmentError as e:
+        except OSError as e:
             logger.error("Error during execution of copy filter", exc_info=True)
             raise InstallationError(e)
 

@@ -71,7 +71,7 @@ class InstallablePackage:
         return InstalledPackage(new_pkg_info)
 
     def __str__(self):
-        return "%s %s" % (self.pkg_info['id'], self.pkg_info['version'])
+        return "{} {}".format(self.pkg_info['id'], self.pkg_info['version'])
 
 
 class InstalledPackage:
@@ -93,7 +93,7 @@ class InstalledPackage:
         self.pkg_info = pkg_info
 
     def __str__(self):
-        return "%s %s" % (self.pkg_info['id'], self.pkg_info['version'])
+        return f"{self.pkg_info['id']} {self.pkg_info['version']}"
 
 
 class PackageManager:
@@ -188,8 +188,8 @@ class PackageManager:
 
             # 2.3. get the list of remote files to download
             # this is a quick way to get the list of unique remote files
-            raw_remote_files = list(dict((remote_file.path, remote_file) for pkg in pkgs
-                                    for remote_file in pkg.remote_files).values())
+            raw_remote_files = list({remote_file.path: remote_file for pkg in pkgs
+                                    for remote_file in pkg.remote_files}.values())
             remote_files = installer_ctrl.preprocess_raw_remote_files(raw_remote_files)
 
             # 3. download remote files
@@ -228,7 +228,7 @@ class PackageManager:
             for removed_path in remove_paths(installed_paths, root_dir):
                 removed_paths.append(removed_path)
         except Exception as e:
-            logger.error("Error while removing files of pkg %s: %s" % (pkg_id, e))
+            logger.error(f"Error while removing files of pkg {pkg_id}: {e}")
             if removed_paths:
                 logger.error("These files have been removed from %s although the"
                              "package will still be shown as installed: %s" %
@@ -490,7 +490,7 @@ class DefaultInstallerController(InstallerController):
         for installable_pkg in installable_pkgs:
             installable_pkg.pkg_info['explicit_install'] = True
         if not self._nodeps:
-            pkg_ids = set(pkg.pkg_info['id'] for pkg in installable_pkgs)
+            pkg_ids = {pkg.pkg_info['id'] for pkg in installable_pkgs}
 
             def filter_fun(dep_pkg_id):
                 return dep_pkg_id not in self._installed_pkg_sto and \
@@ -567,7 +567,7 @@ class DefaultUninstallerController(UninstallerController):
         if self._recursive:
             # some cases are complex to handle, this is why this might
             # seems overly complex
-            to_remove_ids = set(pkg.pkg_info['id'] for pkg in installed_pkgs)
+            to_remove_ids = {pkg.pkg_info['id'] for pkg in installed_pkgs}
 
             def filter_fun(dep_pkg_id):
                 # next line should never raise a KeyError since we are asking
@@ -694,7 +694,7 @@ class DefaultUpgraderController(UpgraderController):
 
     def preprocess_upgrade_list(self, upgrade_list):
         installed_specs = []
-        scheduled_pkg_ids = set(elem[0].pkg_info['id'] for elem in upgrade_list)
+        scheduled_pkg_ids = {elem[0].pkg_info['id'] for elem in upgrade_list}
         for installed_pkg, installable_pkg in upgrade_list:
             install_list = []
             if not self._nodeps:
