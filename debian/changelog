@@ -1,3 +1,9 @@
+xivo-fetchfw (23.01) wazo-dev-buster; urgency=medium
+
+  * Remove Python 2 version
+
+ -- Wazo Maintainers <dev@wazo.community>  Mon, 09 Jan 2023 10:31:21 -0500
+
 xivo-fetchfw (22.01~20211215.145657) wazo-dev-buster; urgency=medium
 
   * Split packages in three: python2, python3 and binary

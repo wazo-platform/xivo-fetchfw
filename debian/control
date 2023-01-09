@@ -10,6 +10,20 @@ Build-Depends:
 Standards-Version: 3.9.6
 X-Python3-Version: >= 3.7
 
+Package: xivo-fetchfw
+Architecture: all
+Depends:
+    xivo-lib-fetchfw-python3 (=${binary:Version}),
+    ${python:Depends},
+    ${python3:Depends},
+    ${misc:Depends},
+Description: Wazo Phones and Cards Firmwares Fetch Engine
+ Wazo is a system based on a powerful IPBX, to bring an easy to
+ install solution for telephony and related services.
+ .
+ This package contains the engine used to fetch the necessary
+ firmwares for Wazo IP phones and cards.
+
 Package: xivo-lib-fetchfw-python3
 Architecture: all
 Depends:
