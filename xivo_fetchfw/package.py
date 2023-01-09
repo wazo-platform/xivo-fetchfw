@@ -1,4 +1,4 @@
-# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import copy
@@ -71,7 +71,7 @@ class InstallablePackage:
         return InstalledPackage(new_pkg_info)
 
     def __str__(self):
-        return "{} {}".format(self.pkg_info['id'], self.pkg_info['version'])
+        return f"{self.pkg_info['id']} {self.pkg_info['version']}"
 
 
 class InstalledPackage:
@@ -228,7 +228,7 @@ class PackageManager:
             for removed_path in remove_paths(installed_paths, root_dir):
                 removed_paths.append(removed_path)
         except Exception as e:
-            logger.error(f"Error while removing files of pkg {pkg_id}: {e}")
+            logger.error("Error while removing files of pkg %s: %s", pkg_id, e)
             if removed_paths:
                 logger.error("These files have been removed from %s although the"
                              "package will still be shown as installed: %s" %
@@ -505,7 +505,6 @@ class DefaultInstallerController(InstallerController):
 
 
 class UninstallerController:
-    # TODO add comments
 
     def __init__(self, installable_pkg_sto, installed_pkg_sto):
         pass

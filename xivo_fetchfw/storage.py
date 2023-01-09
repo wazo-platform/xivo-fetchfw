@@ -1,12 +1,13 @@
-# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import collections
-import logging
 import json
+import logging
 import os
+
 from binascii import a2b_hex
-from configparser import RawConfigParser, ParsingError
+from configparser import ParsingError, RawConfigParser
 
 from xivo_fetchfw import download, install, util
 from xivo_fetchfw.package import InstallablePackage, InstalledPackage

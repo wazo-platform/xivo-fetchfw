@@ -1,11 +1,12 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
 import tempfile
 import unittest
+
 from configparser import RawConfigParser
-from unittest.mock import Mock, MagicMock
+from unittest.mock import MagicMock, Mock
 import xivo_fetchfw.storage as storage
 
 TEST_RES_DIR = os.path.join(os.path.dirname(__file__), 'storage')

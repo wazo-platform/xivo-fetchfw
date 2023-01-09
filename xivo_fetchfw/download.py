@@ -1,4 +1,4 @@
-# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import contextlib
@@ -9,7 +9,7 @@ import os
 from binascii import b2a_hex
 from urllib import request
 from urllib.error import HTTPError, URLError
-from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler, HTTPDigestAuthHandler, ProxyHandler
+from urllib.request import HTTPBasicAuthHandler, HTTPDigestAuthHandler, HTTPPasswordMgrWithDefaultRealm, ProxyHandler
 
 from xivo_fetchfw.util import FetchfwError
 
