@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
-import unittest
+from unittest import TestCase
+
 import xivo_fetchfw.package as package
 
 
-class TestInstalledPackage(unittest.TestCase):
+class TestInstalledPackage(TestCase):
     def test_ok_on_all_mandatory_keys_specified(self):
         pkg_info = {'id': 'foo',
                     'description': 'Foo',
@@ -24,7 +23,7 @@ class TestInstalledPackage(unittest.TestCase):
         self.assertRaises(Exception, package.InstalledPackage, pkg_info)
 
 
-class TestInstallablePackage(unittest.TestCase):
+class TestInstallablePackage(TestCase):
     def test_ok_on_all_mandatory_keys_specified(self):
         pkg_info = {'id': 'foo',
                     'description': 'Foo',

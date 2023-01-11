@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright 2011-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2011-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 """Module to transform configuration file to configuration data.
@@ -15,14 +14,11 @@ to use this module.
 
 """
 
-
-from __future__ import absolute_import
 import collections
-import six.moves.configparser
-import six
+from configparser import RawConfigParser
 
 
-class ConfigSpec(object):
+class ConfigSpec:
     """Represent a configuration file's specification."""
     NO_DEFAULT = object()
     MANDATORY = object()
@@ -148,7 +144,7 @@ class ConfigSpec(object):
             return fun(option_id, raw_value)
 
     def _add_default_and_check_mandatory(self, config_dict):
-        for param_id, param_value in six.iteritems(self._params):
+        for param_id, param_value in self._params.items():
             if param_id not in config_dict:
                 default = param_value[0]
                 if default is self.MANDATORY:
@@ -167,7 +163,7 @@ class ConfigSpec(object):
         unknown_sections = collections.defaultdict(dict)
         for section_id in config_parser.sections():
             for option_id, raw_value in config_parser.items(section_id):
-                param_id = "%s.%s" % (section_id, option_id)
+                param_id = f"{section_id}.{option_id}"
                 if param_id in self._params:
                     config_dict[param_id] = self._process_param(param_id, raw_value)
                 elif section_id in self._sections:
@@ -179,14 +175,14 @@ class ConfigSpec(object):
         # unknown section handling
         if unknown_sections:
             if self._unknown_section_hook:
-                for section_id, section_dict in six.iteritems(unknown_sections):
+                for section_id, section_dict in unknown_sections.items():
                     template_id = self._unknown_section_hook(config_dict, section_id, section_dict)
                     if template_id in self._dyn_params:
                         cur_dyn_params = self._dyn_params[template_id]
-                        for option_id, raw_value in six.iteritems(section_dict):
+                        for option_id, raw_value in section_dict.items():
                             if option_id in cur_dyn_params:
                                 fun = cur_dyn_params[option_id][1]
-                                param_id = '%s.%s' % (section_id, option_id)
+                                param_id = f'{section_id}.{option_id}'
                                 if fun is None:
                                     config_dict[param_id] = raw_value
                                 else:
@@ -194,8 +190,8 @@ class ConfigSpec(object):
                             else:
                                 raise ValueError("unknown dynamic option %s for template %s" %
                                                  (option_id, template_id))
-                        for option_id, (default, _) in six.iteritems(cur_dyn_params):
-                            param_id = '%s.%s' % (section_id, option_id)
+                        for option_id, (default, _) in cur_dyn_params.items():
+                            param_id = f'{section_id}.{option_id}'
                             if param_id not in config_dict:
                                 if default is self.MANDATORY:
                                     raise ValueError('missing dyn parameter: %s' % param_id)
@@ -211,9 +207,9 @@ class ConfigSpec(object):
         return config_dict
 
     def read_config_from_filename(self, filename):
-        config_parser = six.moves.configparser.RawConfigParser()
-        with open(filename) as fobj:
-            config_parser.readfp(fobj)
+        config_parser = RawConfigParser()
+        with open(filename) as f:
+            config_parser.read_file(f)
         return self.read_config(config_parser)
 
 
@@ -230,7 +226,7 @@ def filter_section(config_dict, section_id):
     result = {}
     dot_section_id = section_id + '.'
     dot_section_id_len = len(dot_section_id)
-    for param_id, value in six.iteritems(config_dict):
+    for param_id, value in config_dict.items():
         if param_id.startswith(dot_section_id):
             result[param_id[dot_section_id_len:]] = value
     return result

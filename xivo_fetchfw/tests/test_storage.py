@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
-import mock
 import os
 import tempfile
 import unittest
+
+from configparser import RawConfigParser
+from unittest.mock import MagicMock, Mock
 import xivo_fetchfw.storage as storage
-from six.moves.configparser import RawConfigParser
 
 TEST_RES_DIR = os.path.join(os.path.dirname(__file__), 'storage')
 
@@ -20,7 +19,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
 
     def setUp(self):
         self._cache_dir = tempfile.mkdtemp()
-        self._downloaders = {'default': mock.Mock()}
+        self._downloaders = {'default': Mock()}
 
     def tearDown(self):
         os.rmdir(self._cache_dir)
@@ -81,7 +80,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
         self.assertEqual('bar.zip', xfile.filename)
 
     def test_downloader_is_looked_up_in_dict_if_specified(self):
-        downloaders = mock.MagicMock()
+        downloaders = MagicMock()
         builder = storage.DefaultRemoteFileBuilder(self._cache_dir,
                                                    downloaders)
         config = RawConfigParser()
@@ -95,7 +94,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
         downloaders.__getitem__.assert_called_once_with('foobar')
 
     def test_default_downloader_is_looked_up_in_dict_if_unspecified(self):
-        downloaders = mock.MagicMock()
+        downloaders = MagicMock()
         builder = storage.DefaultRemoteFileBuilder(self._cache_dir,
                                                    downloaders)
         config = RawConfigParser()
@@ -130,8 +129,8 @@ class TestDefaultInstallMgrFactory(unittest.TestCase):
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'a-b', 'null')
         mgr_factory = storage.DefaultInstallMgrFactory(config, self.SECTION,
-                                                       mock.Mock(), {})
-        mgr_factory.new_install_mgr(mock.Mock(), {})
+                                                       Mock(), {})
+        mgr_factory.new_install_mgr(Mock(), {})
 
     def test_raise_error_on_loop(self):
         config = RawConfigParser()
@@ -139,15 +138,15 @@ class TestDefaultInstallMgrFactory(unittest.TestCase):
         config.set(self.SECTION, 'a-b', 'null')
         config.set(self.SECTION, 'b-a', 'null')
         mgr_factory = storage.DefaultInstallMgrFactory(config, self.SECTION,
-                                                       mock.Mock(), {})
-        self.assertRaises(Exception, mgr_factory.new_install_mgr, mock.Mock(), {})
+                                                       Mock(), {})
+        self.assertRaises(Exception, mgr_factory.new_install_mgr, Mock(), {})
 
 
 class TestDefaultInstallMgrFactoryBuilder(unittest.TestCase):
     SECTION = 'test_section'
 
     def test_build_install_mgr_factory_ok(self):
-        factory_builder = storage.DefaultInstallMgrFactoryBuilder(mock.Mock(), {})
+        factory_builder = storage.DefaultInstallMgrFactoryBuilder(Mock(), {})
         config = RawConfigParser()
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'a-b', 'null')
@@ -180,7 +179,7 @@ class TestDefaultInstalledPkgStorage(unittest.TestCase):
 
 class TestBasePkgStorage(unittest.TestCase):
     def _new_pkg(self, depends=[]):
-        pkg = mock.Mock()
+        pkg = Mock()
         pkg.pkg_info = {'depends': depends}
         return pkg
 

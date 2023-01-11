@@ -1,17 +1,12 @@
-# -*- coding: utf-8 -*-
-# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
 import errno
-import itertools
 import logging
 import operator
 import os
 import re
 import shutil
-from six.moves import zip
-from six.moves import map
 
 logger = logging.getLogger(__name__)
 

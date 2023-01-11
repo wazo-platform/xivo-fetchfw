@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
 import copy
 import logging
 from xivo_fetchfw.util import FetchfwError, install_paths, remove_paths, cmp_version
-import six
-from six.moves import filter
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +25,7 @@ def _add_pkg_info_defaults(pkg_info):
     pkg_info.setdefault('depends', [])
 
 
-class InstallablePackage(object):
+class InstallablePackage:
     _MANDATORY_KEYS = _COMMON_MANDATORY_KEYS
 
     def __init__(self, pkg_info, remote_files, install_mgr):
@@ -75,10 +71,10 @@ class InstallablePackage(object):
         return InstalledPackage(new_pkg_info)
 
     def __str__(self):
-        return "%s %s" % (self.pkg_info['id'], self.pkg_info['version'])
+        return f"{self.pkg_info['id']} {self.pkg_info['version']}"
 
 
-class InstalledPackage(object):
+class InstalledPackage:
     _MANDATORY_KEYS = _COMMON_MANDATORY_KEYS + ['files', 'explicit_install']
 
     def __init__(self, pkg_info):
@@ -97,10 +93,10 @@ class InstalledPackage(object):
         self.pkg_info = pkg_info
 
     def __str__(self):
-        return "%s %s" % (self.pkg_info['id'], self.pkg_info['version'])
+        return f"{self.pkg_info['id']} {self.pkg_info['version']}"
 
 
-class PackageManager(object):
+class PackageManager:
     def __init__(self, installable_pkg_sto, installed_pkg_sto):
         self.installable_pkg_sto = installable_pkg_sto
         self.installed_pkg_sto = installed_pkg_sto
@@ -192,8 +188,8 @@ class PackageManager(object):
 
             # 2.3. get the list of remote files to download
             # this is a quick way to get the list of unique remote files
-            raw_remote_files = list(dict((remote_file.path, remote_file) for pkg in pkgs
-                                    for remote_file in pkg.remote_files).values())
+            raw_remote_files = list({remote_file.path: remote_file for pkg in pkgs
+                                    for remote_file in pkg.remote_files}.values())
             remote_files = installer_ctrl.preprocess_raw_remote_files(raw_remote_files)
 
             # 3. download remote files
@@ -232,7 +228,7 @@ class PackageManager(object):
             for removed_path in remove_paths(installed_paths, root_dir):
                 removed_paths.append(removed_path)
         except Exception as e:
-            logger.error("Error while removing files of pkg %s: %s" % (pkg_id, e))
+            logger.error("Error while removing files of pkg %s: %s", pkg_id, e)
             if removed_paths:
                 logger.error("These files have been removed from %s although the"
                              "package will still be shown as installed: %s" %
@@ -293,7 +289,7 @@ class PackageManager(object):
         # Return a list of tuple (<installed package>, <installable_pkg>) for
         # which the version differs
         raw_upgrade_list = []
-        for installed_pkg in six.itervalues(self.installed_pkg_sto):
+        for installed_pkg in self.installed_pkg_sto.values():
             pkg_id = installed_pkg.pkg_info['id']
             if pkg_id in self.installable_pkg_sto:
                 installable_pkg = self.installable_pkg_sto[pkg_id]
@@ -372,7 +368,7 @@ class PackageManager(object):
             upgrader_ctrl.post_upgradation(None)
 
 
-class InstallerController(object):
+class InstallerController:
     """The method are shown in the order they are called.
 
     All installer controller should inherit from this one. Although this class
@@ -494,7 +490,7 @@ class DefaultInstallerController(InstallerController):
         for installable_pkg in installable_pkgs:
             installable_pkg.pkg_info['explicit_install'] = True
         if not self._nodeps:
-            pkg_ids = set(pkg.pkg_info['id'] for pkg in installable_pkgs)
+            pkg_ids = {pkg.pkg_info['id'] for pkg in installable_pkgs}
 
             def filter_fun(dep_pkg_id):
                 return dep_pkg_id not in self._installed_pkg_sto and \
@@ -508,8 +504,7 @@ class DefaultInstallerController(InstallerController):
         return installable_pkgs
 
 
-class UninstallerController(object):
-    # TODO add comments
+class UninstallerController:
 
     def __init__(self, installable_pkg_sto, installed_pkg_sto):
         pass
@@ -571,7 +566,7 @@ class DefaultUninstallerController(UninstallerController):
         if self._recursive:
             # some cases are complex to handle, this is why this might
             # seems overly complex
-            to_remove_ids = set(pkg.pkg_info['id'] for pkg in installed_pkgs)
+            to_remove_ids = {pkg.pkg_info['id'] for pkg in installed_pkgs}
 
             def filter_fun(dep_pkg_id):
                 # next line should never raise a KeyError since we are asking
@@ -596,7 +591,7 @@ class DefaultUninstallerController(UninstallerController):
         return installed_pkgs
 
 
-class UpgraderController(object):
+class UpgraderController:
     # TODO add comments
     def __init__(self, installable_pkg_sto, installed_pkg_sto):
         pass
@@ -698,7 +693,7 @@ class DefaultUpgraderController(UpgraderController):
 
     def preprocess_upgrade_list(self, upgrade_list):
         installed_specs = []
-        scheduled_pkg_ids = set(elem[0].pkg_info['id'] for elem in upgrade_list)
+        scheduled_pkg_ids = {elem[0].pkg_info['id'] for elem in upgrade_list}
         for installed_pkg, installable_pkg in upgrade_list:
             install_list = []
             if not self._nodeps:

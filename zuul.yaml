@@ -1,5 +1,4 @@
 - project:
     templates:
-      - debian-packaging-template
-      - wazo-tox-py27
       - wazo-tox-py37
+      - debian-packaging-template

@@ -1,17 +1,16 @@
-# -*- coding: utf-8 -*-
-# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
 import collections
-import six.moves.configparser
-import logging
 import json
+import logging
 import os
+
 from binascii import a2b_hex
+from configparser import ParsingError, RawConfigParser
+
 from xivo_fetchfw import download, install, util
 from xivo_fetchfw.package import InstallablePackage, InstalledPackage
-import six
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ class ParsingError(StorageError):
     pass
 
 
-class DefaultRemoteFileBuilder(object):
+class DefaultRemoteFileBuilder:
     """A remote file builder takes a config object (RawConfigParser) and a
     file section and builds a remote file (RemoteFile) from it.
 
@@ -76,7 +75,7 @@ class DefaultRemoteFileBuilder(object):
                                                    [download.SHA1Hook.create_factory(sha1sum)])
 
 
-class DefaultFilterBuilder(object):
+class DefaultFilterBuilder:
     """A filter builder takes a list of string tokens and returns a filter object.
 
     For example, if 'fb' is a DefaultFilterBuilder object, then:
@@ -146,7 +145,7 @@ class DefaultFilterBuilder(object):
             return fun(args)
 
 
-class DefaultInstallMgrFactory(object):
+class DefaultInstallMgrFactory:
     """
 
     Note that unless you really know what you're doing, you probably don't
@@ -211,7 +210,7 @@ class DefaultInstallMgrFactory(object):
         return [util.apply_subs(token, vars) for token in raw_tokens]
 
 
-class DefaultInstallMgrFactoryBuilder(object):
+class DefaultInstallMgrFactoryBuilder:
     """A factory that creates DefaultInstallMgrFactory instances."""
     def __init__(self, filter_builder, global_vars):
         self._filter_builder = filter_builder
@@ -222,7 +221,7 @@ class DefaultInstallMgrFactoryBuilder(object):
                                         self._global_vars)
 
 
-class DefaultPkgBuilder(object):
+class DefaultPkgBuilder:
     """A package builder takes a config object (RawConfigParser) and a
     pkg section and builds an installable package (InstallablePackage) from it.
 
@@ -286,7 +285,7 @@ class DefaultPkgBuilder(object):
         return InstallablePackage(pkg_info, pkg_remote_files, pkg_install_mgr)
 
 
-class BasePkgStorage(object):
+class BasePkgStorage:
     """Note to be instantiated directly but to serve as a base class for
     package storage classes.
 
@@ -311,15 +310,6 @@ class BasePkgStorage(object):
 
     def items(self):
         return list(self._pkgs.items())
-
-    def iterkeys(self):
-        return six.iterkeys(self._pkgs)
-
-    def itervalues(self):
-        return six.itervalues(self._pkgs)
-
-    def iteritems(self):
-        return six.iteritems(self._pkgs)
 
     def keys(self):
         return list(self._pkgs.keys())
@@ -395,17 +385,17 @@ class DefaultInstallablePkgStorage(BasePkgStorage):
     def _read_db_files(self):
         # Read the files in the db dir and return a config parser object
         db_dir = self._db_dir
-        config = six.moves.configparser.RawConfigParser()
+        config = RawConfigParser()
         try:
             for rel_path in os.listdir(db_dir):
                 if not rel_path.startswith('.'):
                     path = os.path.join(db_dir, rel_path)
-                    with open(path) as fobj:
-                        config.readfp(fobj)
-        except IOError as e:
-            raise StorageError("could not open/read file '%s': %s" % (path, e))
-        except six.moves.configparser.ParsingError as e:
-            raise StorageError("could not parse file '%s': %s" % (path, e))
+                    with open(path) as f:
+                        config.read_file(f)
+        except OSError as e:
+            raise StorageError(f"could not open/read file '{path}': {e}")
+        except ParsingError as e:
+            raise StorageError(f"could not parse file '{path}': {e}")
         return config
 
     def _split_sections(self, config):
@@ -486,11 +476,11 @@ class DefaultInstalledPkgStorage(BasePkgStorage):
 
     def _load_pkg_info(self, pkg_id):
         filename = os.path.join(self._db_dir, pkg_id)
-        with open(filename, 'r') as fobj:
+        with open(filename) as fobj:
             # XXX json.load returns string as unicode strings but we are using
             #     plain string in the rest of the code. Using unicode would be
             #     great but config parser, used for the installable storage,
-            #     doens't support unicode...
+            #     doesn't support unicode...
             pkg_info = json.load(fobj)
             return pkg_info
 

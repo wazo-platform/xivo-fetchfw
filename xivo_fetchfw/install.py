@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
 import collections
 import contextlib
 import glob
@@ -16,7 +14,6 @@ import tempfile
 import zipfile
 from fnmatch import fnmatch
 from xivo_fetchfw.util import FetchfwError
-import six
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +26,7 @@ class InstallationGraphError(InstallationError):
     pass
 
 
-class _InstallationProcess(object):
+class _InstallationProcess:
     def __init__(self, sources, filters, dir=None):
         self._sources = sources
         self._filters = filters
@@ -81,8 +78,8 @@ class _InstallationProcess(object):
     def _build_requirement_map(self):
         # Return a 'requirement map', i.e. a dictionary which keys are node id
         # and values are node id that depends on the key
-        req_map = dict((node_id, []) for node_id in itertools.chain(self._sources, self._filters))
-        for filter_id, (_, filter_dependency) in six.iteritems(self._filters):
+        req_map = {node_id: [] for node_id in itertools.chain(self._sources, self._filters)}
+        for filter_id, (_, filter_dependency) in self._filters.items():
             req_map[filter_dependency].append(filter_id)
         return req_map
 
@@ -92,7 +89,7 @@ class _InstallationProcess(object):
         os.mkdir(result_dir)
         input_dirs = {}
         output_dirs = {}
-        for node_id, requirements in six.iteritems(req_map):
+        for node_id, requirements in req_map.items():
             if not requirements:
                 # terminal node
                 output_dirs[node_id] = result_dir
@@ -130,7 +127,7 @@ class _InstallationProcess(object):
             self._need_cleanup = False
 
 
-class InstallationManager(object):
+class InstallationManager:
     """An installation manager..."""
     def __init__(self, installation_graph):
         """Build an InstallationManager.
@@ -174,16 +171,16 @@ class InstallationManager(object):
         # exception if there's a filter such that it depends on an unknown node.
         sources = self._sources
         filters = self._filters
-        for filter_id, filter_value in six.iteritems(filters):
+        for filter_id, filter_value in filters.items():
             node_dependency = filter_value[1]
             if node_dependency not in filters and node_dependency not in sources:
                 raise InstallationGraphError("filter '%s' depends on unknown filter/source '%s'" %
                                              (filter_id, node_dependency))
 
     def _check_no_useless_source(self):
-        # Check if every sources participate in the installation process, i.e. raise an exception
+        # Check if every source participates in the installation process, i.e. raise an exception
         # if there's a source such that no other filter depend on it.
-        dependencies = (v[1] for v in six.itervalues(self._filters))
+        dependencies = (v[1] for v in self._filters.values())
         unused_sources = set(self._sources).difference(dependencies)
         if unused_sources:
             raise InstallationGraphError("these sources doesn't participate in the installation: %s" %
@@ -196,7 +193,7 @@ class InstallationManager(object):
         visited = set()
         for node_id in filters:
             if node_id not in visited:
-                currently_visited = set((node_id,))
+                currently_visited = {node_id}
                 while True:
                     next_node_id = filters[node_id][1]
                     if next_node_id in sources:
@@ -221,7 +218,7 @@ class InstallationManager(object):
         return _InstallationProcess(self._sources, self._filters, dir)
 
 
-class _GlobHelper(object):
+class _GlobHelper:
     """The python glob module works only with the notion of the current directory.
     This class is used to facilitate the application of one or more glob patterns
     inside arbitrary directories.
@@ -230,7 +227,7 @@ class _GlobHelper(object):
     def __init__(self, pathnames, error_on_no_matches=True):
         """pathnames can be either a single path name or an iterable of path names.
         """
-        if isinstance(pathnames, six.string_types):
+        if isinstance(pathnames, str):
             self._pathnames = [os.path.normpath(pathnames)]
         else:
             self._pathnames = [os.path.normpath(pathname) for pathname in pathnames]
@@ -260,7 +257,7 @@ class _GlobHelper(object):
                                     % (self._pathnames, src_directory))
 
 
-class FilesystemLinkSource(object):
+class FilesystemLinkSource:
     """A source which create symlink of existing files to the destination
     directory.
 
@@ -275,7 +272,7 @@ class FilesystemLinkSource(object):
           patterns
 
         """
-        if isinstance(pathnames, six.string_types):
+        if isinstance(pathnames, str):
             self._pathnames = [pathnames]
         else:
             self._pathnames = list(pathnames)
@@ -286,13 +283,13 @@ class FilesystemLinkSource(object):
                 os.symlink(globbed_pathname, os.path.join(dst_directory, os.path.basename(globbed_pathname)))
 
 
-class NonGlobbingFilesystemLinkSource(object):
+class NonGlobbingFilesystemLinkSource:
     def __init__(self, pathnames):
         """
         pathnames -- a single pathname or an iterator over multiple pathnames
 
         """
-        if isinstance(pathnames, six.string_types):
+        if isinstance(pathnames, str):
             self._pathnames = [pathnames]
         else:
             self._pathnames = list(pathnames)
@@ -307,7 +304,7 @@ class NonGlobbingFilesystemLinkSource(object):
             os.symlink(pathname, os.path.join(dst_directory, os.path.basename(pathname)))
 
 
-class FilesystemCopySource(object):
+class FilesystemCopySource:
     """A cleaner alternative to FilesystemLinkSource if you are worried about
     race condition, side effects, etc.
 
@@ -318,7 +315,7 @@ class FilesystemCopySource(object):
           patterns
 
         """
-        if isinstance(pathnames, six.string_types):
+        if isinstance(pathnames, str):
             self._pathnames = [pathnames]
         else:
             self._pathnames = list(pathnames)
@@ -333,7 +330,7 @@ class FilesystemCopySource(object):
                     shutil.copy(globbed_pathname, dst_pathname)
 
 
-class NullSource(object):
+class NullSource:
     """A source that add nothing to the destination directory.
 
     Mostly useful for testing purposes.
@@ -343,7 +340,7 @@ class NullSource(object):
         pass
 
 
-class ZipFilter(object):
+class ZipFilter:
     """A filter who transform a directory containing zip files to a directory containing
     the content of these zip files.
 
@@ -362,7 +359,7 @@ class ZipFilter(object):
                 zf.extractall(dst_directory)
 
 
-class TarFilter(object):
+class TarFilter:
     """A filter who transform a directory containing tar files to a directory containing
     the content of these tar files. The tar files can be either uncompressed, gzipped
     or bz2-ipped.
@@ -382,7 +379,7 @@ class TarFilter(object):
                 tf.extractall(dst_directory)
 
 
-class RarFilter(object):
+class RarFilter:
     """A filter who transform a directory containing rar files to a directory
     containing the content of these rar files.
 
@@ -410,7 +407,7 @@ class RarFilter(object):
                 raise InstallationError('unrar returned status code %s' % retcode)
 
 
-class Filter7z(object):
+class Filter7z:
     """A filter who transform a directory containing 7z files to a directory
     containing the content of these 7z files.
 
@@ -446,7 +443,7 @@ class Filter7z(object):
                 raise InstallationError('7zr returned status code %s' % retcode)
 
 
-class CiscoUnsignFilter(object):
+class CiscoUnsignFilter:
     """A filter who transform a directory containing a Cisco-signed gzip file to a directory
     containing the gzipped file inside the signed file.
 
@@ -484,7 +481,7 @@ class CiscoUnsignFilter(object):
                 shutil.copyfileobj(sf, f)
 
 
-class IncludeExcludeFilter(object):
+class IncludeExcludeFilter:
     def __init__(self, filter_fun):
         """
         filter_fun -- a callable object taking two arguments, the first being
@@ -539,7 +536,7 @@ def ExcludeFilter(pathnames):
         patterns
 
     """
-    if isinstance(pathnames, six.string_types):
+    if isinstance(pathnames, str):
         pathnames = [pathnames]
     else:
         pathnames = list(pathnames)
@@ -561,7 +558,7 @@ def IncludeFilter(pathnames):
         patterns
 
     """
-    if isinstance(pathnames, six.string_types):
+    if isinstance(pathnames, str):
         pathnames = [pathnames]
     else:
         pathnames = list(pathnames)
@@ -584,7 +581,7 @@ def IncludeFilter(pathnames):
     return IncludeExcludeFilter(filter_fun)
 
 
-class CopyFilter(object):
+class CopyFilter:
     """A filter which copy one or more files or directories to a certain path
     in the destination directory.
 
@@ -620,7 +617,7 @@ class CopyFilter(object):
                 self._apply_dir(src_directory, abs_dst)
             else:
                 self._apply_file(src_directory, abs_dst)
-        except EnvironmentError as e:
+        except OSError as e:
             logger.error("Error during execution of copy filter", exc_info=True)
             raise InstallationError(e)
 
@@ -640,7 +637,7 @@ class CopyFilter(object):
         shutil.copy(pathname, abs_dst)
 
 
-class NullFilter(object):
+class NullFilter:
     """A filter that add nothing to the destination directory.
 
     Mostly useful for testing purposes.

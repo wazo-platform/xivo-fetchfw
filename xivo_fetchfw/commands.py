@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
 import argparse
 import sys
 
@@ -14,7 +12,7 @@ def execute_command(command, args=None):
     command_executor.execute(args)
 
 
-class CommandExecutor(object):
+class CommandExecutor:
     def __init__(self, command):
         self._command = command
 
@@ -31,7 +29,7 @@ class CommandExecutor(object):
         subcommands.execute(parsed_args)
 
 
-class AbstractCommand(object):
+class AbstractCommand:
     def create_parser(self):
         return argparse.ArgumentParser()
 
@@ -48,7 +46,7 @@ class AbstractCommand(object):
         pass
 
 
-class Subcommands(object):
+class Subcommands:
     def __init__(self):
         self._subcommands = []
 
@@ -67,7 +65,7 @@ class Subcommands(object):
         subcommand.execute(parsed_args)
 
 
-class AbstractSubcommand(object):
+class AbstractSubcommand:
     def __init__(self, name):
         self.name = name
 

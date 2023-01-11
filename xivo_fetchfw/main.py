@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
-# Copyright 2010-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import
-from __future__ import print_function
 import logging
-import six
 import sys
 from operator import itemgetter
-from six.moves import map
 from xivo_fetchfw import cli, config, download, package, params, storage, util
 from xivo_fetchfw import commands
 
@@ -70,7 +65,7 @@ class _XivoFetchfwCommand(commands.AbstractCommand):
         try:
             config_dict = config.read_config(config_filename)
         except Exception as e:
-            print("error: config file '%s': %s" % (cfg_filename, e), file=sys.stderr)
+            print(f"error: config file '{cfg_filename}': {e}", file=sys.stderr)
             logger.debug('Stack trace:', exc_info=True)
             sys.exit(1)
         else:
@@ -148,7 +143,7 @@ class _SearchSubcommand(commands.AbstractSubcommand):
 
 
 def _sorted_itervalues(dict_):
-    return list(map(itemgetter(1), sorted(six.iteritems(dict_), key=itemgetter(0))))
+    return list(map(itemgetter(1), sorted(dict_.items(), key=itemgetter(0))))
 
 
 class _RemoveSubcommand(commands.AbstractSubcommand):
