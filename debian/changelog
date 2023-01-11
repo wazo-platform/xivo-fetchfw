@@ -1,4 +1,4 @@
-xivo-fetchfw (23.01) wazo-dev-buster; urgency=medium
+xivo-fetchfw (23.01~20230109.103121) wazo-dev-buster; urgency=medium
 
   * Remove Python 2 version
 
