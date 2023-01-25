@@ -16,7 +16,7 @@ That said, you can also use it as a simple, general-purpose, package manager.
 
 ## Requirements
 
-Minimum python version is python 3.7.
+Minimum python version is python 3.9.
 
 ## Dependencies
 
