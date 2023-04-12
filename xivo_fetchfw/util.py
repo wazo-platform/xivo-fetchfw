@@ -1,4 +1,4 @@
-# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import errno
@@ -19,7 +19,7 @@ _APPLY_SUBS_REGEX = re.compile(r'(?<!\\)\$(?:{(\w*)}|(\w*))')
 
 
 def apply_subs(string, variables):
-    """Apply and return string with variable substitution applied.
+    r"""Apply and return string with variable substitution applied.
 
     >>> apply_subs('$FOO', {'FOO': 'foo'})
     'foo'
@@ -85,7 +85,7 @@ def cmp(x, y):
 
 
 def cmp_version(version1, version2):
-    """Compare version1 with version2 and return an integer according to the
+    r"""Compare version1 with version2 and return an integer according to the
     outcome.
 
     The return value is negative if version1 < version2, zero if
