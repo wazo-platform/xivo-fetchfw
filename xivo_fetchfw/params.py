@@ -1,4 +1,4 @@
-# Copyright 2011-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2011-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 """Module to transform configuration file to configuration data.
@@ -20,6 +20,7 @@ from configparser import RawConfigParser
 
 class ConfigSpec:
     """Represent a configuration file's specification."""
+
     NO_DEFAULT = object()
     MANDATORY = object()
 
@@ -44,7 +45,9 @@ class ConfigSpec:
             def aux(fun):
                 self.add_param(param_id, default, fun)
                 return fun
+
             return aux
+
         return param_decorator
 
     def _create_dyn_param_decorator(self):
@@ -52,7 +55,9 @@ class ConfigSpec:
             def aux(fun):
                 self.add_dyn_param(template_id, option_id, default, fun)
                 return fun
+
             return aux
+
         return dyn_param_decorator
 
     def _create_section_decorator(self):
@@ -60,13 +65,16 @@ class ConfigSpec:
             def aux(fun):
                 self.add_section(section_id, fun)
                 return fun
+
             return aux
+
         return section_decorator
 
     def _create_unknown_section_dec(self):
         def unknown_section_hook_decorator(fun):
             self.set_unknown_section_hook(fun)
             return fun
+
         return unknown_section_hook_decorator
 
     def add_param(self, param_id, default=NO_DEFAULT, fun=None):
@@ -81,9 +89,9 @@ class ConfigSpec:
 
         """
         if '.' not in param_id:
-            raise ValueError('no dot character in param: %s' % param_id)
+            raise ValueError(f'no dot character in param: {param_id}')
         if param_id in self._params:
-            raise ValueError('param has already been specified: %s' % param_id)
+            raise ValueError(f'param has already been specified: {param_id}')
         self._params[param_id] = (default, fun)
 
     def add_dyn_param(self, template_id, option_id, default=NO_DEFAULT, fun=None):
@@ -100,8 +108,9 @@ class ConfigSpec:
         """
         template_dict = self._dyn_params[template_id]
         if option_id in template_dict:
-            raise ValueError('dyn param already been specified: %s.%s' %
-                             (template_id, option_id))
+            raise ValueError(
+                f'dyn param already been specified: {template_id}.{option_id}'
+            )
         template_dict[option_id] = (default, fun)
 
     def add_section(self, section_id, fun=None):
@@ -111,9 +120,9 @@ class ConfigSpec:
 
         """
         if '.' in section_id:
-            raise ValueError('dot character in section: %s' % section_id)
+            raise ValueError(f'dot character in section: {section_id}')
         if section_id in self._sections:
-            raise ValueError('section has already been specified: %s' % section_id)
+            raise ValueError(f'section has already been specified: {section_id}')
         self._sections[section_id] = fun
 
     def set_unknown_section_hook(self, fun):
@@ -148,7 +157,7 @@ class ConfigSpec:
             if param_id not in config_dict:
                 default = param_value[0]
                 if default is self.MANDATORY:
-                    raise ValueError('missing parameter: %s' % param_id)
+                    raise ValueError(f'missing parameter: {param_id}')
                 elif default is self.NO_DEFAULT:
                     pass
                 else:
@@ -167,7 +176,9 @@ class ConfigSpec:
                 if param_id in self._params:
                     config_dict[param_id] = self._process_param(param_id, raw_value)
                 elif section_id in self._sections:
-                    config_dict[param_id] = self._process_section(section_id, option_id, raw_value)
+                    config_dict[param_id] = self._process_section(
+                        section_id, option_id, raw_value
+                    )
                 else:
                     unknown_sections[section_id][option_id] = raw_value
         self._add_default_and_check_mandatory(config_dict)
@@ -176,7 +187,9 @@ class ConfigSpec:
         if unknown_sections:
             if self._unknown_section_hook:
                 for section_id, section_dict in unknown_sections.items():
-                    template_id = self._unknown_section_hook(config_dict, section_id, section_dict)
+                    template_id = self._unknown_section_hook(
+                        config_dict, section_id, section_dict
+                    )
                     if template_id in self._dyn_params:
                         cur_dyn_params = self._dyn_params[template_id]
                         for option_id, raw_value in section_dict.items():
@@ -188,22 +201,27 @@ class ConfigSpec:
                                 else:
                                     config_dict[param_id] = fun(raw_value)
                             else:
-                                raise ValueError("unknown dynamic option %s for template %s" %
-                                                 (option_id, template_id))
+                                raise ValueError(
+                                    f"unknown dynamic option {option_id} "
+                                    f"for template {template_id}"
+                                )
                         for option_id, (default, _) in cur_dyn_params.items():
                             param_id = f'{section_id}.{option_id}'
                             if param_id not in config_dict:
                                 if default is self.MANDATORY:
-                                    raise ValueError('missing dyn parameter: %s' % param_id)
+                                    raise ValueError(
+                                        f'missing dyn parameter: {param_id}'
+                                    )
                                 elif default is self.NO_DEFAULT:
                                     pass
                                 else:
                                     config_dict[param_id] = default
                     else:
-                        raise ValueError("unknown template %s returned for section %s" %
-                                         (template_id, section_id))
+                        raise ValueError(
+                            f"unknown template {template_id} returned for section {section_id}"
+                        )
             else:
-                raise ValueError("unknown sections: %s" % list(unknown_sections.keys()))
+                raise ValueError(f"unknown sections: {list(unknown_sections.keys())}")
         return config_dict
 
     def read_config_from_filename(self, filename):
@@ -222,7 +240,7 @@ def filter_section(config_dict, section_id):
 
     """
     if '.' in section_id:
-        raise ValueError('dot character in section: %s' % section_id)
+        raise ValueError(f'dot character in section: {section_id}')
     result = {}
     dot_section_id = section_id + '.'
     dot_section_id_len = len(dot_section_id)
@@ -243,4 +261,4 @@ def bool_(raw_value):
     elif raw_value in _BOOL_FALSE:
         return False
     else:
-        raise ValueError('invalid boolean raw value "%s"' % raw_value)
+        raise ValueError(f'invalid boolean raw value "{raw_value}"')

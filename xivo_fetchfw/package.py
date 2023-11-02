@@ -18,7 +18,7 @@ _COMMON_MANDATORY_KEYS = ['id', 'version', 'description']
 def _check_pkg_info(pkg_info, mandatory_keys):
     for key in mandatory_keys:
         if key not in pkg_info:
-            raise Exception("missing mandatory key %s" % key)
+            raise Exception(f"missing mandatory key {key}")
 
 
 def _add_pkg_info_defaults(pkg_info):
@@ -29,7 +29,7 @@ class InstallablePackage:
     _MANDATORY_KEYS = _COMMON_MANDATORY_KEYS
 
     def __init__(self, pkg_info, remote_files, install_mgr):
-        """Create a new installable package.
+        r"""Create a new installable package.
 
         pkg_info -- a dictionary with the following standardised keys:
           id -- id of the package (mandatory)
@@ -111,10 +111,14 @@ class PackageManager:
         except Exception as e:
             # error while removing files we were succesfull at installating
             non_removed_paths = list(set(installed_paths).difference(removed_paths))
-            logger.warning('Error while removing already installed files: %s' %
-                           e, exc_info=True)
-            logger.warning('The following files have been left in %s: %s' %
-                           (root_dir, non_removed_paths))
+            logger.warning(
+                'Error while removing already installed files: %s', e, exc_info=True
+            )
+            logger.warning(
+                'The following files have been left in %s: %s',
+                root_dir,
+                non_removed_paths,
+            )
 
     def _install_pkg_from_install_mgr(self, install_mgr, root_dir, pkg_id):
         install_process = install_mgr.new_installation_process()
@@ -126,8 +130,9 @@ class PackageManager:
             for installed_path in install_paths(result_dir, root_dir):
                 installed_paths.append(installed_path)
         except Exception as e:
-            logger.error('Error during installation of pkg %s in %s: %s' %
-                         (pkg_id, root_dir, e))
+            logger.error(
+                'Error during installation of pkg %s in %s: %s', pkg_id, root_dir, e
+            )
             # preserve stack trace while removing installed files
             try:
                 raise
@@ -145,7 +150,7 @@ class PackageManager:
         # install files
         install_mgr = installable_pkg.install_mgr
         if install_mgr is None:
-            logger.debug("No install mgr for pkg %s" % pkg_id)
+            logger.debug("No install mgr for pkg %s", pkg_id)
             files = []
         else:
             files = self._install_pkg_from_install_mgr(install_mgr, root_dir, pkg_id)
@@ -157,8 +162,7 @@ class PackageManager:
 
             self.installed_pkg_sto.upsert_pkg(installed_pkg)
         except Exception as e:
-            logger.error("Error while commiting pkg %s to storage: %s" %
-                         (pkg_id, e))
+            logger.error("Error while committing pkg %s to storage: %s", pkg_id, e)
             # preserve stack trace while removing installed files
             try:
                 raise
@@ -172,8 +176,7 @@ class PackageManager:
         installable_pkg_sto = self.installable_pkg_sto
         installed_pkg_sto = self.installed_pkg_sto
         # 1.1. instantiate an installer controller
-        installer_ctrl = installer_ctrl_factory(installable_pkg_sto,
-                                                installed_pkg_sto)
+        installer_ctrl = installer_ctrl_factory(installable_pkg_sto, installed_pkg_sto)
         installer_ctrl.pre_installation()
 
         try:
@@ -188,8 +191,13 @@ class PackageManager:
 
             # 2.3. get the list of remote files to download
             # this is a quick way to get the list of unique remote files
-            raw_remote_files = list({remote_file.path: remote_file for pkg in pkgs
-                                    for remote_file in pkg.remote_files}.values())
+            raw_remote_files = list(
+                {
+                    remote_file.path: remote_file
+                    for pkg in pkgs
+                    for remote_file in pkg.remote_files
+                }.values()
+            )
             remote_files = installer_ctrl.preprocess_raw_remote_files(raw_remote_files)
 
             # 3. download remote files
@@ -213,8 +221,9 @@ class PackageManager:
                 try:
                     installer_ctrl.post_installation(e)
                 except Exception as e:
-                    logger.error("Error during installer post installation: %s",
-                                 e, exc_info=True)
+                    logger.error(
+                        "Error during installer post installation: %s", e, exc_info=True
+                    )
         else:
             installer_ctrl.post_installation(None)
 
@@ -230,20 +239,25 @@ class PackageManager:
         except Exception as e:
             logger.error("Error while removing files of pkg %s: %s", pkg_id, e)
             if removed_paths:
-                logger.error("These files have been removed from %s although the"
-                             "package will still be shown as installed: %s" %
-                             (root_dir, removed_path))
+                logger.error(
+                    "These files have been removed from %s although the"
+                    "package will still be shown as installed: %s",
+                    root_dir,
+                    removed_path,
+                )
             raise
         else:
             try:
                 self.installed_pkg_sto.delete_pkg(pkg_id)
             except Exception as e:
-                logger.error("Error while commiting pkg %s to storage: %s" %
-                             (pkg_id, e))
+                logger.error("Error while commiting pkg %s to storage: %s", pkg_id, e)
                 if removed_paths:
-                    logger.error("These files have been removed from %s although the"
-                                 "package will still be shown as installed: %s" %
-                                 (root_dir, removed_path))
+                    logger.error(
+                        "These files have been removed from %s although the"
+                        "package will still be shown as installed: %s",
+                        root_dir,
+                        removed_path,
+                    )
                 raise
 
     def uninstall(self, raw_pkg_ids, root_dir, uninstaller_ctrl_factory):
@@ -251,8 +265,9 @@ class PackageManager:
         installable_pkg_sto = self.installable_pkg_sto
         installed_pkg_sto = self.installed_pkg_sto
         # 1.1. instantiate an installer controller
-        uninstaller_ctrl = uninstaller_ctrl_factory(installable_pkg_sto,
-                                                    installed_pkg_sto)
+        uninstaller_ctrl = uninstaller_ctrl_factory(
+            installable_pkg_sto, installed_pkg_sto
+        )
         uninstaller_ctrl.pre_uninstallation()
 
         try:
@@ -280,8 +295,11 @@ class PackageManager:
                 try:
                     uninstaller_ctrl.post_uninstallation(e)
                 except Exception as e:
-                    logger.error('Error during uninstaller post uninstallation: %s',
-                                 e, exc_info=True)
+                    logger.error(
+                        'Error during uninstaller post uninstallation: %s',
+                        e,
+                        exc_info=True,
+                    )
         else:
             uninstaller_ctrl.post_uninstallation(None)
 
@@ -293,10 +311,14 @@ class PackageManager:
             pkg_id = installed_pkg.pkg_info['id']
             if pkg_id in self.installable_pkg_sto:
                 installable_pkg = self.installable_pkg_sto[pkg_id]
-                if installable_pkg.pkg_info['version'] != installed_pkg.pkg_info['version']:
+                if (
+                    installable_pkg.pkg_info['version']
+                    != installed_pkg.pkg_info['version']
+                ):
                     installable_pkg = self.installable_pkg_sto[pkg_id].clone()
-                    installable_pkg.pkg_info['explicit_install'] = \
-                        installed_pkg.pkg_info['explicit_install']
+                    installable_pkg.pkg_info[
+                        'explicit_install'
+                    ] = installed_pkg.pkg_info['explicit_install']
                     raw_upgrade_list.append((installed_pkg, installable_pkg))
         return raw_upgrade_list
 
@@ -305,8 +327,7 @@ class PackageManager:
         installable_pkg_sto = self.installable_pkg_sto
         installed_pkg_sto = self.installed_pkg_sto
         # 1.1. instantiate an installer controller
-        upgrader_ctrl = upgrader_ctrl_factory(installable_pkg_sto,
-                                              installed_pkg_sto)
+        upgrader_ctrl = upgrader_ctrl_factory(installable_pkg_sto, installed_pkg_sto)
         upgrader_ctrl.pre_upgradation()
 
         try:
@@ -337,7 +358,12 @@ class PackageManager:
 
             # 4. upgrade packages
             upgrader_ctrl.pre_upgrade(upgrade_specs)
-            for installed_pkg, installable_pkg, install_list, uninstall_list in upgrade_specs:
+            for (
+                installed_pkg,
+                installable_pkg,
+                install_list,
+                uninstall_list,
+            ) in upgrade_specs:
                 # 4.1 first uninstall pkg from the list
                 for cur_installed_pkg in uninstall_list:
                     upgrader_ctrl.pre_upgrade_uninstall_pkg(cur_installed_pkg)
@@ -362,8 +388,9 @@ class PackageManager:
                 try:
                     upgrader_ctrl.post_upgradation(e)
                 except Exception as e:
-                    logger.error('Error during upgrader post upgradation: %s',
-                                 e, exc_info=True)
+                    logger.error(
+                        'Error during upgrader post upgradation: %s', e, exc_info=True
+                    )
         else:
             upgrader_ctrl.post_upgradation(None)
 
@@ -466,12 +493,12 @@ class InstallerController:
     def new_factory(cls, *args, **kwargs):
         def aux(installable_pkg_sto, installed_pkg_sto):
             return cls(installable_pkg_sto, installed_pkg_sto, *args, **kwargs)
+
         return aux
 
 
 class DefaultInstallerController(InstallerController):
-    def __init__(self, installable_pkg_sto, installed_pkg_sto,
-                 nodeps=False):
+    def __init__(self, installable_pkg_sto, installed_pkg_sto, nodeps=False):
         self._installable_pkg_sto = installable_pkg_sto
         self._installed_pkg_sto = installed_pkg_sto
         self._nodeps = nodeps
@@ -482,7 +509,7 @@ class DefaultInstallerController(InstallerController):
         # package manager
         for pkg_id in raw_pkg_ids:
             if pkg_id not in self._installable_pkg_sto:
-                raise PackageError("could not find package '%s'" % pkg_id)
+                raise PackageError(f"could not find package '{pkg_id}'")
         return raw_pkg_ids
 
     def preprocess_raw_pkgs(self, raw_installable_pkgs):
@@ -493,10 +520,14 @@ class DefaultInstallerController(InstallerController):
             pkg_ids = {pkg.pkg_info['id'] for pkg in installable_pkgs}
 
             def filter_fun(dep_pkg_id):
-                return dep_pkg_id not in self._installed_pkg_sto and \
-                    dep_pkg_id not in pkg_ids
+                return (
+                    dep_pkg_id not in self._installed_pkg_sto
+                    and dep_pkg_id not in pkg_ids
+                )
+
             dependencies = self._installable_pkg_sto.get_dependencies_many(
-                pkg_ids, filter_fun=filter_fun)
+                pkg_ids, filter_fun=filter_fun
+            )
             for dep_pkg_id in dependencies:
                 dep_pkg = self._installable_pkg_sto[dep_pkg_id].clone()
                 dep_pkg.pkg_info['explicit_install'] = False
@@ -505,7 +536,6 @@ class DefaultInstallerController(InstallerController):
 
 
 class UninstallerController:
-
     def __init__(self, installable_pkg_sto, installed_pkg_sto):
         pass
 
@@ -537,12 +567,12 @@ class UninstallerController:
     def new_factory(cls, *args, **kwargs):
         def aux(installable_pkg_sto, installed_pkg_sto):
             return cls(installable_pkg_sto, installed_pkg_sto, *args, **kwargs)
+
         return aux
 
 
 class DefaultUninstallerController(UninstallerController):
-    def __init__(self, installable_pkg_sto, installed_pkg_sto,
-                 recursive=False):
+    def __init__(self, installable_pkg_sto, installed_pkg_sto, recursive=False):
         self._installable_pkg_sto = installable_pkg_sto
         self._installed_pkg_sto = installed_pkg_sto
         self._recursive = recursive
@@ -551,14 +581,15 @@ class DefaultUninstallerController(UninstallerController):
         for pkg_id in raw_pkg_ids:
             # Check that each pkg_id in pkg_ids is installed on this system
             if pkg_id not in self._installed_pkg_sto:
-                raise PackageError("package '%s' not found" % pkg_id)
+                raise PackageError(f"package '{pkg_id}' not found")
             # Check that there's no installed package that depends on one of the
             # package that we are about to uninstall
             requisite_ids = self._installed_pkg_sto.get_requisites(pkg_id)
             requisite_ids.difference_update(raw_pkg_ids)
             if requisite_ids:
-                raise PackageError("%s is required by: %s" %
-                                   (pkg_id, ' '.join(requisite_ids)))
+                raise PackageError(
+                    f"{pkg_id} is required by: {' '.join(requisite_ids)}"
+                )
         return raw_pkg_ids
 
     def preprocess_raw_pkgs(self, raw_installed_pkgs):
@@ -573,8 +604,10 @@ class DefaultUninstallerController(UninstallerController):
                 # to ignore missing dependencies
                 dep_pkg = self._installed_pkg_sto[dep_pkg_id]
                 return not dep_pkg.pkg_info['explicit_install']
+
             candidate1_ids = self._installed_pkg_sto.get_dependencies_many(
-                to_remove_ids, filter_fun=filter_fun, ignore_missing=True)
+                to_remove_ids, filter_fun=filter_fun, ignore_missing=True
+            )
             candidate2_ids = set(candidate1_ids)
             candidate2_ids.difference_update(to_remove_ids)
             augm_candidate1_ids = set(candidate1_ids)
@@ -583,7 +616,8 @@ class DefaultUninstallerController(UninstallerController):
                 requisite_ids = self._installed_pkg_sto.get_requisites(candidate_id)
                 if not requisite_ids.issubset(augm_candidate1_ids):
                     dependency_ids = self._installed_pkg_sto.get_dependencies(
-                        candidate_id, ignore_missing=True)
+                        candidate_id, ignore_missing=True
+                    )
                     candidate2_ids.discard(candidate_id)
                     candidate2_ids.difference_update(dependency_ids)
             for candidate_id in candidate2_ids:
@@ -664,13 +698,14 @@ class UpgraderController:
     def new_factory(cls, *args, **kwargs):
         def aux(installable_pkg_sto, installed_pkg_sto):
             return cls(installable_pkg_sto, installed_pkg_sto, *args, **kwargs)
+
         return aux
 
 
 class DefaultUpgraderController(UpgraderController):
-    def __init__(self, installable_pkg_sto, installed_pkg_sto,
-                 ignore=None,
-                 nodeps=False):
+    def __init__(
+        self, installable_pkg_sto, installed_pkg_sto, ignore=None, nodeps=False
+    ):
         self._installable_pkg_sto = installable_pkg_sto
         self._installed_pkg_sto = installed_pkg_sto
         self._ignore = [] if ignore is None else ignore
@@ -700,10 +735,14 @@ class DefaultUpgraderController(UpgraderController):
                 pkg_id = installed_pkg.pkg_info['id']
 
                 def filter_fun(dep_pkg_id):
-                    return dep_pkg_id not in self._installed_pkg_sto and \
-                        dep_pkg_id not in scheduled_pkg_ids
+                    return (
+                        dep_pkg_id not in self._installed_pkg_sto
+                        and dep_pkg_id not in scheduled_pkg_ids
+                    )
+
                 dependencies = self._installable_pkg_sto.get_dependencies(
-                    pkg_id, filter_fun=filter_fun)
+                    pkg_id, filter_fun=filter_fun
+                )
                 for dep_pkg_id in dependencies:
                     scheduled_pkg_ids.add(dep_pkg_id)
                     dep_pkg = self._installable_pkg_sto[dep_pkg_id].clone()

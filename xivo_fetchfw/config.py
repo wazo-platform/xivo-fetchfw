@@ -1,4 +1,4 @@
-# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from configparser import RawConfigParser
@@ -35,6 +35,7 @@ def _new_config_spec():
             return 'auth-section'
 
     return cfg_spec
+
 
 _CONFIG_SPEC = _new_config_spec()
 

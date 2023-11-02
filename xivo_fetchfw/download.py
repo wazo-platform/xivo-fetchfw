@@ -9,7 +9,12 @@ import os
 from binascii import b2a_hex
 from urllib import request
 from urllib.error import HTTPError, URLError
-from urllib.request import HTTPBasicAuthHandler, HTTPDigestAuthHandler, HTTPPasswordMgrWithDefaultRealm, ProxyHandler
+from urllib.request import (
+    HTTPBasicAuthHandler,
+    HTTPDigestAuthHandler,
+    HTTPPasswordMgrWithDefaultRealm,
+    ProxyHandler,
+)
 
 from xivo_fetchfw.util import FetchfwError
 
@@ -47,9 +52,13 @@ class DefaultDownloader:
         try:
             return self._do_download(url, timeout)
         except HTTPError as e:
-            logger.warning("HTTPError while downloading '%s': %s", self._get_url(url), e)
+            logger.warning(
+                "HTTPError while downloading '%s': %s", self._get_url(url), e
+            )
             if e.code == 401:
-                raise InvalidCredentialsError("unauthorized access to '%s'" % self._get_url(url))
+                raise InvalidCredentialsError(
+                    f"unauthorized access to '{self._get_url(url)}'"
+                )
             else:
                 raise DownloadError(e)
         except URLError as e:
@@ -87,7 +96,6 @@ class AuthenticatingDownloader(DefaultDownloader):
 
 
 class _OpenerWithTimeout:
-
     def __init__(self, opener, timeout):
         self._opener = opener
         self._timeout = timeout
@@ -98,6 +106,7 @@ class _OpenerWithTimeout:
 
 class BaseRemoteFile:
     """A remote file that can be downloaded."""
+
     _BLOCK_SIZE = 4096
 
     def __init__(self, url, downloader, hook_factories=None):
@@ -170,6 +179,7 @@ class RemoteFile:
     exists -- a method that returns true if the remote file exists on the filesystem
 
     """
+
     def __init__(self, path, size, base_remote_file):
         """
         path -- the path where the file will be written
@@ -205,6 +215,7 @@ class RemoteFile:
 
 class DownloadHook:
     """Base class for download hooks."""
+
     def start(self):
         """Called just before the download is started.
 
@@ -259,6 +270,7 @@ class DownloadHook:
 
 class WriteToFileHook(DownloadHook):
     """Write a download to a file."""
+
     def __init__(self, filename):
         super().__init__()
         self._filename = filename
@@ -300,13 +312,16 @@ class WriteToFileHook(DownloadHook):
     @classmethod
     def create_factory(cls, filename):
         """Create a hook factory that will return WriteToFileHook instances."""
+
         def aux():
             return cls(filename)
+
         return aux
 
 
 class SHA1Hook(DownloadHook):
     """Compute the SHA1 sum of a download and check if it match."""
+
     def __init__(self, sha1sum):
         """
         sha1sum -- the raw sha1 sum (NOT an hex representation).
@@ -324,19 +339,23 @@ class SHA1Hook(DownloadHook):
     def complete(self):
         sha1sum = self._hash.digest()
         if sha1sum != self._sha1sum:
-            raise CorruptedFileError("sha1sum mismatch: %s instead of %s" %
-                                     (b2a_hex(sha1sum), b2a_hex(self._sha1sum)))
+            raise CorruptedFileError(
+                f"sha1sum mismatch: {b2a_hex(sha1sum)} instead of {b2a_hex(self._sha1sum)}"
+            )
 
     @classmethod
     def create_factory(cls, sha1sum):
         """Create a hook factory that will return SHA1Hook instances."""
+
         def aux():
             return cls(sha1sum)
+
         return aux
 
 
 class ProgressBarHook(DownloadHook):
     """Update a progress bar matching the download status."""
+
     def __init__(self, pbar):
         super().__init__()
         self._pbar = pbar
@@ -355,6 +374,7 @@ class ProgressBarHook(DownloadHook):
 
 class AbortHook(DownloadHook):
     """Abort a download at will by raising an exception in a call to update."""
+
     def __init__(self):
         super().__init__()
         self._abort = False
@@ -395,7 +415,5 @@ def new_downloaders_from_handlers(handlers=None):
 
 
 def new_downloaders(proxies=None):
-    """Create standard handlers and downloaders.
-
-    """
+    """Create standard handlers and downloaders."""
     return new_downloaders_from_handlers(new_handlers(proxies))

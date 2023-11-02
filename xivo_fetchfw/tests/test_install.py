@@ -1,4 +1,4 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -53,10 +53,9 @@ class _TestStandardExtractFilter:
         self.assert_output_directory_content()
 
     def assert_output_directory_content(self):
-        self.assertEqual(['dir0/',
-                          'dir0/file1.txt',
-                          'file0.txt'],
-                         sorted(list_paths(self._tmp_dir)))
+        self.assertEqual(
+            ['dir0/', 'dir0/file1.txt', 'file0.txt'], sorted(list_paths(self._tmp_dir))
+        )
 
 
 class TestZipFilter(_TestStandardExtractFilter, unittest.TestCase):
@@ -145,8 +144,10 @@ class TestIncludeFilter(unittest.TestCase):
         self._create_file('dir1/dir2/file2')
         filter = install.IncludeFilter(['dir1'])
         filter.apply(self._tmp_src_dir, self._tmp_dst_dir)
-        self.assertEqual(['dir1/', 'dir1/dir2/', 'dir1/dir2/file2', 'dir1/file1'],
-                         sorted(list_paths(self._tmp_dst_dir)))
+        self.assertEqual(
+            ['dir1/', 'dir1/dir2/', 'dir1/dir2/file2', 'dir1/file1'],
+            sorted(list_paths(self._tmp_dst_dir)),
+        )
 
 
 class TestCopyFilter(unittest.TestCase):
@@ -181,16 +182,18 @@ class TestCopyFilter(unittest.TestCase):
         self._create_file('file2')
         filter = install.CopyFilter(['file1', 'file2'], 'dir/')
         filter.apply(self._tmp_src_dir, self._tmp_dst_dir)
-        self.assertEqual(['dir/', 'dir/file1', 'dir/file2'],
-                         sorted(list_paths(self._tmp_dst_dir)))
+        self.assertEqual(
+            ['dir/', 'dir/file1', 'dir/file2'], sorted(list_paths(self._tmp_dst_dir))
+        )
 
     def test_copy_dirs_into_dir_is_ok(self):
         self._create_dir('dir1')
         self._create_dir('dir2')
         filter = install.CopyFilter(['dir1', 'dir2'], 'dir/')
         filter.apply(self._tmp_src_dir, self._tmp_dst_dir)
-        self.assertEqual(['dir/', 'dir/dir1/', 'dir/dir2/'],
-                         sorted(list_paths(self._tmp_dst_dir)))
+        self.assertEqual(
+            ['dir/', 'dir/dir1/', 'dir/dir2/'], sorted(list_paths(self._tmp_dst_dir))
+        )
 
     def test_copy_dir_into_file_raise_error(self):
         self._create_dir('dir1')
