@@ -14,7 +14,7 @@ TEST_RES_DIR = os.path.join(os.path.dirname(__file__), 'storage')
 
 class TestDefaultRemoteFileBuilder(unittest.TestCase):
     SECTION = 'test_section'
-    SHA1SUM = 'f1d2d2f924e986ac86fdf7b36c94bcdf32beec15'    # fake sha1sum
+    SHA1SUM = 'f1d2d2f924e986ac86fdf7b36c94bcdf32beec15'  # fake sha1sum
     DLERS = {'default': 'fake downloader'}
 
     def setUp(self):
@@ -25,8 +25,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
         os.rmdir(self._cache_dir)
 
     def test_ok_on_all_mandatory_parameters_specified(self):
-        builder = storage.DefaultRemoteFileBuilder(self._cache_dir,
-                                                   self._downloaders)
+        builder = storage.DefaultRemoteFileBuilder(self._cache_dir, self._downloaders)
         config = RawConfigParser()
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'url', 'http://example.org/foo.zip')
@@ -37,8 +36,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
         self.assertEqual('foo.zip', xfile.filename)
 
     def test_missing_url_raise_error(self):
-        builder = storage.DefaultRemoteFileBuilder(self._cache_dir,
-                                                   self._downloaders)
+        builder = storage.DefaultRemoteFileBuilder(self._cache_dir, self._downloaders)
         config = RawConfigParser()
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'size', '1')
@@ -47,8 +45,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
         self.assertRaises(Exception, builder.build_remote_file, config, self.SECTION)
 
     def test_missing_size_raise_error(self):
-        builder = storage.DefaultRemoteFileBuilder(self._cache_dir,
-                                                   self._downloaders)
+        builder = storage.DefaultRemoteFileBuilder(self._cache_dir, self._downloaders)
         config = RawConfigParser()
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'url', 'http://example.org/foo.zip')
@@ -57,8 +54,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
         self.assertRaises(Exception, builder.build_remote_file, config, self.SECTION)
 
     def test_missing_sha1sum_raise_error(self):
-        builder = storage.DefaultRemoteFileBuilder(self._cache_dir,
-                                                   self._downloaders)
+        builder = storage.DefaultRemoteFileBuilder(self._cache_dir, self._downloaders)
         config = RawConfigParser()
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'url', 'http://example.org/foo.zip')
@@ -67,8 +63,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
         self.assertRaises(Exception, builder.build_remote_file, config, self.SECTION)
 
     def test_specified_filename_override_implicit(self):
-        builder = storage.DefaultRemoteFileBuilder(self._cache_dir,
-                                                   self._downloaders)
+        builder = storage.DefaultRemoteFileBuilder(self._cache_dir, self._downloaders)
         config = RawConfigParser()
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'url', 'http://example.org/foo.zip')
@@ -81,8 +76,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
 
     def test_downloader_is_looked_up_in_dict_if_specified(self):
         downloaders = MagicMock()
-        builder = storage.DefaultRemoteFileBuilder(self._cache_dir,
-                                                   downloaders)
+        builder = storage.DefaultRemoteFileBuilder(self._cache_dir, downloaders)
         config = RawConfigParser()
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'url', 'http://example.org/foo.zip')
@@ -95,8 +89,7 @@ class TestDefaultRemoteFileBuilder(unittest.TestCase):
 
     def test_default_downloader_is_looked_up_in_dict_if_unspecified(self):
         downloaders = MagicMock()
-        builder = storage.DefaultRemoteFileBuilder(self._cache_dir,
-                                                   downloaders)
+        builder = storage.DefaultRemoteFileBuilder(self._cache_dir, downloaders)
         config = RawConfigParser()
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'url', 'http://example.org/foo.zip')
@@ -128,8 +121,7 @@ class TestDefaultInstallMgrFactory(unittest.TestCase):
         config = RawConfigParser()
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'a-b', 'null')
-        mgr_factory = storage.DefaultInstallMgrFactory(config, self.SECTION,
-                                                       Mock(), {})
+        mgr_factory = storage.DefaultInstallMgrFactory(config, self.SECTION, Mock(), {})
         mgr_factory.new_install_mgr(Mock(), {})
 
     def test_raise_error_on_loop(self):
@@ -137,8 +129,7 @@ class TestDefaultInstallMgrFactory(unittest.TestCase):
         config.add_section(self.SECTION)
         config.set(self.SECTION, 'a-b', 'null')
         config.set(self.SECTION, 'b-a', 'null')
-        mgr_factory = storage.DefaultInstallMgrFactory(config, self.SECTION,
-                                                       Mock(), {})
+        mgr_factory = storage.DefaultInstallMgrFactory(config, self.SECTION, Mock(), {})
         self.assertRaises(Exception, mgr_factory.new_install_mgr, Mock(), {})
 
 
@@ -165,7 +156,8 @@ class TestDefaultInstallablePkgStorage(unittest.TestCase):
     def test_ok_on_valid_db(self):
         db_dir = os.path.join(TEST_RES_DIR, 'installable')
         installable_pkg_sto = storage.new_installable_pkg_storage(
-            db_dir, self._cache_dir, {'default': 'default dler'}, {})
+            db_dir, self._cache_dir, {'default': 'default dler'}, {}
+        )
         self.assertTrue('simple1' in installable_pkg_sto)
         self.assertTrue('simple2' in installable_pkg_sto)
 
@@ -184,51 +176,58 @@ class TestBasePkgStorage(unittest.TestCase):
         return pkg
 
     def test_dependencies_with_maxdepth_0_return_empty_set(self):
-        pkgs = {'a': self._new_pkg(['b']),
-                'b': self._new_pkg()}
+        pkgs = {'a': self._new_pkg(['b']), 'b': self._new_pkg()}
         pkg_sto = storage.BasePkgStorage()
         pkg_sto._pkgs = pkgs
         self.assertEqual(set(), pkg_sto.get_dependencies('a', 0))
 
     def test_dependencies_with_maxdepth_1_return_direct_deps(self):
-        pkgs = {'a': self._new_pkg(['b']),
-                'b': self._new_pkg(['c']),
-                'c': self._new_pkg()}
+        pkgs = {
+            'a': self._new_pkg(['b']),
+            'b': self._new_pkg(['c']),
+            'c': self._new_pkg(),
+        }
         pkg_sto = storage.BasePkgStorage()
         pkg_sto._pkgs = pkgs
         self.assertEqual(['b'], sorted(pkg_sto.get_dependencies('a', 1)))
 
     def test_dependencies_return_direct_and_indirect_deps(self):
-        pkgs = {'a': self._new_pkg(['b']),
-                'b': self._new_pkg(['c', 'd']),
-                'c': self._new_pkg(),
-                'd': self._new_pkg(),
-                'e': self._new_pkg(), }
+        pkgs = {
+            'a': self._new_pkg(['b']),
+            'b': self._new_pkg(['c', 'd']),
+            'c': self._new_pkg(),
+            'd': self._new_pkg(),
+            'e': self._new_pkg(),
+        }
         pkg_sto = storage.BasePkgStorage()
         pkg_sto._pkgs = pkgs
         self.assertEqual(['b', 'c', 'd'], sorted(pkg_sto.get_dependencies('a')))
 
     def test_dependencies_multiple_depths_consider_shortest_depth(self):
-        pkgs = {'a': self._new_pkg(['c']),
-                'b': self._new_pkg(['d']),
-                'c': self._new_pkg(['d']),
-                'd': self._new_pkg()}
+        pkgs = {
+            'a': self._new_pkg(['c']),
+            'b': self._new_pkg(['d']),
+            'c': self._new_pkg(['d']),
+            'd': self._new_pkg(),
+        }
         pkg_sto = storage.BasePkgStorage()
         pkg_sto._pkgs = pkgs
-        self.assertEqual(['c', 'd'],
-                         sorted(pkg_sto.get_dependencies_many(['a', 'b'], maxdepth=1)))
+        self.assertEqual(
+            ['c', 'd'], sorted(pkg_sto.get_dependencies_many(['a', 'b'], maxdepth=1))
+        )
 
     def test_dependencies_works_fine_with_direct_cycle(self):
-        pkgs = {'a': self._new_pkg(['b']),
-                'b': self._new_pkg(['a'])}
+        pkgs = {'a': self._new_pkg(['b']), 'b': self._new_pkg(['a'])}
         pkg_sto = storage.BasePkgStorage()
         pkg_sto._pkgs = pkgs
         self.assertEqual(['a', 'b'], sorted(pkg_sto.get_dependencies('a')))
 
     def test_dependencies_works_fine_with_indirect_cycle(self):
-        pkgs = {'a': self._new_pkg(['b']),
-                'b': self._new_pkg(['c']),
-                'c': self._new_pkg(['a'])}
+        pkgs = {
+            'a': self._new_pkg(['b']),
+            'b': self._new_pkg(['c']),
+            'c': self._new_pkg(['a']),
+        }
         pkg_sto = storage.BasePkgStorage()
         pkg_sto._pkgs = pkgs
         self.assertEqual(['a', 'b', 'c'], sorted(pkg_sto.get_dependencies('a')))
@@ -243,13 +242,22 @@ class TestBasePkgStorage(unittest.TestCase):
         pkgs = {'a': self._new_pkg(['b'])}
         pkg_sto = storage.BasePkgStorage()
         pkg_sto._pkgs = pkgs
-        self.assertEqual(['b'], sorted(pkg_sto.get_dependencies('a', ignore_missing=True)))
+        self.assertEqual(
+            ['b'], sorted(pkg_sto.get_dependencies('a', ignore_missing=True))
+        )
 
     def test_dependencies_ok_with_filter_fun(self):
-        pkgs = {'a': self._new_pkg(['b']),
-                'b': self._new_pkg(['c']),
-                'c': self._new_pkg()}
-        filter_fun = lambda pkg_id: pkg_id != 'c'
+        pkgs = {
+            'a': self._new_pkg(['b']),
+            'b': self._new_pkg(['c']),
+            'c': self._new_pkg(),
+        }
+
+        def filter_fun(pkg_id):
+            return pkg_id != 'c'
+
         pkg_sto = storage.BasePkgStorage()
         pkg_sto._pkgs = pkgs
-        self.assertEqual(['b'], sorted(pkg_sto.get_dependencies('a', filter_fun=filter_fun)))
+        self.assertEqual(
+            ['b'], sorted(pkg_sto.get_dependencies('a', filter_fun=filter_fun))
+        )

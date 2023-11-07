@@ -38,20 +38,22 @@ def apply_subs(string, variables):
     using zero-length substitution variables ("a$." for example).
 
     """
+
     def aux(m):
         var_name = m.group(1)
         if var_name is None:
             var_name = m.group(2)
         if not var_name:
-            raise ValueError("invalid zero-length variable: %s" % string)
+            raise ValueError(f"invalid zero-length variable: {string}")
         try:
             var_value = variables[var_name]
         except KeyError:
-            raise KeyError("undefined substitution '%s'" % var_name)
+            raise KeyError(f"undefined substitution '{var_name}'")
         else:
             # This treat a special case where var_value has the string
             # "\$" in it, we don't want it to get unescaped at the end
             return var_value.replace(r'\$', r'\\$')
+
     interm = _APPLY_SUBS_REGEX.sub(aux, string)
     return interm.replace(r'\$', '$')
 
@@ -289,8 +291,11 @@ def remove_paths(paths, directory):
             # previously failed.
             for non_empty_directory in non_empty_directories:
                 if non_empty_directory.startswith(abs_path):
-                    logger.debug("Not trying to remove '%s' since removing '%s' failed",
-                                 abs_path, non_empty_directory)
+                    logger.debug(
+                        "Not trying to remove '%s' since removing '%s' failed",
+                        abs_path,
+                        non_empty_directory,
+                    )
                     break
             else:
                 logger.debug("Deleting '%s' as directory", abs_path)
@@ -298,10 +303,16 @@ def remove_paths(paths, directory):
                     os.rmdir(abs_path)
                 except OSError as e:
                     if e.errno == errno.ENOTEMPTY:
-                        logger.debug("Could not delete directory '%s' because it is not empty", path)
+                        logger.debug(
+                            "Could not delete directory '%s' because it is not empty",
+                            path,
+                        )
                         non_empty_directories.append(abs_path)
                     elif e.errno == errno.ENOENT:
-                        logger.warning("Could not delete directory '%s' because it does not exist", path)
+                        logger.warning(
+                            "Could not delete directory '%s' because it does not exist",
+                            path,
+                        )
                     else:
                         raise
         else:
@@ -310,7 +321,9 @@ def remove_paths(paths, directory):
                 os.remove(abs_path)
             except OSError as e:
                 if e.errno == errno.ENOENT:
-                    logger.warning("Could not delete file '%s' because it does not exist", abs_path)
+                    logger.warning(
+                        "Could not delete file '%s' because it does not exist", abs_path
+                    )
                 else:
                     raise
         yield path
@@ -318,4 +331,5 @@ def remove_paths(paths, directory):
 
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod(verbose=True)

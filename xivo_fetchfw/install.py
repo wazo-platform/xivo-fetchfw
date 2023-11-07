@@ -1,4 +1,4 @@
-# Copyright 2010-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2010-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import collections
@@ -65,7 +65,9 @@ class _InstallationProcess:
                     logger.debug("Executing filter node %s", node_id)
                     filter_obj.apply(input_dir, output_dir)
         except Exception:
-            logger.error("Error during execution of installation manager", exc_info=True)
+            logger.error(
+                "Error during execution of installation manager", exc_info=True
+            )
             try:
                 raise
             finally:
@@ -78,7 +80,9 @@ class _InstallationProcess:
     def _build_requirement_map(self):
         # Return a 'requirement map', i.e. a dictionary which keys are node id
         # and values are node id that depends on the key
-        req_map = {node_id: [] for node_id in itertools.chain(self._sources, self._filters)}
+        req_map = {
+            node_id: [] for node_id in itertools.chain(self._sources, self._filters)
+        }
         for filter_id, (_, filter_dependency) in self._filters.items():
             req_map[filter_dependency].append(filter_id)
         return req_map
@@ -129,8 +133,9 @@ class _InstallationProcess:
 
 class InstallationManager:
     """An installation manager..."""
+
     def __init__(self, installation_graph):
-        """Build an InstallationManager.
+        r"""Build an InstallationManager.
 
         Installation_graph is a dictionary, for example:
           {'filters':
@@ -163,8 +168,9 @@ class InstallationManager:
     def _check_nodes_id_are_unique(self):
         common_ids = set(self._sources).intersection(self._filters)
         if common_ids:
-            raise InstallationGraphError("these IDs are shared by both a source and a filter: %s" %
-                                         common_ids)
+            raise InstallationGraphError(
+                f"these IDs are shared by both a source and a filter: {common_ids}"
+            )
 
     def _check_filters_depend_on_valid_node(self):
         # Check that there's no unknown identifier in the installation graph, i.e. raise an
@@ -174,8 +180,9 @@ class InstallationManager:
         for filter_id, filter_value in filters.items():
             node_dependency = filter_value[1]
             if node_dependency not in filters and node_dependency not in sources:
-                raise InstallationGraphError("filter '%s' depends on unknown filter/source '%s'" %
-                                             (filter_id, node_dependency))
+                raise InstallationGraphError(
+                    f"filter '{filter_id}' depends on unknown filter/source '{node_dependency}'"
+                )
 
     def _check_no_useless_source(self):
         # Check if every source participates in the installation process, i.e. raise an exception
@@ -183,8 +190,9 @@ class InstallationManager:
         dependencies = (v[1] for v in self._filters.values())
         unused_sources = set(self._sources).difference(dependencies)
         if unused_sources:
-            raise InstallationGraphError("these sources doesn't participate in the installation: %s" %
-                                         unused_sources)
+            raise InstallationGraphError(
+                f"these sources doesn't participate in the installation: {unused_sources}"
+            )
 
     def _check_is_acyclic(self):
         # Check that the installation graph is acyclic
@@ -199,7 +207,9 @@ class InstallationManager:
                     if next_node_id in sources:
                         break
                     if next_node_id in currently_visited:
-                        raise InstallationGraphError("a cycle in the installation graph has been detected")
+                        raise InstallationGraphError(
+                            "a cycle in the installation graph has been detected"
+                        )
                     currently_visited.add(next_node_id)
                     node_id = next_node_id
                 visited.update(currently_visited)
@@ -224,18 +234,20 @@ class _GlobHelper:
     inside arbitrary directories.
 
     """
+
     def __init__(self, pathnames, error_on_no_matches=True):
-        """pathnames can be either a single path name or an iterable of path names.
-        """
+        """pathnames can be either a single path name or an iterable of path names."""
         if isinstance(pathnames, str):
             self._pathnames = [os.path.normpath(pathnames)]
         else:
             self._pathnames = [os.path.normpath(pathname) for pathname in pathnames]
         for pathname in self._pathnames:
             if os.path.isabs(pathname):
-                raise ValueError("path name '%s' is an absolute path" % pathname)
+                raise ValueError(f"path name '{pathname}' is an absolute path")
             if pathname.startswith(os.pardir):
-                raise ValueError("path name '%s' makes reference to the parent directory" % pathname)
+                raise ValueError(
+                    f"path name '{pathname}' makes reference to the parent directory"
+                )
         self._error_on_no_matches = error_on_no_matches
 
     def glob_in_dir(self, src_directory):
@@ -253,8 +265,10 @@ class _GlobHelper:
                 no_matches = False
                 yield globbed_abs_pathname
         if no_matches and self._error_on_no_matches:
-            raise InstallationError("the glob patterns %s did not match anything in directory '%s'"
-                                    % (self._pathnames, src_directory))
+            raise InstallationError(
+                f"the glob patterns {self._pathnames} did not "
+                f"match anything in directory '{src_directory}'"
+            )
 
 
 class FilesystemLinkSource:
@@ -266,6 +280,7 @@ class FilesystemLinkSource:
     directories of the destination directory.
 
     """
+
     def __init__(self, pathnames):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
@@ -280,7 +295,10 @@ class FilesystemLinkSource:
     def pull(self, dst_directory):
         for pathname in self._pathnames:
             for globbed_pathname in glob.iglob(pathname):
-                os.symlink(globbed_pathname, os.path.join(dst_directory, os.path.basename(globbed_pathname)))
+                os.symlink(
+                    globbed_pathname,
+                    os.path.join(dst_directory, os.path.basename(globbed_pathname)),
+                )
 
 
 class NonGlobbingFilesystemLinkSource:
@@ -300,8 +318,10 @@ class NonGlobbingFilesystemLinkSource:
             # detect human error, that said it's still possible that the file
             # be removed during execution
             if not os.path.exists(pathname):
-                raise InstallationError('path doesn\'t exist: %s' % pathname)
-            os.symlink(pathname, os.path.join(dst_directory, os.path.basename(pathname)))
+                raise InstallationError(f'path doesn\'t exist: {pathname}')
+            os.symlink(
+                pathname, os.path.join(dst_directory, os.path.basename(pathname))
+            )
 
 
 class FilesystemCopySource:
@@ -309,6 +329,7 @@ class FilesystemCopySource:
     race condition, side effects, etc.
 
     """
+
     def __init__(self, pathnames):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
@@ -323,7 +344,9 @@ class FilesystemCopySource:
     def pull(self, dst_directory):
         for pathname in self._pathnames:
             for globbed_pathname in glob.iglob(pathname):
-                dst_pathname = os.path.join(dst_directory, os.path.basename(globbed_pathname))
+                dst_pathname = os.path.join(
+                    dst_directory, os.path.basename(globbed_pathname)
+                )
                 if os.path.isdir(globbed_pathname):
                     shutil.copytree(globbed_pathname, dst_pathname)
                 else:
@@ -336,6 +359,7 @@ class NullSource:
     Mostly useful for testing purposes.
 
     """
+
     def pull(self, dst_directory):
         pass
 
@@ -345,6 +369,7 @@ class ZipFilter:
     the content of these zip files.
 
     """
+
     def __init__(self, pathnames):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
@@ -365,6 +390,7 @@ class TarFilter:
     or bz2-ipped.
 
     """
+
     def __init__(self, pathnames):
         """
         pathnames -- a single glob pattern or an iterator over multiple glob
@@ -388,6 +414,7 @@ class RarFilter:
     package (non-free version).
 
     """
+
     _CMD_PREFIX = ['unrar', 'e', '-idq', '-y']
 
     def __init__(self, pathnames):
@@ -404,7 +431,7 @@ class RarFilter:
             logger.debug('Executing external command: %s', cmd)
             retcode = subprocess.call(cmd)
             if retcode:
-                raise InstallationError('unrar returned status code %s' % retcode)
+                raise InstallationError(f'unrar returned status code {retcode}')
 
 
 class Filter7z:
@@ -422,6 +449,7 @@ class Filter7z:
     identifier.
 
     """
+
     _CMD_PREFIX = ['7zr', 'e', '-bd']
 
     def __init__(self, pathnames):
@@ -434,13 +462,13 @@ class Filter7z:
 
     def apply(self, src_directory, dst_directory):
         for pathname in self._glob_helper.iglob_in_dir(src_directory):
-            cmd = self._CMD_PREFIX + ['-o%s' % dst_directory, pathname]
+            cmd = self._CMD_PREFIX + [f'-o{dst_directory}', pathname]
             # there's no "quiet" option for 7zr, so we redirect stdout to /dev/null
             with open(os.devnull, 'wb') as devnull_fobj:
                 logger.debug('Executing external command: %s', cmd)
                 retcode = subprocess.call(cmd, stdout=devnull_fobj)
             if retcode:
-                raise InstallationError('7zr returned status code %s' % retcode)
+                raise InstallationError(f'7zr returned status code {retcode}')
 
 
 class CiscoUnsignFilter:
@@ -448,8 +476,11 @@ class CiscoUnsignFilter:
     containing the gzipped file inside the signed file.
 
     """
+
     _BUF_SIZE = 512
-    _GZIP_MAGIC_NUMBER = b'\x1f\x8b'  # see http://www.gzip.org/zlib/rfc-gzip.html#file-format
+    _GZIP_MAGIC_NUMBER = (
+        b'\x1f\x8b'  # see http://www.gzip.org/zlib/rfc-gzip.html#file-format
+    )
 
     def __init__(self, signed_pathname, unsigned_pathname):
         """Note: signed_pathname can be a glob pattern, but when the pattern is expanded,
@@ -461,20 +492,29 @@ class CiscoUnsignFilter:
         self._glob_helper = _GlobHelper(signed_pathname)
         self._unsigned_pathname = os.path.normpath(unsigned_pathname)
         if os.path.isabs(self._unsigned_pathname):
-            raise ValueError("unsigned path name '%s' is an absolute path" % self._unsigned_pathname)
+            raise ValueError(
+                f"unsigned path name '{self._unsigned_pathname}' is an absolute path"
+            )
         if self._unsigned_pathname.startswith(os.pardir):
-            raise ValueError("unsigned path name '%s' makes reference to the parent directory" % self._unsigned_pathname)
+            raise ValueError(
+                f"unsigned path name '{self._unsigned_pathname}' "
+                "makes reference to the parent directory"
+            )
 
     def apply(self, src_directory, dst_directory):
         signed_pathnames = self._glob_helper.glob_in_dir(src_directory)
         if len(signed_pathnames) > 1:
-            raise InstallationError("glob pattern matched %d files" % len(signed_pathnames))
+            raise InstallationError(
+                f"glob pattern matched {len(signed_pathnames)} files"
+            )
         signed_pathname = signed_pathnames[0]
         with open(signed_pathname, 'rb') as sf:
             buf = sf.read(CiscoUnsignFilter._BUF_SIZE)
             index = buf.find(CiscoUnsignFilter._GZIP_MAGIC_NUMBER)
             if index == -1:
-                raise InstallationError("Couldn't find gzip magic number in the signed file.")
+                raise InstallationError(
+                    "Couldn't find gzip magic number in the signed file."
+                )
             unsigned_filename = os.path.join(dst_directory, self._unsigned_pathname)
             with open(unsigned_filename, 'wb') as f:
                 f.write(buf[index:])
@@ -546,6 +586,7 @@ def ExcludeFilter(pathnames):
             if fnmatch(rel_file, pathname):
                 return False
         return True
+
     return IncludeExcludeFilter(filter_fun)
 
 
@@ -578,6 +619,7 @@ def IncludeFilter(pathnames):
                     included_dirs.add(rel_file)
                 return True
         return False
+
     return IncludeExcludeFilter(filter_fun)
 
 
@@ -606,9 +648,13 @@ class CopyFilter:
             if os.path.exists(abs_dst):
                 if os.path.isdir(abs_dst) != dst_is_dir:
                     if dst_is_dir:
-                        raise InstallationError("destination exists and is a file but should be a directory")
+                        raise InstallationError(
+                            "destination exists and is a file but should be a directory"
+                        )
                     else:
-                        raise InstallationError("destination exists and is a directory but should be a file")
+                        raise InstallationError(
+                            "destination exists and is a directory but should be a file"
+                        )
             else:
                 dirname = os.path.dirname(abs_dst)
                 if not os.path.exists(dirname):
@@ -632,7 +678,7 @@ class CopyFilter:
     def _apply_file(self, src_directory, abs_dst):
         pathnames = self._glob_helper.glob_in_dir(src_directory)
         if len(pathnames) > 1:
-            raise InstallationError("glob pattern matched %d files" % len(pathnames))
+            raise InstallationError(f"glob pattern matched {len(pathnames)} files")
         pathname = pathnames[0]
         shutil.copy(pathname, abs_dst)
 
@@ -643,5 +689,6 @@ class NullFilter:
     Mostly useful for testing purposes.
 
     """
+
     def apply(self, src_directory, dst_directory):
         pass

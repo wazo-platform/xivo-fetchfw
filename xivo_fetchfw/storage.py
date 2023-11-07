@@ -7,7 +7,7 @@ import logging
 import os
 
 from binascii import a2b_hex
-from configparser import ParsingError, RawConfigParser
+from configparser import RawConfigParser
 
 from xivo_fetchfw import download, install, util
 from xivo_fetchfw.package import InstallablePackage, InstalledPackage
@@ -37,6 +37,7 @@ class DefaultRemoteFileBuilder:
     downloader: default      ; optional
 
     """
+
     def __init__(self, cache_dir, downloaders):
         """Initialize a new remote file builder.
 
@@ -69,10 +70,13 @@ class DefaultRemoteFileBuilder:
         try:
             downloader = self._downloaders[downloader_name]
         except KeyError:
-            raise ParsingError("'%s' is not a valid downloader name in file definition '%s'" %
-                               (downloader_name, section))
-        return download.RemoteFile.new_remote_file(path, size, url, downloader,
-                                                   [download.SHA1Hook.create_factory(sha1sum)])
+            raise ParsingError(
+                f"'{downloader_name}' is not a valid downloader "
+                f"name in file definition '{section}'"
+            )
+        return download.RemoteFile.new_remote_file(
+            path, size, url, downloader, [download.SHA1Hook.create_factory(sha1sum)]
+        )
 
 
 class DefaultFilterBuilder:
@@ -83,29 +87,30 @@ class DefaultFilterBuilder:
     will return a <TarFilter('test.tar')> object.
 
     """
+
     def _build_unzip(self, args):
         if len(args) != 1:
-            raise ValueError("unzip takes 1 arguments: has %d" % len(args))
+            raise ValueError(f"unzip takes 1 arguments: has {len(args)}")
         return install.ZipFilter(args[0])
 
     def _build_untar(self, args):
         if len(args) != 1:
-            raise ValueError("untar takes 1 arguments: has %d" % len(args))
+            raise ValueError(f"untar takes 1 arguments: has {len(args)}")
         return install.TarFilter(args[0])
 
     def _build_unrar(self, args):
         if len(args) != 1:
-            raise ValueError("unrar takes 1 arguments: has %d" % len(args))
+            raise ValueError(f"unrar takes 1 arguments: has {len(args)}")
         return install.RarFilter(args[0])
 
     def _build_7z(self, args):
         if len(args) != 1:
-            raise ValueError("7z takes 1 arguments: has %d" % len(args))
+            raise ValueError(f"7z takes 1 arguments: has {len(args)}")
         return install.Filter7z(args[0])
 
     def _build_unsign(self, args):
         if len(args) != 2:
-            raise ValueError("unsign takes 1 arguments: has %d" % len(args))
+            raise ValueError(f"unsign takes 1 arguments: has {len(args)}")
         return install.CiscoUnsignFilter(args[0], args[1])
 
     def _build_exclude(self, args):
@@ -120,12 +125,12 @@ class DefaultFilterBuilder:
 
     def _build_cp(self, args):
         if len(args) < 2:
-            raise ValueError("cp takes at least 2 arguments: has %d" % len(args))
+            raise ValueError(f"cp takes at least 2 arguments: has {len(args)}")
         return install.CopyFilter(args[:-1], args[-1])
 
     def _build_null(self, args):
         if args:
-            raise ValueError("null takes no arguments: has %d" % len(args))
+            raise ValueError(f"null takes no arguments: has {len(args)}")
         return install.NullFilter()
 
     def build_node(self, tokens):
@@ -136,11 +141,11 @@ class DefaultFilterBuilder:
 
         """
         type, args = tokens[0], tokens[1:]
-        method_name = '_build_' + type
+        method_name = f'_build_{type}'
         try:
             fun = getattr(self, method_name)
         except AttributeError:
-            raise ValueError("unknown node type %s" % type)
+            raise ValueError(f"unknown node type {type}")
         else:
             return fun(args)
 
@@ -160,6 +165,7 @@ class DefaultInstallMgrFactory:
     c-d: cp */*.txt var/lib/foo/
 
     """
+
     def __init__(self, config, section, filter_builder, global_vars):
         # XXX it could be "better" if we could create an intermediate representation
         #     with the info we have so that creating a new install manager would
@@ -177,11 +183,13 @@ class DefaultInstallMgrFactory:
         for name, value in self._config.items(self._section):
             src, dst = self._get_src_and_dst(name, self._section)
             if dst == 'a':
-                raise ParsingError("usage of reserved dst 'a' in install definition '%s'" %
-                                   self._section)
+                raise ParsingError(
+                    f"usage of reserved dst 'a' in install definition '{self._section}'"
+                )
             if dst in filters:
-                raise ParsingError("at least two filter with dst '%s' in install definition '%s'" %
-                                   (dst, self._section))
+                raise ParsingError(
+                    f"at least two filter with dst '{dst}' in install definition '{self._section}'"
+                )
             raw_tokens = self._tokenize(value, self._section)
             tokens = self._substitute(raw_tokens, vars)
             filter_obj = self._filter_builder.build_node(tokens)
@@ -192,16 +200,18 @@ class DefaultInstallMgrFactory:
         try:
             src, dst = name.split('-')
         except ValueError:
-            raise ParsingError("'%s' is not a valid key in install definition '%s'" %
-                               (name, section))
+            raise ParsingError(
+                f"'{name}' is not a valid key in install definition '{section}'"
+            )
         else:
             return src, dst
 
     def _tokenize(self, value, section):
         tokens = value.split()
         if not tokens:
-            raise ParsingError("'%s' is not a valid value in install definition '%s'" %
-                               (value, section))
+            raise ParsingError(
+                f"'{value}' is not a valid value in install definition '{section}'"
+            )
         return tokens
 
     def _substitute(self, raw_tokens, local_vars):
@@ -212,13 +222,15 @@ class DefaultInstallMgrFactory:
 
 class DefaultInstallMgrFactoryBuilder:
     """A factory that creates DefaultInstallMgrFactory instances."""
+
     def __init__(self, filter_builder, global_vars):
         self._filter_builder = filter_builder
         self._global_vars = global_vars
 
     def build_install_mgr_factory(self, config, section):
-        return DefaultInstallMgrFactory(config, section, self._filter_builder,
-                                        self._global_vars)
+        return DefaultInstallMgrFactory(
+            config, section, self._filter_builder, self._global_vars
+        )
 
 
 class DefaultPkgBuilder:
@@ -238,7 +250,10 @@ class DefaultPkgBuilder:
     depends: base-digium        ; optional
 
     """
-    def build_installable_pkg(self, config, section, pkg_id, remotes_files, install_mgr_factories):
+
+    def build_installable_pkg(
+        self, config, section, pkg_id, remotes_files, install_mgr_factories
+    ):
         # remote files -- a map where keys are remote file ids and values are remote files
         # install_mgr_factories -- a map where keys are install manager ids and values are
         #   install manager factories
@@ -246,7 +261,7 @@ class DefaultPkgBuilder:
         raw_pkg_info = dict(config.items(section))
 
         if 'id' in raw_pkg_info:
-            raise ParsingError("found invalid option 'id' in pkg def '%s'" % section)
+            raise ParsingError(f"found invalid option 'id' in pkg def '{section}'")
 
         if 'depends' in raw_pkg_info:
             pkg_info['depends'] = raw_pkg_info.pop('depends').split()
@@ -257,8 +272,9 @@ class DefaultPkgBuilder:
                 try:
                     pkg_remote_files.append(remotes_files[remote_file_id])
                 except KeyError:
-                    raise ParsingError("unknown file '%s' in pkg def '%s'" %
-                                       (remote_file_id, section))
+                    raise ParsingError(
+                        f"unknown file '{remote_file_id}' in pkg def '{section}'"
+                    )
 
         if 'install' in raw_pkg_info:
             tokens = raw_pkg_info.pop('install').split()
@@ -267,16 +283,21 @@ class DefaultPkgBuilder:
             try:
                 install_mgr_factory = install_mgr_factories[install_mgr_id]
             except KeyError:
-                raise ParsingError("unknown install '%s' in pkg def '%s'" %
-                                   (remote_file_id, section))
+                raise ParsingError(
+                    f"unknown install '{remote_file_id}' in pkg def '{section}'"
+                )
             else:
-                src_node = install.NonGlobbingFilesystemLinkSource(f.path for f in pkg_remote_files)
+                src_node = install.NonGlobbingFilesystemLinkSource(
+                    f.path for f in pkg_remote_files
+                )
                 local_vars = {}
                 for i, remote_file in enumerate(pkg_remote_files):
-                    local_vars['FILE%d' % (i + 1)] = remote_file.filename
+                    local_vars[f'FILE{i + 1}'] = remote_file.filename
                 for i, arg in enumerate(install_mgr_args):
-                    local_vars['ARG%d' % (i + 1)] = arg
-                pkg_install_mgr = install_mgr_factory.new_install_mgr(src_node, local_vars)
+                    local_vars[f'ARG{i + 1}'] = arg
+                pkg_install_mgr = install_mgr_factory.new_install_mgr(
+                    src_node, local_vars
+                )
         else:
             pkg_install_mgr = None
 
@@ -293,6 +314,7 @@ class BasePkgStorage:
     which is a dictionary where keys are package ids and values are package.
 
     """
+
     def __getitem__(self, key):
         return self._pkgs[key]
 
@@ -317,8 +339,9 @@ class BasePkgStorage:
     def values(self):
         return list(self._pkgs.values())
 
-    def get_dependencies(self, pkg_id, maxdepth=-1, filter_fun=None,
-                         ignore_missing=False):
+    def get_dependencies(
+        self, pkg_id, maxdepth=-1, filter_fun=None, ignore_missing=False
+    ):
         """Return the set of direct and indirect dependencies of pkg_id.
 
         maxdepth -- -1 to get recursively all the dependencies, 0 to return an
@@ -328,11 +351,13 @@ class BasePkgStorage:
           package is to be added as a dependencies (and its child, up to maxdepth)
 
         """
-        return self.get_dependencies_many([pkg_id], maxdepth, filter_fun,
-                                          ignore_missing)
+        return self.get_dependencies_many(
+            [pkg_id], maxdepth, filter_fun, ignore_missing
+        )
 
-    def get_dependencies_many(self, pkg_ids, maxdepth=-1, filter_fun=None,
-                              ignore_missing=False):
+    def get_dependencies_many(
+        self, pkg_ids, maxdepth=-1, filter_fun=None, ignore_missing=False
+    ):
         """Similar to get_depencies but accept a list of package IDs instead
         of only one package ID.
 
@@ -368,7 +393,9 @@ class BasePkgStorage:
 
 
 class DefaultInstallablePkgStorage(BasePkgStorage):
-    def __init__(self, db_dir, remote_file_builder, install_mgr_factory_builder, pkg_builder):
+    def __init__(
+        self, db_dir, remote_file_builder, install_mgr_factory_builder, pkg_builder
+    ):
         self._db_dir = db_dir
         self._remote_file_builder = remote_file_builder
         self._install_mgr_factory_builder = install_mgr_factory_builder
@@ -379,8 +406,12 @@ class DefaultInstallablePkgStorage(BasePkgStorage):
         config = self._read_db_files()
         pkg_sections, file_sections, install_sections = self._split_sections(config)
         remote_files = self._create_remote_files(config, file_sections)
-        install_mgr_factories = self._create_install_mgr_factories(config, install_sections)
-        self._pkgs = self._create_pkg(config, pkg_sections, remote_files, install_mgr_factories)
+        install_mgr_factories = self._create_install_mgr_factories(
+            config, install_sections
+        )
+        self._pkgs = self._create_pkg(
+            config, pkg_sections, remote_files, install_mgr_factories
+        )
 
     def _read_db_files(self):
         # Read the files in the db dir and return a config parser object
@@ -410,7 +441,7 @@ class DefaultInstallablePkgStorage(BasePkgStorage):
             elif section.startswith('install_'):
                 install_sections.append(section)
             else:
-                raise ParsingError("invalid section '%s'" % section)
+                raise ParsingError(f"invalid section '{section}'")
         return pkg_sections, file_sections, install_sections
 
     def _create_remote_files(self, config, sections):
@@ -422,8 +453,9 @@ class DefaultInstallablePkgStorage(BasePkgStorage):
             remote_file_id = section[5:]
             remote_file = self._remote_file_builder.build_remote_file(config, section)
             if remote_file.path in remote_file_paths:
-                raise ParsingError('two remote files use the same path: %s' %
-                                   remote_file.path)
+                raise ParsingError(
+                    f'two remote files use the same path: {remote_file.path}'
+                )
             remote_file_paths.add(remote_file.path)
             remote_files[remote_file_id] = remote_file
         return remote_files
@@ -433,7 +465,11 @@ class DefaultInstallablePkgStorage(BasePkgStorage):
         for section in sections:
             assert section.startswith('install_')
             install_mgr_factory_id = section[8:]
-            install_mgr_factory = self._install_mgr_factory_builder.build_install_mgr_factory(config, section)
+            install_mgr_factory = (
+                self._install_mgr_factory_builder.build_install_mgr_factory(
+                    config, section
+                )
+            )
             install_mgr_factories[install_mgr_factory_id] = install_mgr_factory
         return install_mgr_factories
 
@@ -442,7 +478,9 @@ class DefaultInstallablePkgStorage(BasePkgStorage):
         for section in sections:
             assert section.startswith('pkg_')
             pkg_id = section[4:]
-            pkg = self._pkg_builder.build_installable_pkg(config, section, pkg_id, remote_files, install_mgr_factories)
+            pkg = self._pkg_builder.build_installable_pkg(
+                config, section, pkg_id, remote_files, install_mgr_factories
+            )
             pkgs[pkg_id] = pkg
         return pkgs
 
@@ -488,7 +526,7 @@ class DefaultInstalledPkgStorage(BasePkgStorage):
         pkg_info = installed_pkg.pkg_info
         pkg_id = pkg_info['id']
         if pkg_id in self._pkgs:
-            raise ValueError('package is already installed: %s' % pkg_id)
+            raise ValueError(f'package is already installed: {pkg_id}')
         self._write_pkg_info(pkg_id, pkg_info)
         self._add_requirements(installed_pkg, pkg_id)
         self._pkgs[pkg_id] = installed_pkg
@@ -498,7 +536,7 @@ class DefaultInstalledPkgStorage(BasePkgStorage):
         pkg_info = installed_pkg.pkg_info
         pkg_id = pkg_info['id']
         if pkg_id not in self._pkgs:
-            raise ValueError('package is not installed: %s' % pkg_id)
+            raise ValueError(f'package is not installed: {pkg_id}')
         self._remove_requirements(installed_pkg, pkg_id)
         self._write_pkg_info(pkg_id, pkg_info)
         self._add_requirements(installed_pkg, pkg_id)
@@ -515,14 +553,14 @@ class DefaultInstalledPkgStorage(BasePkgStorage):
 
     def _write_pkg_info(self, pkg_id, pkg_info):
         if os.sep in pkg_id:
-            raise ValueError('invalid pkg id: %s' % pkg_id)
+            raise ValueError(f'invalid pkg id: {pkg_id}')
         filename = os.path.join(self._db_dir, pkg_id)
         with open(filename, 'w') as fobj:
             json.dump(pkg_info, fobj, indent=self._json_indent)
 
     def delete_pkg(self, pkg_id):
         if pkg_id not in self._pkgs:
-            raise ValueError('package is not installed: %s' % pkg_id)
+            raise ValueError(f'package is not installed: {pkg_id}')
         self._remove_requirements(self._pkgs[pkg_id], pkg_id)
         filename = os.path.join(self._db_dir, pkg_id)
         os.remove(filename)
@@ -539,16 +577,20 @@ class DefaultInstalledPkgStorage(BasePkgStorage):
         # we check first since we are using a defaultdict and don't want to
         # create a new instance if pkg_id is not there
         if pkg_id not in self._pkgs:
-            raise ValueError('package is not installed: %s' % pkg_id)
+            raise ValueError(f'package is not installed: {pkg_id}')
         return set(self._requirement_map[pkg_id])
 
 
 def new_installable_pkg_storage(db_dir, cache_dir, downloaders, global_vars):
     remote_file_builder = DefaultRemoteFileBuilder(cache_dir, downloaders)
     filter_builder = DefaultFilterBuilder()
-    install_mgr_factory_builder = DefaultInstallMgrFactoryBuilder(filter_builder, global_vars)
+    install_mgr_factory_builder = DefaultInstallMgrFactoryBuilder(
+        filter_builder, global_vars
+    )
     pkg_builder = DefaultPkgBuilder()
-    return DefaultInstallablePkgStorage(db_dir, remote_file_builder, install_mgr_factory_builder, pkg_builder)
+    return DefaultInstallablePkgStorage(
+        db_dir, remote_file_builder, install_mgr_factory_builder, pkg_builder
+    )
 
 
 def new_installed_pkg_storage(db_dir):
@@ -563,6 +605,8 @@ def new_pkg_storages(base_db_dir, cache_dir, downloaders, global_vars):
     for dir in [able_db_dir, ed_db_dir]:
         if not os.path.isdir(dir):
             os.makedirs(dir)
-    able_storage = new_installable_pkg_storage(able_db_dir, cache_dir, downloaders, global_vars)
+    able_storage = new_installable_pkg_storage(
+        able_db_dir, cache_dir, downloaders, global_vars
+    )
     ed_storage = new_installed_pkg_storage(ed_db_dir)
     return able_storage, ed_storage

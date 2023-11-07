@@ -1,4 +1,4 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -57,13 +57,11 @@ class TestApplySubs(unittest.TestCase):
         self.assertEqual('bar$', result)
 
     def test_multiple_space_separated_substitution(self):
-        result = util.apply_subs('$foo1 $foo2', {'foo1': 'bar1',
-                                                 'foo2': 'bar2'})
+        result = util.apply_subs('$foo1 $foo2', {'foo1': 'bar1', 'foo2': 'bar2'})
         self.assertEqual('bar1 bar2', result)
 
     def test_multiple_non_space_separated_bracket_substitution(self):
-        result = util.apply_subs('$foo1$foo2', {'foo1': 'bar1',
-                                                'foo2': 'bar2'})
+        result = util.apply_subs('$foo1$foo2', {'foo1': 'bar1', 'foo2': 'bar2'})
         self.assertEqual('bar1bar2', result)
 
     def test_missing_substitution_var_raise_error(self):
@@ -82,57 +80,55 @@ class TestApplySubs(unittest.TestCase):
 
 
 class TestCmpVersion(unittest.TestCase):
-    TESTS = [('1', '1', 0),
-             ('1.0.0', '1.0.0', 0),
-             ('1.0', '1.00', 0),
-             ('1.1a', '1.1a', 0),
-             ('1', '1-0', 0),
-             ('1-1', '1-1', 0),
-             ('0:1', '1', 0),
-             ('1:1', '1:1', 0),
-
-             ('2', '1', 1),
-             ('1', '2', -1),
-
-             ('1.0.1', '1.0.0', 1),
-             ('1.0.0', '1.1.1', -1),
-
-             ('1.10', '1.2', 1),
-             ('1.2', '1.10', -1),
-
-             ('1', '1a', 1),
-             ('1a', '1', -1),
-
-             ('1b', '1a', 1),
-             ('1a', '1b', -1),
-
-             ('1.1', '1.a', 1),
-             ('1.a', '1.1', -1),
-
-             ('1-1', '1', 1),
-             ('1', '1-1', -1),
-
-             ('1-10', '1-2', 1),
-             ('1-2', '1-10', -1),
-
-             ('1:1', '1', 1),
-             ('1', '1:1', -1),
-
-             ('2:1', '1:1', 1),
-             ('1:1', '2:1', -1)]
+    TESTS = [
+        ('1', '1', 0),
+        ('1.0.0', '1.0.0', 0),
+        ('1.0', '1.00', 0),
+        ('1.1a', '1.1a', 0),
+        ('1', '1-0', 0),
+        ('1-1', '1-1', 0),
+        ('0:1', '1', 0),
+        ('1:1', '1:1', 0),
+        ('2', '1', 1),
+        ('1', '2', -1),
+        ('1.0.1', '1.0.0', 1),
+        ('1.0.0', '1.1.1', -1),
+        ('1.10', '1.2', 1),
+        ('1.2', '1.10', -1),
+        ('1', '1a', 1),
+        ('1a', '1', -1),
+        ('1b', '1a', 1),
+        ('1a', '1b', -1),
+        ('1.1', '1.a', 1),
+        ('1.a', '1.1', -1),
+        ('1-1', '1', 1),
+        ('1', '1-1', -1),
+        ('1-10', '1-2', 1),
+        ('1-2', '1-10', -1),
+        ('1:1', '1', 1),
+        ('1', '1:1', -1),
+        ('2:1', '1:1', 1),
+        ('1:1', '2:1', -1),
+    ]
 
     def test_run_tests_ok(self):
         for version1, version2, result in self.TESTS:
             cmp_result = util.cmp_version(version1, version2)
             if result > 0:
-                self.assertTrue(cmp_result > 0, "cmp(%s, %s) == %s, expecting %s"
-                                % (version1, version2, cmp_result, result))
+                self.assertTrue(
+                    cmp_result > 0,
+                    f"cmp({version1}, {version2}) == {cmp_result}, expecting {result}",
+                )
             elif result < 0:
-                self.assertTrue(cmp_result < 0, "cmp(%s, %s) == %s, expecting %s"
-                                % (version1, version2, cmp_result, result))
+                self.assertTrue(
+                    cmp_result < 0,
+                    f"cmp({version1}, {version2}) == {cmp_result}, expecting {result}",
+                )
             else:
-                self.assertTrue(cmp_result == 0, "cmp(%s, %s) == %s, expecting %s"
-                                % (version1, version2, cmp_result, result))
+                self.assertTrue(
+                    cmp_result == 0,
+                    f"cmp({version1}, {version2}) == {cmp_result}, expecting {result}",
+                )
 
 
 class TestRecursiveListDir(unittest.TestCase):
@@ -217,11 +213,9 @@ class TestListPaths(unittest.TestCase):
         self._create_dir('dir1/dir2/dir3')
         self._create_file('dir1/dir2/dir3/file1')
         result = sorted(util.list_paths(self._tmp_dir))
-        self.assertEqual(['dir1/',
-                          'dir1/dir2/',
-                          'dir1/dir2/dir3/',
-                          'dir1/dir2/dir3/file1'],
-                         result)
+        self.assertEqual(
+            ['dir1/', 'dir1/dir2/', 'dir1/dir2/dir3/', 'dir1/dir2/dir3/file1'], result
+        )
 
 
 class TestInstallPaths(unittest.TestCase):
@@ -266,7 +260,9 @@ class TestInstallPaths(unittest.TestCase):
         self._create_dir('dir1')
         self._create_file('dir1/file1')
         result = self._install()
-        self.assertEqual(['dir1/', 'dir1/file1'], sorted(util.list_paths(self._tmp_dst_dir)))
+        self.assertEqual(
+            ['dir1/', 'dir1/file1'], sorted(util.list_paths(self._tmp_dst_dir))
+        )
         self.assertEqual(['dir1/', 'dir1/file1'], result)
 
 
@@ -329,7 +325,9 @@ class TestRemovePaths(unittest.TestCase):
         self._create_dir('dir1')
         self._create_file('dir1/file1')
         result = sorted(util.remove_paths(['dir1/'], self._tmp_dir))
-        self.assertEqual(['dir1/', 'dir1/file1'], sorted(util.list_paths(self._tmp_dir)))
+        self.assertEqual(
+            ['dir1/', 'dir1/file1'], sorted(util.list_paths(self._tmp_dir))
+        )
         self.assertEqual(['dir1/'], result)
 
     def test_remove_inexistant_file_doesnt_raise(self):
