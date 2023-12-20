@@ -2,14 +2,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
+
 import progressbar
+
+from xivo_fetchfw.download import ProgressBarHook
 from xivo_fetchfw.package import (
     DefaultInstallerController,
     DefaultUninstallerController,
-    PackageError,
     DefaultUpgraderController,
+    PackageError,
 )
-from xivo_fetchfw.download import ProgressBarHook
 
 logger = logging.getLogger(__name__)
 

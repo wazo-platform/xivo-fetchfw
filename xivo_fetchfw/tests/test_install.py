@@ -5,6 +5,7 @@ import os
 import shutil
 import tempfile
 import unittest
+
 import xivo_fetchfw.install as install
 from xivo_fetchfw.util import list_paths
 

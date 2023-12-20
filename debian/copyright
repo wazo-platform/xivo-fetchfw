@@ -1,7 +1,7 @@
 ﻿This package was debianized by Corentin Le Gall <clegall@proformatique.com> on
 Mon, 16 Apr 2007 15:58:37 +0200.
 
-Copyright: 2008-2012  Avencall
+Copyright 2008-2023 The Wazo Authors  (see the AUTHORS file)
 
 License:
 
@@ -20,4 +20,3 @@ License:
 
 On Debian systems, the complete text of the GNU General Public License
 version 3 can be found in `/usr/share/common-licenses/GPL'.
-

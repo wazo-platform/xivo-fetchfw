@@ -1,5 +1,5 @@
 [install_digium-fw]
-a-b: untar $FILE1 
+a-b: untar $FILE1
 b-c: cp * $KFW_ROOT/
 
 

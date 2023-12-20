@@ -4,9 +4,9 @@
 import os
 import tempfile
 import unittest
-
 from configparser import RawConfigParser
 from unittest.mock import MagicMock, Mock
+
 import xivo_fetchfw.storage as storage
 
 TEST_RES_DIR = os.path.join(os.path.dirname(__file__), 'storage')

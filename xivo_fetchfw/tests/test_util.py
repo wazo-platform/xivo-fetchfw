@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
-import unittest
 import shutil
 import tempfile
+import unittest
+
 import xivo_fetchfw.util as util
 
 

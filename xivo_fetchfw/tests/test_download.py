@@ -2,11 +2,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import hashlib
-from unittest.mock import Mock
 import os
 import shutil
 import tempfile
 import unittest
+from unittest.mock import Mock
+
 import xivo_fetchfw.download as download
 
 CONTENT = b'foobar'

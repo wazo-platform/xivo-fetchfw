@@ -13,6 +13,7 @@ import tarfile
 import tempfile
 import zipfile
 from fnmatch import fnmatch
+
 from xivo_fetchfw.util import FetchfwError
 
 logger = logging.getLogger(__name__)

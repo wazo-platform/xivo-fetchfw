@@ -4,8 +4,8 @@
 import logging
 import sys
 from operator import itemgetter
-from xivo_fetchfw import cli, config, download, package, params, storage, util
-from xivo_fetchfw import commands
+
+from xivo_fetchfw import cli, commands, config, download, package, params, storage, util
 
 logger = logging.getLogger('xivo-fetchfw')
 
