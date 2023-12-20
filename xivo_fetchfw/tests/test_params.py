@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from unittest import TestCase
+
 from xivo_fetchfw import params
 
 

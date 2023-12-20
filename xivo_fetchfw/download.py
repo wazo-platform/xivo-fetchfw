@@ -5,7 +5,6 @@ import contextlib
 import hashlib
 import logging
 import os
-
 from binascii import b2a_hex
 from urllib import request
 from urllib.error import HTTPError, URLError

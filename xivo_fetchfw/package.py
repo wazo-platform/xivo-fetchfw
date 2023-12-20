@@ -3,7 +3,8 @@
 
 import copy
 import logging
-from xivo_fetchfw.util import FetchfwError, install_paths, remove_paths, cmp_version
+
+from xivo_fetchfw.util import FetchfwError, cmp_version, install_paths, remove_paths
 
 logger = logging.getLogger(__name__)
 

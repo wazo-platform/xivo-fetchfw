@@ -18,25 +18,25 @@ xivo-fetchfw (14.01~20140108.151155.79a59d7) xivo-dev; urgency=low
 
 xivo-fetchfw (12.20~20121010.160342.d142860-4) squeeze-xivo-skaro-dev; urgency=low
 
-  * fix version 
+  * fix version
 
  -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Thu, 11 Oct 2012 13:42:22 -0400
 
 xivo-fetchfw (12.20~20121010.160342.d142860-3) squeeze-xivo-skaro-dev; urgency=low
 
-  * fix version 
+  * fix version
 
  -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Thu, 11 Oct 2012 13:04:03 -0400
 
 xivo-fetchfw (12.20~20121010.160342.d142860-2) squeeze-xivo-skaro-dev; urgency=low
 
-  * fix version  
+  * fix version
 
  -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Thu, 11 Oct 2012 12:57:58 -0400
 
 xivo-fetchfw (12.19-1) squeeze-xivo-skaro-dev; urgency=low
 
-  * rename package 
+  * rename package
 
  -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Tue, 09 Oct 2012 13:42:13 -0400
 
@@ -72,7 +72,7 @@ pf-xivo-fetchfw (3:1.2~svn11095-0) lenny-xivo-skaro-dev; urgency=low
 
 pf-xivo-fetchfw (3:1.2~svn10106-0) lenny-xivo-skaro-dev; urgency=low
 
-  * New upstream relase 
+  * New upstream relase
 
  -- Nicolas HICHER (atarakt) <nhicher@proformatique.com>  Thu, 03 Feb 2011 16:18:50 +0100
 
@@ -102,7 +102,7 @@ pf-xivo-phones-firmware (0.4~svn3111-3) etch-xivo-k-9-dev; urgency=low
 
 pf-xivo-phones-firmware (0.4~svn3111-2) etch-xivo-k-9-dev; urgency=low
 
-  * Added ${python:Versions} ${python:Depends} and ${python:Provides} 
+  * Added ${python:Versions} ${python:Depends} and ${python:Provides}
 
  -- Guillaume Knispel <gknispel@proformatique.com>  Thu, 10 Jul 2008 16:45:51 +0200
 
@@ -209,4 +209,3 @@ pf-xivo-phones-firmware (0.1~svn670-1) etch; urgency=low
   * Initial Release.
 
  -- Corentin Le Gall <corentin@proformatique.com>  Tue, 17 Apr 2007 18:12:35 +0200
-

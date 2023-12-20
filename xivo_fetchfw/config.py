@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from configparser import RawConfigParser
+
 from xivo_fetchfw.params import ConfigSpec
 
 

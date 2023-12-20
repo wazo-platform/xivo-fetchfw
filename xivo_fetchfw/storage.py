@@ -5,7 +5,6 @@ import collections
 import json
 import logging
 import os
-
 from binascii import a2b_hex
 from configparser import RawConfigParser
 
